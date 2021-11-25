@@ -1,7 +1,8 @@
 // Kunling Yang, 20912628
-// Last Modified At 0232, 20211123
+// Last Modified At 1730,20211124
 
 #include "piece.h"
+#include "position.h"
 
 class PieceImpl{
   protected:
