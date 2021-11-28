@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <memory>
-#include "Posn.h"
+#include "posn.h"
 #include "subject.h"
 #include "moveHistory.h"
 

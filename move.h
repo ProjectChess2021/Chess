@@ -1,7 +1,7 @@
 #ifndef __MOVE_H__ 
 #define __MOVE_H__
 
-#include "Posn.h"
+#include "posn.h"
 
 class Move {
     std::unique_ptr<Posn> original;

@@ -5,7 +5,8 @@ class Player {
     int score;
     int id;
     public:
-    
+    int getScore();
+    int getId();
 }
 
 #endif
