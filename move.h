@@ -2,6 +2,7 @@
 #define __MOVE_H__
 
 #include "posn.h"
+#include <memory>
 
 class Move {
     std::unique_ptr<Posn> original;
@@ -9,7 +10,7 @@ class Move {
     char operation;
     public:
     Move( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalX, const char &operation );
+        const int &finalY, const char &operation );
     Posn *getOriginal();
     Posn *getEnd();
 };

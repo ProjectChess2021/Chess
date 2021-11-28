@@ -2,6 +2,8 @@
 #define __MOVEHISTORY_H__
 
 #include "move.h"
+#include <vector>
+#include <memory>
 
 class MoveHistory {
     int maxUndos;
@@ -21,7 +23,7 @@ class MoveHistory {
         MoveHistIter &end();
         MoveHistIter &operator++();
         Move &operator*();
-    }
+    };
 };
 
 #endif

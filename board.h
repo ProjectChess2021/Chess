@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "posn.h"
+#include "subject.h"
 
 class Piece;
 
@@ -15,7 +16,7 @@ class Board : public Subject {
     std::vector<std::unique_ptr<Piece *>> deadPool;
   public:
     Board();
-    setup();
+    void setup();
     
     char move( Posn *original, Posn *final );
     char undo( Posn *final, Posn *original );

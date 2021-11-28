@@ -7,6 +7,6 @@ class Player {
     public:
     int getScore();
     int getId();
-}
+};
 
 #endif

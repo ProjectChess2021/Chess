@@ -8,14 +8,15 @@
 #include "posn.h"
 #include "subject.h"
 #include "moveHistory.h"
+#include "piece.h"
 
 class Player;
 
 class Game : public Subject {
     std::vector<Player *> players;
     std::unique_ptr<MoveHistory> mh;
-    std::vector<std::vector<std::unique_ptr<Piece *>>> board;
-    std::vector<std::unique_ptr<Piece *>> deadPool;
+    std::vector<std::vector<std::unique_ptr<Piece>>> board;
+    std::vector<std::unique_ptr<Piece>> deadPool;
   public: 
     Game( std::vector<Player *> *players );
     // Use board and movehistory in start, which is in each game
