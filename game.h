@@ -3,22 +3,20 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include <memory>
-#include <stack>
+#include <vector>
 #include "board.h"
+#include "moveHistory.h"
 
 class Player;
 
 class Game {
-    std::unique_ptr<Board> aBoard;
-    std::unique_ptr<Player> p1;
-    std::unique_ptr<Player> p2;
-    bool undoable;
-    std::stack<Piece> moveHistory;  
-  public:
-    Game(bool,std::unique_ptr<Player>,std::unique_ptr<Player>);
+    std::vector<Player *> players;
+  public: 
+    Game( std::vector<Player *> *players );
+    // Use board and movehistory in start, which is in each game
+    void start();
     void displayScore();
-    void setUp(bool default);
+    void setup();
 };  // end Game
 
 #endif

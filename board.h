@@ -6,15 +6,19 @@
 
 #include <vector>
 #include <memory>
-#include "position.h"
+#include "Posn.h"
 
 class Piece;
 
-class Board {
-    std::vector<Piece> pieceArray;
+class Board, public Subject {
+    std::vector<std::vector<std::unique_ptr<Piece *>>> board;
+    std::vector<std::unique_ptr<Piece *>> deadPool;
   public:
     Board();
-    void setUp();
+    setup();
+    
+    char move( Posn *original, Posn *final );
+    char undo( Posn *final, Posn *original );
 };  // end Board
 
 #endif
