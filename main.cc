@@ -3,6 +3,7 @@
 
 #include "board.h"
 #include "game.h"
+#include "player.h"
 //#include "window.h"
 #include <iostream>
 #include <memory>
@@ -11,24 +12,23 @@ int main() {
     std::unique_ptr<Game> aGame;
     std::string command;
 
-    while(true) {
-        std::cin >> command;
-        if(std::cin.fail() || command == "quit")    break;
-
-        switch (command){
-        case "game":
+    while(std::cin >> command) {
+        if(std::cin.fail() || command == "quit") {
+            aGame.display();
+            break;
+        }   
+        if (command == "game"){
             std::string p1;
             std::string p2;
             std::cin >> p1 >> p2;
-            aGame();
-        case "resign":
+            aGame.setup(p1, p2);
+        else if (command == "resign") {
+            aGame.end();
+        } else if (command == "setup") {
 
-            break;
 
-        case "setup":
+        } else {
 
-            break;
-        default:
             std::cout << "Unrecognized command!" << std::endl;
         }
     }
