@@ -1,13 +1,20 @@
 CXX=g++
-CXXFLAGS=-std=c++14 -MMD -g
-OBJECTS=bishop.0 blackSide.o board.o bot.o king.o knight.o pawn.o piece.o position.o queen.o rook.o side.o whiteSide.o window.o
-DEPENDS=${OBJECTS:.o=.d}
-EXEC = projectChess
+CXXFLAGS=-std=c++14 -Wall -O -g -MMD -Werror=vla # use -MMD to generate dependencies
+SOURCES=$(wildcard *.cc)   # list of all .cc files in the current directory
+OBJECTS=${SOURCES:.cc=.o}  # .o files depend upon .cc files with same names
+DEPENDS=${OBJECTS:.o=.d}   # .d file is list of dependencies for corresponding .cc file
+EXEC=tree
 
-${EXEC}: ${OBJECTS}
-	${CXX} ${OBJECTS} -o ${EXEC}
+# First target in the makefile is the default target.
+$(EXEC): $(OBJECTS)
+		$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
+#       strip ${EXEC}
+
+%.o: %.cc
+		$(CXX) -c -o $@ $< $(CXXFLAGS) 
 
 -include ${DEPENDS}
+
 .PHONY: clean
 clean:
-	rm ${OBJECTS} ${DEPENDS} ${EXEC}
+		rm  -f $(OBJECTS) $(DEPENDS) $(EXEC)
