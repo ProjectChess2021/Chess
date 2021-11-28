@@ -13,6 +13,7 @@ class Player;
 
 class Game : public Subject {
     std::vector<Player *> players;
+    std::unique_ptr<MoveHistory> mh;
     std::vector<std::vector<std::unique_ptr<Piece *>>> board;
     std::vector<std::unique_ptr<Piece *>> deadPool;
   public: 

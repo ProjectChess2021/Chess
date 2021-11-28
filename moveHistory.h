@@ -8,7 +8,7 @@ class MoveHistory : public Subject {
     std::vector<std::unique_ptr<Move>> mh;
 
     public:
-    MoveHistory();
+    MoveHistory( const int &maxUndo );
 
     void add( const Move &mv );
     Move &undo();
