@@ -11,7 +11,7 @@
 class Piece;
 
 class Board : public Subject {
-    std::vector<std::vector<std::unique_ptr<Piece *>>> board;
+    std::vector<std::vector<std::unique_ptr<Piece>>> board;
     std::vector<std::unique_ptr<Piece *>> deadPool;
   public:
     Board();
