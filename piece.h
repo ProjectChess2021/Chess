@@ -6,17 +6,16 @@
 #define __PIECE_H__
 
 #include <memory>
-
-class PieceImpl;    // forward declaration
-class Visitor;
-class Posn;
+#include "posn.h"
 
 class Piece {
-  protected:
-    std::unique_ptr<PieceImpl> pImpl;               // Bridge design pattern
+    int side;
+    static char type;
   public:
-    virtual bool move() = 0;
-    virtual void capturedBy(Visitor&) = 0;          // visitor design pattern
+    Piece( const int &side, bool moved, const char &type );
+    int getSide();
+    char getType();
+    virtual bool isValidMove( Posn *original, Posn *end ) = 0;
     virtual ~Piece();
 };
 

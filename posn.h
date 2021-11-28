@@ -6,6 +6,8 @@ class Posn {
     int y;
     public:
     Posn( const int &x, const int &y );
+    int getX();
+    int getY();
 };
 
 #endif
