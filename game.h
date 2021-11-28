@@ -4,17 +4,22 @@
 #define __GAME_H__
 
 #include <vector>
-#include "board.h"
+#include <memory>
+#include "Posn.h"
 #include "moveHistory.h"
 
 class Player;
 
 class Game {
     std::vector<Player *> players;
+    std::vector<std::vector<std::unique_ptr<Piece *>>> board;
+    std::vector<std::unique_ptr<Piece *>> deadPool;
   public: 
     Game( std::vector<Player *> *players );
     // Use board and movehistory in start, which is in each game
     void start();
+    char move( Posn *original, Posn *final );
+    char undo( Posn *final, Posn *original );
     void displayScore();
     void setup();
 };  // end Game
