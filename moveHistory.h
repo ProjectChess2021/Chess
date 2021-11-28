@@ -3,7 +3,7 @@
 
 #include "move.h"
 
-class MoveHistory : public Subject {
+class MoveHistory {
     int maxUndos;
     std::vector<std::unique_ptr<Move>> mh;
 
