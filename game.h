@@ -6,11 +6,12 @@
 #include <vector>
 #include <memory>
 #include "Posn.h"
+#include "subject.h"
 #include "moveHistory.h"
 
 class Player;
 
-class Game {
+class Game : public Subject {
     std::vector<Player *> players;
     std::vector<std::vector<std::unique_ptr<Piece *>>> board;
     std::vector<std::unique_ptr<Piece *>> deadPool;
