@@ -2,12 +2,14 @@
 #define __KING_H__
 
 #include "piece.h"
+#include "posn.h"
+#include "game.h"
 
 class King :public Piece {
-    bool moved;
     public:
-    King( const int &side, bool moved, const char &type );
-    bool isValidMove( Posn *original, Posn *end ) override;
+    King( const int &side );
+    bool isValidMove( Posn *original, Posn *end, 
+        std::vector<std::vector<Piece *>> &board ) override;
 };
 
 #endif

@@ -2,11 +2,13 @@
 #define __KNIGHT_H__
 
 #include "piece.h"
+#include "posn.h"
 
 class Knight : public Piece {
     public:
-    Knight( const int &side, bool moved, const char &type );
-    bool isValidMove( Posn *original, Posn *end ) override;
+    Knight( const int &side );
+    bool isValidMove( Posn *original, Posn *end, 
+        std::vector<std::vector<Piece *>> &board ) override;
 };
 
 #endif

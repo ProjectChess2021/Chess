@@ -7,15 +7,21 @@
 
 #include <memory>
 #include "posn.h"
+#include <vector>
 
 class Piece {
+    // side = 1 means the bottom player, side == 2 means the top player
     int side;
-    static char type;
+    char type;
+    bool moved;
   public:
-    Piece( const int &side, bool moved, const char &type );
+    Piece( const int &side, const char &type );
     int getSide();
     char getType();
-    virtual bool isValidMove( Posn *original, Posn *end ) = 0;
+    bool &isMoved();
+    // require: the input position must be on the board
+    virtual bool isValidMove( Posn *original, Posn *end, 
+      std::vector<std::vector<Piece *>> &board ) = 0;
     virtual ~Piece();
 };
 

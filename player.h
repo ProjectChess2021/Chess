@@ -7,6 +7,7 @@ class Player {
     public:
     int getScore();
     int getId();
+    std::string cmd( Board *board );
 };
 
 #endif

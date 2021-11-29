@@ -2,11 +2,13 @@
 #define __BISHOP_H__
 
 #include "piece.h"
+#include "posn.h"
 
-class Bishop {
+class Bishop : public Piece {
     public:
-    Bishop( const int &side, bool moved, const char &type );
-    bool isValid( Posn *original, Posn *end ) override;
+    Bishop( const int &side );
+    bool isValidMove( Posn *original, Posn *end, 
+        std::vector<std::vector<Piece *>> &board ) override;
 };
 
 #endif

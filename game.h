@@ -15,14 +15,16 @@ class Player;
 class Game : public Subject {
     std::vector<Player *> players;
     std::unique_ptr<MoveHistory> mh;
-    std::vector<std::vector<std::unique_ptr<Piece>>> board;
-    std::vector<std::unique_ptr<Piece>> deadPool;
+    std::vector<std::unique_ptr<Piece>> pieces;
+    std::vector<std::vector<Piece *>> board;
+    std::vector<Piece *> deadPool;
   public: 
     Game( std::vector<Player *> *players );
     // Use board and movehistory in start, which is in each game
     void start();
     char move( Posn *original, Posn *final );
     char undo( Posn *final, Posn *original );
+    bool isChecked( const int &x, const int &y, const int &side );
     void displayScore();
     void setup();
 };  // end Game

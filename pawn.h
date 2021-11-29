@@ -4,10 +4,10 @@
 #include "piece.h"
 
 class Pawn : public Piece {
-    bool moved;
     public:
-    Pawn( const int &side, bool moved, const char &type );
-    bool isValidMove( Posn *original, Posn *end ) override;
+    Pawn( const int &side );
+    bool isValidMove( Posn *original, Posn *end, 
+        std::vector<std::vector<Piece *>> &board ) override;
 };
 
 #endif

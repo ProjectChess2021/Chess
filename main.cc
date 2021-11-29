@@ -1,7 +1,6 @@
 // Kunling Yang, 20912628
 // Last Modified At 1821, 20211124
 
-#include "board.h"
 #include "game.h"
 #include "player.h"
 //#include "window.h"
