@@ -15,6 +15,8 @@ class MoveHistory {
     void add( const Move &mv );
     Move &undo();
 
+    void clearHistory();
+
     class MoveHistIter {
         int index;
         MoveHistIter( const int index );
