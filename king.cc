@@ -1,7 +1,7 @@
 #include "king.h"
 #include <vector>
 #include <iostream>
-#include "isChecked.cc"
+#include "isChecked.h"
 
 King::King( const int &side ) : Piece{ side, 'k' } { }
 
@@ -17,7 +17,7 @@ bool King::isValidMove( Posn *original, Posn *end,
     if ( diffX == 0 && diffY == 0 ) return false;
 
     if ( -1 <= diffX && diffX <= 1 && -1 <= diffY && diffY <= 1 ) {
-        if ( isChecked( endX, endY, getSide(), board ) ) {
+        if ( IsChecked::isChecked( endX, endY, getSide(), board ) ) {
             return false;
         }
         if ( board[endX][endY] != nullptr ) {
@@ -37,7 +37,8 @@ bool King::isValidMove( Posn *original, Posn *end,
         char type = board[7][oriY]->getType();
         if ( !isMoved() && type == 'r' && !board[7][oriY]->isMoved() ) {
             for ( int x = oriX; x <= endX; ++x ) {
-                if ( isChecked( x, oriY, getSide(), board ) ) return false;
+                if ( IsChecked::isChecked( x, oriY, getSide(), board ) ) 
+                    return false;
             }
             return true;
         }
@@ -51,7 +52,8 @@ bool King::isValidMove( Posn *original, Posn *end,
         char type = board[0][oriY]->getType();
         if ( !isMoved() && type == 'r' && !board[0][oriY]->isMoved() ) {
             for ( int x = oriX; x >= endX; --x ) {
-                if ( isChecked( x, oriY, getSide(), board ) ) return false;
+                if ( IsChecked::isChecked( x, oriY, getSide(), board ) ) 
+                    return false;
             }
             return true;
         }

@@ -1,7 +1,6 @@
-#ifndef __ISCHECKED_CC__
-#define __ISCHECKED_CC__
 #include <vector>
 #include "piece.h"
+#include "isChecked.h"
 
 bool verticalChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
@@ -166,7 +165,7 @@ bool knightChecked( const int &x, const int &y, const int &side,
     }
 }
 
-bool isChecked( const int &x, const int &y, const int &side,
+bool IsChecked::isChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
     
     // Vertical check
@@ -183,5 +182,3 @@ bool isChecked( const int &x, const int &y, const int &side,
 
     return false;
 }
-
-#endif
