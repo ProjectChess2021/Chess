@@ -14,7 +14,7 @@ class MoveHistory {
 
     void add( const int &originalX, const int &originalY, const int &finalX, 
         const int &finalY, const char &operation );
-    Move &undo();
+    std::unique_ptr<Move> &undo();
 
     void clearHistory();
 
