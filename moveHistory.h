@@ -16,14 +16,15 @@ class MoveHistory {
     Move &undo();
 
     class MoveHistIter {
-        int index;
+        int curr;
         MoveHistIter( const int index );
         public:
-        MoveHistIter &begin();
-        MoveHistIter &end();
         MoveHistIter &operator++();
         Move &operator*();
+        friend class MoveHistory;
     };
+    MoveHistIter &begin();
+    MoveHistIter &end();
 };
 
 #endif
