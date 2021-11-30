@@ -7,7 +7,7 @@ EXEC=chess
 
 # First target in the makefile is the default target.
 $(EXEC): $(OBJECTS)
-		$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXEC)
+		$(CXX) $(CXXFLAGS) $(OBJECTS) -lX11 -o $(EXEC)
 #       strip ${EXEC}
 
 %.o: %.cc
