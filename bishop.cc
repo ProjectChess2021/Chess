@@ -13,7 +13,7 @@ bool Bishop::isValidMove( Posn *original, Posn *end,
     int diffX = endX - oriX;
     int diffY = endY - oriY;
 
-    if ( diffY == 0 ) return false;
+    if ( diffY == 0 || diffX == 0 ) return false;
 
     if ( diffX == diffY ) {
         if ( diffX > 0 ) {

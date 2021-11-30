@@ -13,6 +13,7 @@ class Move {
         const int &finalY, const char &operation );
     Posn *getOriginal();
     Posn *getEnd();
+    char getOperation();
 };
 
 #endif
