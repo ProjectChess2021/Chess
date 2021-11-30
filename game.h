@@ -18,7 +18,6 @@ class Game : public Subject {
     std::vector<std::unique_ptr<Piece>> pieces;
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
-    bool isChecked( const int &x, const int &y, const int &side );
   public: 
     Game( std::vector<Player *> *players );
     // Use board and movehistory in start, which is in each game
