@@ -2,7 +2,7 @@
 #define __PLAYER_H__
 
 #include <vector>
-#include "player.h"
+#include "piece.h"
 
 class Player {
     int score;
