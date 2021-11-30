@@ -1,3 +1,5 @@
+#ifndef __ISCHECKED_CC__
+#define __ISCHECKED_CC__
 #include <vector>
 #include "piece.h"
 
@@ -181,3 +183,5 @@ bool isChecked( const int &x, const int &y, const int &side,
 
     return false;
 }
+
+#endif

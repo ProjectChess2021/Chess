@@ -12,7 +12,8 @@ class MoveHistory {
     public:
     MoveHistory( const int &maxUndo );
 
-    void add( const Move &mv );
+    void add( const int &originalX, const int &originalY, const int &finalX, 
+        const int &finalY, const char &operation );
     Move &undo();
 
     void clearHistory();
