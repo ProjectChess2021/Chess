@@ -1,9 +1,10 @@
-#include <vector>
 #include "piece.h"
 #include "isChecked.h"
+#include <iostream>
 
 bool verticalChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
+    std::cerr << "Starting vertical Check" << std::endl;
     for ( int i = 1; y + i < 8; ++i ) {
         if ( board[x][y + i] != nullptr ) {
             char type = board[x][y + i]->getType();
@@ -41,6 +42,7 @@ bool verticalChecked( const int &x, const int &y, const int &side,
 
 bool diagonalChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
+    std::cerr << "Starting diagonal Check" << std::endl;
     for ( int i = 1; y + i < 8 && x + i < 8; ++i ) {
         if ( board[x + i][y + i] != nullptr ) {
             char type = board[x + i][y + i]->getType();
@@ -110,6 +112,7 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
 
 bool horizontalChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
+    std::cerr << "Starting horizontal Check" << std::endl;
     for ( int i = 1; x + i < 8; ++i ) {
         if ( board[x + i][y] != nullptr ) {
             char type = board[x + i][y]->getType();
@@ -147,6 +150,7 @@ bool horizontalChecked( const int &x, const int &y, const int &side,
 
 bool knightChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
+    std::cerr << "Starting knight Check" << std::endl;
     std::vector<int> arr;
     arr.emplace_back( 1 );
     arr.emplace_back( 2 );
@@ -155,13 +159,16 @@ bool knightChecked( const int &x, const int &y, const int &side,
     for ( auto i : arr ) {
         for ( auto k : arr ) {
             if ( abs( i ) != abs( k ) ) {
-                if ( board[x + i][y + k] != nullptr ) {
-                char type = board[x + i][y + k]->getType();
-                int otherSide = board[x + i][y + k]->getSide();
-                if ( otherSide != side ) {
-                    if ( type == 'n' ) return true;
+                if ( x + i >= 8 || x + i < 0 || y + k >= 8 || y + k < 0 ) {
+                    continue;
                 }
-            }
+                if ( board[x + i][y + k] != nullptr ) {
+                    char type = board[x + i][y + k]->getType();
+                    int otherSide = board[x + i][y + k]->getSide();
+                    if ( otherSide != side ) {
+                        if ( type == 'n' ) return true;
+                    }
+                }
             }
         }
     }

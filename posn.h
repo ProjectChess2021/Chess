@@ -1,6 +1,8 @@
 #ifndef __POSN_H__
 #define __POSN_H__
 
+#include <string>
+
 class Posn {
     int x;
     int y;
