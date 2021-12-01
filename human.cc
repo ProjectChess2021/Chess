@@ -50,9 +50,9 @@ std::string Human::cmd( std::vector<std::vector<Piece *>> board ) {
             std::cin >> iniPosn;
             std::cin >> endPosn;
             int iniX = iniPosn[0] - 'a';
-            int iniY = iniPosn[1] - '0';
+            int iniY = iniPosn[1] - '1';
             int endX = endPosn[0] - 'a';
-            int endY = endPosn[1] - '0';
+            int endY = endPosn[1] - '1';
 
             if ( !inRange( iniX, iniY, endX, endY ) ) {
                 std::cout << "Invalid coordinates" << std::endl;
