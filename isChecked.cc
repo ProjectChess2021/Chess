@@ -141,6 +141,8 @@ bool horizontalChecked( const int &x, const int &y, const int &side,
             break;
         }
     }
+
+    return false;
 }
 
 bool knightChecked( const int &x, const int &y, const int &side,
@@ -163,6 +165,8 @@ bool knightChecked( const int &x, const int &y, const int &side,
             }
         }
     }
+
+    return false;
 }
 
 bool IsChecked::isChecked( const int &x, const int &y, const int &side,

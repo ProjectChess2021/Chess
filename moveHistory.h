@@ -14,14 +14,15 @@ class MoveHistory {
 
     void add( const int &originalX, const int &originalY, const int &finalX, 
         const int &finalY, const char &operation );
-    std::unique_ptr<Move> undo();
+    std::vector<Move *> undo();
 
     void clearHistory();
 
     class MoveHistIter {
         int curr;
         std::vector<std::unique_ptr<Move>> &mh;
-        MoveHistIter( const int &index );
+        MoveHistIter( const int &index, 
+            std::vector<std::unique_ptr<Move>> &mh );
         public:
         MoveHistIter &operator++();
         Move &operator*();
