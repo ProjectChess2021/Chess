@@ -1,16 +1,22 @@
 // Created by Zichu
-// Last Modifed At 2319, 20211130 (By Kunling Yang)
+// Last Modifed At 1840,20211201 (By Kunling Yang)
 #ifndef __TEXTDISPLAY_H__
 #define __TEXTDISPLAY_H__
 
 #include "observer.h"
 #include "game.h"
 #include <vector>
+#include "posn.h"
 
 class TextDisplay : public Observer {
     Game &g;
-    int size;
     std::vector<std::vector<char>> display; // Holds the occupy status of the whole board
+    bool isInExtendedBoard(const int, const int) noexcept;  // return true if it is a valid posn on Extended Board
+    bool isInExtendedBoard(const Posn&) noexcept;            
+    bool isInRegularBoard(const int, const int) noexcept;  // return true if it is a valid posn on Extended Board
+    bool isInRegularBoard(const Posn&) noexcept;  
+    bool isInCornerBoard(const int, const int) noexcept;  // return true if it is a valid posn on Extended Board
+    bool isInCornerBoard(const Posn&) noexcept;  
     public:
     TextDisplay( Game &g );
     ~TextDisplay() override;
