@@ -4,6 +4,8 @@
 #define __POSN_H__
 #include <iostream>
 
+#include <string>
+
 class Posn {
     int x;
     int y;

@@ -21,8 +21,8 @@ bool withInFourHandBoard(const int x, const int y) {
 // update the TextObserver once get notified
 void TextDisplay::notify() {
     std::vector<std::vector<Piece*>> aBoard = g.getBoard();
-    for(int i = 0; i < aBoard.size(); i++) {
-        for(int j = 0; j < aBoard[i].size(); j++) {
+    for(int i = 0; i < (int)aBoard.size(); i++) {
+        for(int j = 0; j < (int)aBoard[i].size(); j++) {
             if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
                 display[i][j] = aBoard[i][j]->getType();
             else {
@@ -43,7 +43,7 @@ std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     MoveHistory::MoveHistIter it = MHptr->begin();
     for(int i = 0; i < txtOb.display.size(); i++) {
         out <<std::left << std::setw(2) << txtOb.size - i << " ";       // Line Num
-        for(int j = 0; j < txtOb.display[i].size(); j++){
+        for(int j = 0; j < (int)txtOb.display[i].size(); j++){
                 out << txtOb.display[i][j];
         }    // end inner for loop 
 
@@ -58,4 +58,5 @@ std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     for(int i = 0; i < txtOb.size; i ++) out<<(char)( 'a' + 0);
 
     system("pause");
+    return out;
 }   // end operator<<

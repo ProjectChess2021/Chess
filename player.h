@@ -12,6 +12,7 @@ class Player {
     int getScore();
     int getId();
     virtual std::string cmd( std::vector<std::vector<Piece *>> board ) = 0;
+    virtual ~Player();
 };
 
 #endif

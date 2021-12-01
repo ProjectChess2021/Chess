@@ -3,7 +3,7 @@
 
 #include "moveHistory.h"
 
-MoveHistory::MoveHistory( const int& maxUndo ) : maxUndos{ maxUndos }  { }
+MoveHistory::MoveHistory( const int& maxUndo  ) : maxUndos{ maxUndo }  { }
 // end constructor
 
 
@@ -11,26 +11,30 @@ void MoveHistory::add ( const int &originalX, const int &originalY,
     const int &finalX, const int &finalY, const char &operation ) {
     mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
         finalY, operation) );
-    if ( mh.size() > maxUndos * 2 ) {
+    if ( (int)mh.size() > maxUndos * 2 ) {
         mh.pop_back();
     }
 }   // end add
 
-std::unique_ptr<Move> MoveHistory::undo() {
-    std::unique_ptr<Move> mv = std::move( mh[0] );
+std::vector<Move *> MoveHistory::undo() {
+    std::vector<Move *> undos;
+    undos.emplace_back( mh[0].release() );
     mh.erase( mh.begin() );
-    return std::move( mv );
+    undos.emplace_back( mh[0].release() );
+    mh.erase( mh.begin() );
+    return undos;
 }   // end undo
 
-MoveHistory::MoveHistIter::MoveHistIter( const int &index ) : 
+MoveHistory::MoveHistIter::MoveHistIter( const int &index, 
+    std::vector<std::unique_ptr<Move>> &mh ) : 
     curr{ index }, mh{ mh } { }
 
 MoveHistory::MoveHistIter MoveHistory::begin()  {
-    return MoveHistIter{ 0 };
+    return MoveHistIter{ 0, mh };
 }   // end begin
 
 MoveHistory::MoveHistIter MoveHistory::end()   {
-    return MoveHistIter{ mh.size() };
+    return MoveHistIter{ (int)mh.size(), mh };
 }   // end end
 
 Move &MoveHistory::MoveHistIter::operator*()    {
