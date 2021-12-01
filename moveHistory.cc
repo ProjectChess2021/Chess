@@ -45,3 +45,7 @@ MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator++() {
     curr++;
     return *this;
 }
+
+bool MoveHistory::MoveHistIter::operator!=( const MoveHistIter &it ) {
+    return curr == it.curr && mh == mh;
+}

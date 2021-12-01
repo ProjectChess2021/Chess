@@ -5,9 +5,9 @@
 
 Posn::Posn( const int &x, const int &y ) : x{ x }, y{ y } { }
 
-int Posn::getX() const { return x; }
+int Posn::getX() const noexcept { return x; }
 
-int Posn::getY() const { return y; }
+int Posn::getY() const noexcept { return y; }
 
 std::ostream &operator<<( std::ostream& out, const Posn& aPosn) {
     return out << aPosn.getX() << aPosn.getY();

@@ -31,8 +31,8 @@ class MoveHistory {
         bool operator!=(const MoveHistIter&);
         friend class MoveHistory;
     };
-    MoveHistIter &begin();
-    MoveHistIter &end();
+    MoveHistIter begin();
+    MoveHistIter end();
 };
 
 #endif
