@@ -1,8 +1,9 @@
 // Kunling Yang, 20912628
-// Last Modified At 2314, 20211130
+// Last Modified At 2314, 0006, 20211201
 
 #include "textDisplay.h"
 #include <iostream>
+#include "moveHistory.h"
 #include <iomanip>
 
 // Initialize the Board as a blank board.
@@ -18,7 +19,7 @@ bool withInFourHandBoard(const int x, const int y) {
 }   // end isBeyondFourHandBoard
 
 // update the TextObserver once get notified
-void TextDisplay::notify() override {
+void TextDisplay::notify() {
     std::vector<std::vector<Piece*>> aBoard = g.getBoard();
     for(int i = 0; i < aBoard.size(); i++) {
         for(int j = 0; j < aBoard[i].size(); j++) {
@@ -38,14 +39,23 @@ void TextDisplay::notify() override {
 // This function returns the Board as ostream
 std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     system("clear");          // clear what's on the screen so it looks nicer
+    std::unique_ptr<MoveHistory> MHptr = txtOb.g.getMoveHistory();
+    MoveHistory::MoveHistIter it = MHptr->begin();
     for(int i = 0; i < txtOb.display.size(); i++) {
         out <<std::left << std::setw(2) << txtOb.size - i << " ";       // Line Num
         for(int j = 0; j < txtOb.display[i].size(); j++){
                 out << txtOb.display[i][j];
         }    // end inner for loop 
+
+        // Move History Display:
+        if(it != MHptr->end()) {
+            out << std::left << std::setw(15) << *it;
+            ++it;
+        }
         out << std::endl;
     }   //end outer for loop
     out << std::endl;
     for(int i = 0; i < txtOb.size; i ++) out<<(char)( 'a' + 0);
+
     system("pause");
 }   // end operator<<

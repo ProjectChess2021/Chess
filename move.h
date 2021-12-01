@@ -1,3 +1,6 @@
+// Created By Zichu
+// Last Modified At 0006,20211201 (By Kunling Yang)
+
 #ifndef __MOVE_H__ 
 #define __MOVE_H__
 
@@ -14,6 +17,7 @@ class Move {
     Posn *getOriginal();
     Posn *getEnd();
     char getOperation();
+    friend std::ostream &operator<<( std::ostream &, const Move& ); 
 };
 
 #endif
