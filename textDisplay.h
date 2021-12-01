@@ -1,3 +1,5 @@
+// Created by Zichu
+// Last Modifed At 2319, 20211130 (By Kunling Yang)
 #ifndef __TEXTDISPLAY_H__
 #define __TEXTDISPLAY_H__
 
@@ -7,7 +9,8 @@
 
 class TextDisplay : public Observer {
     Game &g;
-    std::vector<std::vector<char>> display;
+    int size;
+    std::vector<std::vector<char>> display; // Holds the occupy status of the whole board
     public:
     TextDisplay( Game &g );
     ~TextDisplay() override;

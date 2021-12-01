@@ -26,6 +26,8 @@ class Game : public Subject {
     char undo( Posn *end, Posn *original );
     void displayScore();
     void setup();
+    int getPlayerNum() noexcept;
+    std::vector<std::vector<Piece *>>& getBoard();
 };  // end Game
 
 #endif
