@@ -1,3 +1,5 @@
+// Created By Zichu
+// Last Modifed At 0005, 20211201 (By Kunling)
 #ifndef __MOVEHISTORY_H__
 #define __MOVEHISTORY_H__
 
@@ -26,11 +28,11 @@ class MoveHistory {
         public:
         MoveHistIter &operator++();
         Move &operator*();
+        bool operator!=(const MoveHistIter&);
         friend class MoveHistory;
     };
-
-    MoveHistIter begin();
-    MoveHistIter end();
+    MoveHistIter &begin();
+    MoveHistIter &end();
 };
 
 #endif

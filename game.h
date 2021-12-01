@@ -1,5 +1,6 @@
 // Kunling Yang, 20912628
-// Last Modified At 1857, 20211124
+// Last Modified At 0007, 20211201
+
 #ifndef __GAME_H__
 #define __GAME_H__
 
@@ -28,6 +29,7 @@ class Game : public Subject {
     void setup();
     int getPlayerNum() noexcept;
     std::vector<std::vector<Piece *>>& getBoard();
+    std::unique_ptr<MoveHistory> getMoveHistory();
 };  // end Game
 
 #endif
