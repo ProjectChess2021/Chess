@@ -19,17 +19,21 @@ class Game : public Subject {
     std::vector<std::unique_ptr<Piece>> pieces;
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
+    int boardSize;
+    std::string boardType;  // one of "regular", "extended", "corner"
+
   public: 
     Game( std::vector<Player *> *players );
     // Use board and movehistory in start, which is in each game
-    void play();
     char move( Posn *original, Posn *end );
     char undo( Posn *end, Posn *original );
-    void displayScore();
     void setup();
-    int getPlayerNum() noexcept;
+    int getBoardSize() noexcept;
+    std::string getBoardType() noexcept;
     std::vector<std::vector<Piece *>>& getBoard();
     std::unique_ptr<MoveHistory> getMoveHistory();
+
+    // void mutateBoard(); //potentially want to change the board after a match?
 };  // end Game
 
 #endif
