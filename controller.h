@@ -5,6 +5,7 @@
 #define __CONTROLLER_H__
 
 #include <memory>
+#include <string>
 #include <vector>
 
 class Observer;
@@ -13,8 +14,8 @@ class Game;
 class Controller {
     std::vector<std::unique_ptr<Observer>> view;  // store the ptr to all Observers
     std::unique_ptr<Game> model;
-    void createView() noexcept;
-    void createModel() noexcept;
+    void createView(const bool) noexcept;     // attach an observer, true if desire a graphical one
+    void createModel(const std::string&) noexcept;
     void displayScore() noexcept;
     void notify() noexcept;
     public:

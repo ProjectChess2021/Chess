@@ -1,34 +1,23 @@
 // Kunling Yang, 20912628
-// Last Modified At 1821, 20211124
+// Last Modified At 1929,20211201
 
-// #include "game.h"
-// #include "player.h"
-// //#include "window.h"
-// #include <iostream>
-// #include <memory>
+#include "controller.h"
+#include <iostream>
+#include <memory>
 
-// int main() {
-//     std::unique_ptr<Game> aGame;
-//     std::string command;
+int main() {
+    std::unique_ptr<Controller> c;
+    std::string input;
 
-//     while(std::cin >> command) {
-//         if(std::cin.fail() || command == "quit") {
-//             aGame.display();
-//             break;
-//         }   
-//         if (command == "game"){
-//             std::string p1;
-//             std::string p2;
-//             std::cin >> p1 >> p2;
-//             aGame.setup(p1, p2);
-//         else if (command == "resign") {
-//             aGame.end();
-//         } else if (command == "setup") {
-
-
-//         } else {
-
-//             std::cout << "Unrecognized command!" << std::endl;
-//         }
-//     }
-// }
+    while(std::cin >> input) {
+        if(std::cin.fail() || input == "quit") {
+            c->acceptInput("quit");
+            break;
+        }   // end if
+        try {
+            c->acceptInput(input);
+        }   catch (std::runtime_error& e) {
+            std::cout << e.what() << std::endl;
+        }
+    }
+}   // end main
