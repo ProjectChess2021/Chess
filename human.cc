@@ -72,6 +72,7 @@ std::string Human::cmd( std::vector<std::vector<Piece *>> board ) {
                 board[iniX][iniY] = nullptr;
             } else {
                 std::cout << "Invalid move!" << std::endl;
+                continue;
             }
 
             if ( IsChecked::isChecked( kingX, kingY, getId(), board ) ) {

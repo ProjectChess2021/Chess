@@ -13,30 +13,30 @@ TextDisplay::TextDisplay(Game& g) : g{g} {
 }  // end Constructor
 
 // This function returns true if this is a valid cell on a FourHandBoard
-bool TextDisplay::isInExtendedBoard(const int x, const int y) {
+bool TextDisplay::isInExtendedBoard(const int x, const int y) noexcept {
     bool onCorner = (x <= 2 && y <= 2) || (x <= 2 && y >= 11) ||      // Not on four corners
                     (x >= 11 && y <= 2) ||  (x >= 11 && y >= 11);
     return  !onCorner && 0 <= x && x <= 13 && 0 <= y && y <= 13;      // Not outside the boundary
 }   // end isInExtendedBoard
 
-bool TextDisplay::isInExtendedBoard(Posn& pos) {
+bool TextDisplay::isInExtendedBoard(Posn& pos) noexcept {
     return isInExtendedBoard(pos.getX(), pos.getY());
 }   // end isInExtendedBoard
 
 // This function returns true if this is a valid cell on a Regular Board
-bool TextDisplay::isInRegularBoard(const int x, const int y) {
+bool TextDisplay::isInRegularBoard(const int x, const int y) noexcept {
     return 0 <= x && x <= 7 && 0 <= y && y <= 7;
 }   // end isInRegularBoard
 
-bool TextDisplay::isInRegularBoard(Posn& pos) {
+bool TextDisplay::isInRegularBoard(Posn& pos) noexcept {
     return isInRegularBoard(pos.getX(), pos.getY());
 }   // end isInRegularBoard
 
-bool TextDisplay::isInCornerBoard(const int x, const int y) {
+bool TextDisplay::isInCornerBoard(const int x, const int y) noexcept {
     return (0 <= x && x <= 12 && 0 <= y && y <= 12);
 }   // end isInCornerBoard
 
-bool TextDisplay::isInCornerBoard(Posn& pos) {
+bool TextDisplay::isInCornerBoard(Posn& pos) noexcept {
     return isInCornerBoard(pos.getX(), pos.getY());
 }   // end isInCornerBoard
 
