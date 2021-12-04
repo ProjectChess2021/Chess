@@ -1,12 +1,19 @@
+// Zichu
+// Last Modified At 1858, 20211203 (By Kunling Yang)
+
 #ifndef __BOT_H__
 #define __BOT_H__
 
 #include "player.h"
+#include <memory>
 
+class Strategy;
 class Bot : public Player {
+    std::unique_ptr<Strategy> _strategy;
     public:
-    Bot( const int &side );
-    std::string cmd( std::vector<std::vector<Piece *>> board ) override;
+    Bot( const int &side, Strategy*);
+    void setStrategy(Strategy*);        // change the strategy, which is the AI difficulty
+    std::string cmd( std::vector<std::vector<Piece *>> board) override;
 };
 
 #endif
