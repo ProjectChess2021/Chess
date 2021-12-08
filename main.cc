@@ -1,7 +1,6 @@
 // Kunling Yang, 20912628
 // Last Modified At 1929,20211201
 
-#include "controller.h"
 #include <iostream>
 #include <memory>
 
