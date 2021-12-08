@@ -6,14 +6,15 @@
 
 #include <utility>
 #include "move.h"
+#include <string>
 #include <vector>
+#include <map>
 #include "game.h"
 using std::pair;
 using std::vector;
 
-const vector<pair<char,int>> PIECEWEIGHT{
-    pair<char,int>('p',5), pair<char,int>('r',25), pair<char,int>('n',15),
-    pair<char,int>('b',20), pair<char,int>('q',100), pair<char,int>('k',9999)
+const std::map<char,int> PIECEWEIGHT{
+    {'p', 5}, {'r', 25}, {'n', 15}, {'b', 20}, {'q', 100}, {'k', 9999}
 };
 
 // credit to Chess-programming-wiki, some modification is applied
@@ -79,7 +80,7 @@ const vector<pair<char, vector<vector<int>>>> POSWEIGHT {
 class Strategy {    
     public:
     virtual ~Strategy();
-    virtual void makeMove(std::vector<std::vector<Piece *>>&) = 0;
+    virtual std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&)  = 0;
 };  // end Strategy
 
 #endif

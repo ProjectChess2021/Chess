@@ -5,12 +5,13 @@
 #define __LEVELTWO_H__
 
 #include "strategy.h"
+#include "levelOne.h"
 #include "piece.h"
 #include <vector>
 
-class LevelTwo : public Strategy{
+class LevelTwo : public LevelOne{
     public:
-    void makeMove(std::vector<std::vector<Piece *>>&) override;
+    std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) override;
 };  // end LevelTwo
 
 #endif

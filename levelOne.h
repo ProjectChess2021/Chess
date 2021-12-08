@@ -9,7 +9,7 @@
 
 class LevelOne : public Strategy{
     public:
-    void makeMove(std::vector<std::vector<Piece *>>&) override;
+    std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) override;
 };  // end LevelOne
 
 #endif

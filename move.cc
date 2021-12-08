@@ -3,16 +3,20 @@
 #include "move.h"
 #include <iomanip>
 
-Move::Move(Posn& init, Posn& dest, const char& op) :
+Move::Move(Posn& init, Posn& dest, const int& _side, const char& op) :
     original{std::make_unique<Posn>(init)},
     end{std::make_unique<Posn>(dest)},
+    side{_side},
     operation{op}   {}
 
 Move::Move( const int &originalX, const int &originalY, const int &finalX, 
-    const int &finalY, const char &operation ) : 
+    const int &finalY, const int& _side, const char &operation ) : 
     original{ std::make_unique<Posn>( originalX, originalY ) }, 
     end{ std::make_unique<Posn>( finalX, finalY ) },
+    side{_side},
     operation{ operation } { }
+
+int Move::getSide() {return side;}
 
 Posn *Move::getOriginal() { return original.get(); }
 
@@ -46,7 +50,8 @@ std::ostream &operator<<( std::ostream & out, const Move& _move){
     std::cerr << "Printing out a move info @ Line 44, move.cc" << std::endl;
     std::string sideStr = getSideStr(_move.side);
     sideStr[0] = toupper(sideStr[0]);
-    out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.operation) << " ";
-    out << *_move.original << " -> " << *_move.end;
+    // out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.operation) << " ";
+    // out << *_move.original << " -> " << *_move.end;
+    out << sideStr << ": " << *_move.original << " -> " << *_move.end;
     return out;
 }   // end operator<<
