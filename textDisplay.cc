@@ -8,18 +8,9 @@
 
 // Initialize the Board as a blank board.
 TextDisplay::TextDisplay(Game& g) : g{g} {
-    int occupy = (g.getBoardSize() - 1) * (g.getBoardSize() - 1);
+    int occupy = (8 - 1) * (8 - 1);
     display.resize(occupy, std::vector<char>(occupy, ' '));
 }  // end Constructor
-
-// This function returns true if this is a valid cell on a Regular Board
-bool TextDisplay::isInRegularBoard(const int x, const int y) noexcept {
-    return 0 <= x && x <= 7 && 0 <= y && y <= 7;
-}   // end isInRegularBoard
-
-bool TextDisplay::isInRegularBoard(Posn& pos) noexcept {
-    return isInRegularBoard(pos.getX(), pos.getY());
-}   // end isInRegularBoard
 
 // update the TextObserver once get notified
 void TextDisplay::notify() {

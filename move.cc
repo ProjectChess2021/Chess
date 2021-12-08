@@ -46,7 +46,7 @@ std::ostream &operator<<( std::ostream & out, const Move& _move){
     std::cerr << "Printing out a move info @ Line 44, move.cc" << std::endl;
     std::string sideStr = getSideStr(_move.side);
     sideStr[0] = toupper(sideStr[0]);
-    out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.type) << " ";
+    out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.operation) << " ";
     out << *_move.original << " -> " << *_move.end;
     return out;
 }   // end operator<<

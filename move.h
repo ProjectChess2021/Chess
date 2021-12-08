@@ -11,7 +11,6 @@ class Move {
     std::unique_ptr<Posn> original;
     std::unique_ptr<Posn> end;
     int side;
-    char type;
     char operation;
     public:
     Move(Posn&, Posn&, const char&);
