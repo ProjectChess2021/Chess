@@ -20,18 +20,15 @@ class Game : public Subject {
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
 
-  public: 
-    Game( std::vector<Player *> *players, const std::string& boardType);
-    // Use board and movehistory in start, which is in each game
-    char move( Posn *original, Posn *end );
-    char undo( Posn *end, Posn *original );
-    void setup();
-    int resign();           // current Player resign
-    void setPlayer(const int id, bool isHuman, int difficultyLV);
-    // void mutateBoard(); //potentially want to change the board after a match?
+    char move( Posn *original, Posn *end, char type );
+    char undo( Posn *end, Posn *original, char type );
 
-    int getBoardSize() noexcept;
-    std::string getBoardType() noexcept;
+  public: 
+    Game( std::vector<Player *> &players );
+    // Use board and movehistory in start, which is in each game
+    void start();
+    void setup();
+
     std::vector<std::vector<Piece *>>& getBoard();
     std::unique_ptr<MoveHistory> getMoveHistory();
     int getScore(int idx);  // return the currentScore of a single player
