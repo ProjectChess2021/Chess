@@ -1,0 +1,71 @@
+8 rnbqkbnr      MoveHistory
+7 pppppppp
+6  _ _ _ _
+5 _ _ _ _
+4  _ _ _ _
+3 _ _ _ _
+2 PPPPPPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 pppppppp      White:  pawn d2 -> d3
+6  _ _ _ _
+5 _ _ _ _
+4  _ _ _ _
+3 _ _P_ _
+2 PPP_PPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 pppp_ppp      White:  pawn d2 -> d3
+6  _ _p_ _      Black:  pawn e7 -> e6
+5 _ _ _ _
+4  _ _ _ _
+3 _ _P_ _
+2 PPP_PPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 pppp_ppp      White:  pawn d2 -> d3
+6  _ _p_ _      Black:  pawn e7 -> e6
+5 _ _ _ _       White: queen d1 -> d2
+4  _ _ _ _
+3 _ _P_ _
+2 PPPQPPPP
+1 RNB KBNR
+
+  abcdefgh
+8 rnb_kbnr      MoveHistory
+7 pppp_ppp      White:  pawn d2 -> d3
+6  _ _p_ _      Black:  pawn e7 -> e6
+5 _ _ _ _       White: queen d1 -> d2
+4  _ _ _ q      Black: queen d8 -> h4
+3 _ _P_ _
+2 PPPQPPPP
+1 RNB KBNR
+
+  abcdefgh
+8 rnb_kbnr      MoveHistory
+7 pppp_ppp      White:  pawn d2 -> d3
+6  _ _p_ _      Black:  pawn e7 -> e6
+5 _ _ _ _       White: queen d1 -> d2
+4  Q _ _ q      Black: queen d8 -> h4
+3 _ _P_ _       White: queen d2 -> b4
+2 PPP_PPPP
+1 RNB KBNR
+
+  abcdefgh
+8 rnb_kbnr      MoveHistory
+7 pppp_ppp      Black:  pawn e7 -> e6
+6  _ _p_ _      White: queen d1 -> d2
+5 _ _ _ _       Black: queen d8 -> h4
+4  q _ _ _      White: queen d2 -> b4
+3 _ _P_ _       Black: queen h4 -> b4 (capture a queen)
+2 PPP_PPPP
+1 RNB KBNR
+
+  abcdefgh
+White is in check.

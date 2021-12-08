@@ -1,0 +1,70 @@
+8 rnbqkbnr      MoveHistory
+7 pppppppp
+6  _ _ _ _
+5 _ _ _ _
+4  _ _ _ _
+3 _ _ _ _
+2 PPPPPPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 pppppppp      White: pawn a2 -> a3
+6  _ _ _ _
+5 _ _ _ _
+4  _ _ _ _
+3 P _ _ _
+2  PPPPPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 _ppppppp      White: pawn a2 -> a3
+6 p_ _ _ _      Black: pawn a7 -> a6
+5 _ _ _ _
+4  _ _ _ _
+3 P _ _ _
+2  PPPPPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 _ppppppp      White: pawn a2 -> a3
+6 p_ _ _ _      Black: pawn a7 -> a6
+5 _ _ _ _       White: pawn d2 -> d4
+4  _ P _ _
+3 P _ _ _
+2  PP_PPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 _ppppp_p      White: pawn a2 -> a3
+6 p_ _ _ _      Black: pawn a7 -> a6
+5 _ _ _ p       White: pawn d2 -> d4
+4  _ P _ _      Black: pawn f7 -> f5
+3 P _ _ _
+2  PP_PPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 _ppppp_p      White:  pawn a2 -> a3
+6 p_ _ _ _      Black:  pawn a7 -> a6
+5 _ _ _ p       White:  pawn d2 -> d4
+4 P_ P _ _      Black:  pawn f7 -> f5
+3 _ _ _ _       White:  pawn a3 -> a4
+2  PP_PPPP
+1 RNBQKBNR
+
+  abcdefgh
+8 rnbqkbnr      MoveHistory
+7 _ppppp_p      Black:  pawn a7 -> a6
+6  _ _ _ _      White:  pawn d2 -> d4
+5 p _ _ p       Black:  pawn f7 -> f5
+4 P_ P _ _      White:  pawn a3 -> a4
+3 _ _ _ _       Black:  pawn a6 -> a5
+2  PP_PPPP
+1 RNBQKBNR
+
+  abcdefgh

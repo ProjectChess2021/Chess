@@ -1,0 +1,113 @@
+8  _ _ _ _      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ _ _ _ 
+
+  abcdefgh
+8  _ _k_ _      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ _ _ _ 
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ _ _ _ 
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ _ K _ 
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ _ K _R
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ _ _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 R _ K _R
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ p _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 R _ K _R
+
+  abcdefgh
+8  _ _k_ r      MoveHistory
+7 _ _ p _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _P
+2  _ _ _ _
+1 R _ K _R
+
+  abcdefgh
+a8 is set to be ever moved.
+Setup successful and it's black's turn to go next.
+8  _ _k_ r      MoveHistory
+7 _ _ p _ 
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 R _ K _R
+
+  abcdefgh
+8  _ _ rk_      MoveHistory
+7 _ _ p _       Black:  king e8 -> g8 (castling)
+6  _ _ _ _
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 R _ K _R
+
+  abcdefgh
+Rook is ever moved thus cannot do that.
+8  _ _ rk_      MoveHistory
+7 _ _ p _       Black:  king e8 -> g8 (castling)
+6  _ _ _ _      White:  king e1 -> c1 (castling)
+5 _ _ _ _ 
+4  _ _ _ _
+3 _ _ _ _ 
+2  _ _ _ _
+1 _ KR_ _R
+
+  abcdefgh

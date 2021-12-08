@@ -1,0 +1,20 @@
+setup
++ r a5
++ n g6
++ K d2
+done
++ k c4
++ k b4
+done
+- k b4
++ P b3
+done
+- P b3
++ P b8
+done
+- P b8
++ P b1
+done
+- P b1
+= white
+done
