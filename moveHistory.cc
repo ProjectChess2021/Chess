@@ -1,5 +1,5 @@
 // Kunling Yang, 20912628
-// Last Modified At 2359 20211129
+// Last Modified At (UTC-5) 2259,20211207
 
 #include "moveHistory.h"
 
@@ -9,6 +9,7 @@ MoveHistory::MoveHistory( const int& maxUndo  ) : maxUndos{ maxUndo }  { }
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
     const int &finalX, const int &finalY, const char &operation ) {
+    std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
     mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
         finalY, operation) );
     if ( (int)mh.size() > maxUndos * 2 ) {
@@ -17,6 +18,7 @@ void MoveHistory::add ( const int &originalX, const int &originalY,
 }   // end add
 
 std::vector<Move *> MoveHistory::undo() {
+    std::cerr << "undo @ Line21, moveHistory.cc" << std::endl;
     std::vector<Move *> undos;
     undos.emplace_back( mh[0].release() );
     mh.erase( mh.begin() );
@@ -43,6 +45,11 @@ Move &MoveHistory::MoveHistIter::operator*()    {
 
 MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator++() {
     curr++;
+    return *this;
+}
+
+MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator--() {
+    curr--;
     return *this;
 }
 

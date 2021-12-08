@@ -27,6 +27,7 @@ class MoveHistory {
             std::vector<std::unique_ptr<Move>> &mh );
         public:
         MoveHistIter &operator++();
+        MoveHistIter &operator--();
         Move &operator*();
         bool operator!=(const MoveHistIter&);
         friend class MoveHistory;
