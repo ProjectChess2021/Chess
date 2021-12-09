@@ -7,7 +7,7 @@ class Rook : public Piece {
     public:
     Rook( const int &side );
     bool isValidMove( Posn *original, Posn *end, 
-        Game &game ) override;
+        std::vector<std::vector<Piece *>> &board, MoveHistory *mh ) override;
 };
 
 #endif

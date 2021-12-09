@@ -177,7 +177,15 @@ bool knightChecked( const int &x, const int &y, const int &side,
 }
 
 bool IsChecked::isChecked( const int &x, const int &y, const int &side,
-    std::vector<std::vector<Piece *>> &board ) {
+    std::vector<std::vector<Piece *>> board ) {
+
+    for ( int i = 0; i < 8; ++i ) {
+        for ( int k = 0; k < 8; ++k ) {
+            if ( board[i][k]->getType() == 'k' && board[i][k]->getSide() == side ) {
+                board[i][k] = nullptr;
+            }
+        }
+    }
     
     // Vertical check
     if ( verticalChecked( x, y, side, board ) ) return true;
@@ -195,7 +203,7 @@ bool IsChecked::isChecked( const int &x, const int &y, const int &side,
 }
 
 bool IsChecked::isChecked( const int &side,
-    std::vector<std::vector<Piece *>> &board ) {
+    std::vector<std::vector<Piece *>> board ) {
     int kingX = 0;
     int kingY = 0;
     for ( int i = 0; i < 8; ++i ) {

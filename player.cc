@@ -2,6 +2,7 @@
 // Last Modified At
 
 #include "player.h"
+#include "game.h"
 
 const int SIZE = 8;
 Player::Player( const int &id ) : 
@@ -17,15 +18,15 @@ void Player::emplacePieceMove(const int x, const int y, Game &game) {
         for(int j = 0; j < SIZE; j++) {     // col
             Posn init{x,y};
             Posn dest{i,j};
-            if(target->isValidMove(&init, &dest, game)) {
-                char op;
+            if(target->isValidMove(&init, &dest, board, game.getMoveHistory())) {
+                std::string op;
                 // get movement type
                 if(toupper(target->getType()) == 'P' && (i == 0 || i == 7))
-                    op = 'p';
+                    op = "p";
                 else if (toupper(target->getType()) == 'K' && abs(j - y) == 2)  // move king two steps
-                    op = 'c';
+                    op = "c";
                 else if (board[i][j] && board[i][j]->getSide() != id)    // piece of different side
-                    op = 'k';
+                    op = "k";
                 availableMove.emplace_back(init, dest, id, op);
             }   // end if
         }   // end col for loop

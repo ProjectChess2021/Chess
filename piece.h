@@ -8,7 +8,7 @@
 #include <memory>
 #include "posn.h"
 #include <vector>
-#include "game.h"
+#include "moveHistory.h"
 
 class Piece {
     // side = 1 means the bottom player, side == 2 means the top player
@@ -27,7 +27,7 @@ class Piece {
     bool &isJustMoved();
     // require: the input position must be on the board
     virtual bool isValidMove( Posn *original, Posn *end, 
-      Game &game ) = 0;
+      std::vector<std::vector<Piece *>> &board, MoveHistory *mh ) = 0;
     virtual ~Piece();
 };
 

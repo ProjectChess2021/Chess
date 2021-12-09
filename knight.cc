@@ -5,8 +5,7 @@
 Knight::Knight( const int &side ) : Piece{ side, 'n' } { }
 
 bool Knight::isValidMove( Posn *original, Posn *end, 
-    Game &game ) {
-    std::vector<std::vector<Piece *>> board = game.getBoard();
+    std::vector<std::vector<Piece *>> &board, MoveHistory *mh ) {
     int oriX = original->getX();
     int oriY = original->getY();
     int endX = end->getX();

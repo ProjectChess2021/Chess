@@ -9,15 +9,13 @@
 #include "subject.h"
 #include "player.h"
 #include "moveHistory.h"
-#include "piece.h"
 #include "rook.h"
 #include "pawn.h"
 #include "knight.h"
 #include "bishop.h"
 #include "queen.h"
 #include "king.h"
-
-class Player;
+#include "piece.h"
 
 class Game : public Subject {
     std::vector<Player *> players;
