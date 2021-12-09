@@ -8,10 +8,11 @@ MoveHistory::MoveHistory( const int& maxUndo  ) : maxUndos{ maxUndo }  { }
 
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
-    const int &finalX, const int &finalY, const char &operation ) {
+    const int &finalX, const int &finalY, const std::string &operation, 
+    const bool &firstMove ) {
     std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
     mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
-        finalY, operation) );
+        finalY, operation, firstMove) );
     if ( (int)mh.size() > maxUndos * 2 ) {
         mh.pop_back();
     }
@@ -26,6 +27,10 @@ std::vector<Move *> MoveHistory::undo() {
     mh.erase( mh.begin() );
     return undos;
 }   // end undo
+
+Move *MoveHistory::lastMove() { return mh[0].get(); }
+
+bool MoveHistory::hasMoved() { return mh.size() >= 1; }
 
 MoveHistory::MoveHistIter::MoveHistIter( const int &index, 
     std::vector<std::unique_ptr<Move>> &mh ) : 

@@ -5,7 +5,8 @@
 #include "king.h"
 #include <vector>
 
-Human::Human( const int &side ) : Player{ side } { }
+Human::Human( const int &side, std::vector<std::vector<Piece *>> &board ) : 
+    Player{ side, board } { }
 
 bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
     if ( iniX < 0 || iniX >= 8 ) {

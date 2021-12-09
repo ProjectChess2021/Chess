@@ -4,7 +4,8 @@
 Queen::Queen( const int &side ) : Piece{ side, 'q' } { }
 
 bool Queen::isValidMove( Posn *original, Posn *end, 
-    std::vector<std::vector<Piece *>> &board ) {
+    Game &game ) {
+    std::vector<std::vector<Piece *>> board = game.getBoard();
     int oriX = original->getX();
     int oriY = original->getY();
     int endX = end->getX();

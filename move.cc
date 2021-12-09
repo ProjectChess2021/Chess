@@ -3,14 +3,15 @@
 #include "move.h"
 #include <iomanip>
 
-Move::Move(Posn& init, Posn& dest, const int& _side, const char& op) :
+Move::Move(Posn& init, Posn& dest, const int& _side, const char& op, const bool &firstMove) :
     original{std::make_unique<Posn>(init)},
     end{std::make_unique<Posn>(dest)},
     side{_side},
-    operation{op}   {}
+    operation{op},
+    firstMove{ firstMove }   {}
 
 Move::Move( const int &originalX, const int &originalY, const int &finalX, 
-    const int &finalY, const int& _side, const char &operation ) : 
+    const int &finalY, const int& _side, const std::string &operation ) : 
     original{ std::make_unique<Posn>( originalX, originalY ) }, 
     end{ std::make_unique<Posn>( finalX, finalY ) },
     side{_side},
@@ -22,7 +23,9 @@ Posn *Move::getOriginal() { return original.get(); }
 
 Posn *Move::getEnd() { return end.get(); }
 
-char Move::getOperation() { return operation; }
+bool Move::isFirstMove() { return firstMove; }
+
+std::string Move::getOperation() { return operation; }
 
 // This function translates the side number to a string (colour representing the player)
 std::string getSideStr(const int x){

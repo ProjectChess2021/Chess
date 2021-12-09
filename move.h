@@ -11,15 +11,17 @@ class Move {
     std::unique_ptr<Posn> original;
     std::unique_ptr<Posn> end;
     int side;
-    char operation; //(c)astling,(m)ove,(k)ill,(p)romotion
+    bool firstMove;
+    std::string operation; //(c)astling,(m)ove,(k)ill,(p)romotion
     public:
-    Move(Posn&, Posn&, const int&, const char&);
+    Move(Posn&, Posn&, const int&, const char&, const bool &firstMove);
     Move( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalY, const int&, const char &operation );
+        const int &finalY, const int&, const std::string &operation );
     int getSide() noexcept;
     Posn* getOriginal();
     Posn* getEnd();
-    char getOperation();
+    bool isFirstMove();
+    std::string getOperation();
     friend std::ostream &operator<<( std::ostream &, const Move& ); 
 };
 

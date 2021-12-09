@@ -5,7 +5,8 @@
 Bishop::Bishop( const int &side ) : Piece{ side, 'b' } { }
 
 bool Bishop::isValidMove( Posn *original, Posn *end, 
-    std::vector<std::vector<Piece *>> &board ) {
+    Game &game ) {
+    std::vector<std::vector<Piece *>> board = game.getBoard();
     int oriX = original->getX();
     int oriY = original->getY();
     int endX = end->getX();

@@ -5,7 +5,9 @@
 Pawn::Pawn( const int &side ) : Piece{ side, 'p' } { }
 
 bool Pawn::isValidMove( Posn *original, Posn *end, 
-    std::vector<std::vector<Piece *>> &board ) {
+    Game &game ) {
+    std::vector<std::vector<Piece *>> board = game.getBoard();
+    MoveHistory *mh = game.getMoveHistory();
     int oriX = original->getX();
     int oriY = original->getY();
     int endX = end->getX();
@@ -24,7 +26,8 @@ bool Pawn::isValidMove( Posn *original, Posn *end,
             }
             if ( diffY == 2 ) {
                 if ( !isMoved() ) {
-                    if ( board[endX][endY] != nullptr ) 
+                    if ( board[endX][endY] != nullptr || 
+                         board[endX][endY - 1] != nullptr ) 
                         return false;
                     return true;
                 }
@@ -38,7 +41,8 @@ bool Pawn::isValidMove( Posn *original, Posn *end,
             }
             if ( diffY == -2 ) {
                 if ( !isMoved() ) {
-                    if ( board[endX][endY] != nullptr ) 
+                    if ( board[endX][endY] != nullptr || 
+                         board[endX][endY + 1] != nullptr ) 
                         return false;
                     return true;
                 }
@@ -58,6 +62,37 @@ bool Pawn::isValidMove( Posn *original, Posn *end,
             if ( board[oriX + diffX][oriY] != nullptr ) {
                 if ( board[oriX + diffX][oriY]->getSide() != getSide() ) {
                     return true;
+                }
+            }
+        }
+    }
+
+    if ( mh->hasMoved() ) {
+        Move *lastMove = mh->lastMove();
+        Posn *lastMoveEnd = lastMove->getEnd();
+        Posn *lastMoveBegin = lastMove->getOriginal();
+        Piece *lastPiece = board[lastMoveEnd->getX()][lastMoveEnd->getY()];
+        if ( lastPiece->getType() == 'p' ) {
+            if ( ( diffX == 1 || diffX == -1 ) ) {
+                if ( diffY == 1 && getSide() == 1 ) {
+                    if ( endX == lastMoveEnd->getX() && 
+                        endY - 1 == lastMoveEnd->getY() &&
+                        endX == lastMoveBegin->getX() && 
+                        endY + 1 == lastMoveBegin->getY() &&
+                        lastPiece->getSide() != getSide() ) {
+                        return true;
+                    }
+                }
+            }
+            if ( diffY == -1 && getSide() == 2 ) {
+                if ( board[endX][endY + 1] != nullptr ) {
+                    if ( endX == lastMoveEnd->getX() && 
+                        endY + 1 == lastMoveEnd->getY() &&
+                        endX == lastMoveBegin->getX() && 
+                        endY - 1 == lastMoveBegin->getY() &&
+                        lastPiece->getSide() != getSide() ) {
+                        return true;
+                    }
                 }
             }
         }

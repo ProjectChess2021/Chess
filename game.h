@@ -6,10 +6,15 @@
 
 #include <vector>
 #include <memory>
-#include "posn.h"
 #include "subject.h"
 #include "moveHistory.h"
 #include "piece.h"
+#include "rook.h"
+#include "pawn.h"
+#include "knight.h"
+#include "bishop.h"
+#include "queen.h"
+#include "king.h"
 
 class Player;
 
@@ -20,8 +25,10 @@ class Game : public Subject {
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
 
-    char move( Posn *original, Posn *end, char type );
-    char undo( Posn *end, Posn *original, char type );
+    // will not change the moved status of the piece that is being changed
+    std::string move( const int &originalX, const int &originalY, 
+      const int &finalX, const int &finalY );
+    void undo();
 
   public: 
     Game( std::vector<Player *> &players );
@@ -30,7 +37,7 @@ class Game : public Subject {
     void setup();
 
     std::vector<std::vector<Piece *>>& getBoard();
-    std::unique_ptr<MoveHistory> getMoveHistory();
+    MoveHistory *getMoveHistory();
     int getScore(int idx);  // return the currentScore of a single player
 };  // end Game
 

@@ -8,7 +8,7 @@
 
 // Initialize the Board as a blank board.
 TextDisplay::TextDisplay(Game& g) : g{g} {
-    int occupy = (8 - 1) * (8 - 1);
+    int occupy = 7 * 7;
     display.resize(occupy, std::vector<char>(occupy, ' '));
 }  // end Constructor
 
