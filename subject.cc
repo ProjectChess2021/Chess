@@ -10,8 +10,8 @@ void Subject::detach( Observer *o ) {
     }
 }
 
-void Subject::notifyObservers() {
+void Subject::notifyObservers( Game &game) {
     for ( auto &ob : obs ) {
-        ob->notify();
+        ob->notify( game );
     }
 }

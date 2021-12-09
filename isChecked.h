@@ -8,6 +8,8 @@ class IsChecked {
     public:
     bool static isChecked( const int &x, const int &y, const int &side,
         std::vector<std::vector<Piece *>> &board );
+    bool static isChecked( const int &side,
+        std::vector<std::vector<Piece *>> &board );
 };
 
 #endif

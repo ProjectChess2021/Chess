@@ -193,3 +193,20 @@ bool IsChecked::isChecked( const int &x, const int &y, const int &side,
 
     return false;
 }
+
+bool IsChecked::isChecked( const int &side,
+    std::vector<std::vector<Piece *>> &board ) {
+    int kingX = 0;
+    int kingY = 0;
+    for ( int i = 0; i < 8; ++i ) {
+        for ( int k = 0; k < 8; ++k ) {
+            if ( board[i][k]->getType() == 'k' && board[i][k]->getSide() == side ) {
+                kingX = i;
+                kingY = k;
+                i = 8;
+                k = 8;
+            }
+        }
+    }
+    return isChecked( kingX, kingY, side, board );
+}

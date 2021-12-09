@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include "subject.h"
+#include "player.h"
 #include "moveHistory.h"
 #include "piece.h"
 #include "rook.h"
@@ -24,6 +25,7 @@ class Game : public Subject {
     std::vector<std::unique_ptr<Piece>> pieces;
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
+    bool whiteStart;
 
     // will not change the moved status of the piece that is being changed
     std::string move( const int &originalX, const int &originalY, 
@@ -35,6 +37,7 @@ class Game : public Subject {
     // Use board and movehistory in start, which is in each game
     void start();
     void setup();
+    void boardInit();
 
     std::vector<std::vector<Piece *>>& getBoard();
     MoveHistory *getMoveHistory();

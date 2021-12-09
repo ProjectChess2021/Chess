@@ -5,8 +5,8 @@
 #include "king.h"
 #include <vector>
 
-Human::Human( const int &side, std::vector<std::vector<Piece *>> &board ) : 
-    Player{ side, board } { }
+Human::Human( const int &side ) : 
+    Player{ side } { }
 
 bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
     if ( iniX < 0 || iniX >= 8 ) {
@@ -24,12 +24,13 @@ bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY
     return true;
 }
 
-std::string Human::cmd( std::vector<std::vector<Piece *>> board ) {
+std::string Human::cmd( Game &game ) {
     std::string cmd = "";
     std::string iniPosn = "";
     std::string endPosn = "";
     int kingX = 0;
     int kingY = 0;
+    std::vector<std::vector<Piece *>> board = game.getBoard();
 
     for ( int i = 0; i < 8; ++i ) {
         for ( int k = 0; k < 8; ++k ) {
@@ -68,7 +69,7 @@ std::string Human::cmd( std::vector<std::vector<Piece *>> board ) {
             std::cerr << "endX = " << endX << std::endl;
             std::cerr << "endY = " << endY << std::endl;
 
-            if ( board[iniX][iniY]->isValidMove( &init, &end, board ) ) {
+            if ( board[iniX][iniY]->isValidMove( &init, &end, game ) ) {
                 board[endX][endY] = board[iniX][iniY];
                 board[iniX][iniY] = nullptr;
             } else {

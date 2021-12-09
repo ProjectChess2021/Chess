@@ -5,8 +5,8 @@
 
 class Human : public Player {
     public:
-    Human( const int &side, std::vector<std::vector<Piece *>> &board );
-    std::string cmd( std::vector<std::vector<Piece *>> board ) override;
+    Human( const int &side );
+    std::string cmd( Game &game ) override;
 };
 
 #endif

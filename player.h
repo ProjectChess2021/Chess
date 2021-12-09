@@ -10,17 +10,17 @@
 #include "observer.h"
 
 class Player : public Observer {
-    int score;
+    float score;
     int id;
     std::vector<Move> availableMove;
-    std::vector<std::vector<Piece *>>& board;
-    void emplacePieceMove(const int, const int);
+    void emplacePieceMove(const int, const int, Game &game);
     public:
-    Player( const int &id, std::vector<std::vector<Piece *>>&);
-    void notify() override;
-    int getScore();
+    Player( const int &id );
+    void notify( Game &game ) override;
+    float &getScore();
     int getId();
-    virtual std::string cmd( std::vector<std::vector<Piece *>> board ) = 0;
+    bool hasAvaliableMove();
+    virtual std::string cmd( Game &game ) = 0;
     virtual ~Player();
 };
 
