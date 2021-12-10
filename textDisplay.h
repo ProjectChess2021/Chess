@@ -4,15 +4,16 @@
 #define __TEXTDISPLAY_H__
 
 #include "observer.h"
-#include "game.h"
 #include <vector>
 #include "posn.h"
+
+class game;
 
 class TextDisplay : public Observer {
     Game &g;
     std::vector<std::vector<char>> display; // Holds the occupy status of the whole board
     public:
-    TextDisplay( Game &g );
+    TextDisplay( Game &game );
     ~TextDisplay() override;
 
     void notify(Game&) override;

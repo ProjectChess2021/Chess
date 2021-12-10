@@ -412,3 +412,9 @@ void Game::setup() {
     }
     notifyObservers(*this);
 }
+
+std::vector<std::vector<Piece *>> &Game::getBoard() { return board; }
+
+MoveHistory *Game::getMoveHistory() { return mh.get(); }
+
+int Game::getScore( int idx ) { return players[idx]->getScore(); }
