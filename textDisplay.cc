@@ -57,3 +57,5 @@ std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     //system("pause");
     return out;
 }   // end operator<<
+
+TextDisplay::~TextDisplay() { } 
