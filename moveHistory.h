@@ -15,7 +15,7 @@ class MoveHistory {
     MoveHistory( const int &maxUndo );
 
     void add( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalY, const std::string &operation, const bool &firstMove );
+        const int &finalY, const int& side, const std::string &operation, const bool &firstMove );
     std::vector<Move *> undo();
 
     Move *lastMove();

@@ -3,19 +3,23 @@
 #include "move.h"
 #include <iomanip>
 
-Move::Move(Posn& init, Posn& dest, const int& _side, const char& op, const bool &firstMove) :
+Move::Move(Posn& init, Posn& dest, const int& _side, const std::string& op, const bool &_isFirstMove) :
     original{std::make_unique<Posn>(init)},
     end{std::make_unique<Posn>(dest)},
     side{_side},
-    operation{op},
-    firstMove{ firstMove }   {}
+    firstMove{_isFirstMove},
+    operation{op} {}    // end Constructor
 
-Move::Move( const int &originalX, const int &originalY, const int &finalX, 
-    const int &finalY, const int& _side, const std::string &operation ) : 
-    original{ std::make_unique<Posn>( originalX, originalY ) }, 
-    end{ std::make_unique<Posn>( finalX, finalY ) },
+Move::Move( const int &initX, const int &initY, const int &destX, 
+    const int &destY, const int& _side, const std::string &operation, const bool& _isFirstMove) : 
     side{_side},
-    operation{ operation } { }
+    firstMove{_isFirstMove},
+    operation{ operation } { 
+        Posn init = Posn{initX, initY};
+        Posn dest = Posn{destX, destY};
+        original = std::make_unique<Posn>(init);
+        end = std::make_unique<Posn>(dest);
+    } // end Constructor
 
 int Move::getSide() {return side;}
 

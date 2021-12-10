@@ -4,5 +4,5 @@
 #include "levelThree.h"
 
 std::string LevelThree::makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) {
-    
+    return "";
 }   // end makeMove

@@ -15,7 +15,7 @@ class TextDisplay : public Observer {
     TextDisplay( Game &g );
     ~TextDisplay() override;
 
-    void notify() override;
+    void notify(Game&) override;
 
     friend std::ostream &operator<<( std::ostream &, const TextDisplay& );
 };

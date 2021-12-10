@@ -1,5 +1,6 @@
 #include "human.h"
 #include <string>
+#include "game.h"
 #include "isChecked.h"
 #include <iostream>
 #include "king.h"
@@ -69,7 +70,7 @@ std::string Human::cmd( Game &game ) {
             std::cerr << "endX = " << endX << std::endl;
             std::cerr << "endY = " << endY << std::endl;
 
-            if ( board[iniX][iniY]->isValidMove( &init, &end, game ) ) {
+            if ( board[iniX][iniY]->isValidMove( &init, &end, board, game.getMoveHistory()) ) {
                 board[endX][endY] = board[iniX][iniY];
                 board[iniX][iniY] = nullptr;
             } else {

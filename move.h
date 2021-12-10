@@ -1,5 +1,5 @@
 // Zichu
-// Last Modified At (UTC-5)2244,20211207 (By Kunling)
+// Last Modified At (UTC-5)2254,20211209 (By Kunling)
 
 #ifndef __MOVE_H__ 
 #define __MOVE_H__
@@ -14,10 +14,10 @@ class Move {
     bool firstMove;
     std::string operation; //(c)astling,(m)ove,(k)ill,(p)romotion
     public:
-    Move(Posn&, Posn&, const int&, const char&, const bool &firstMove);
+    Move(Posn&, Posn&, const int&, const std::string&, const bool &firstMove);
     Move( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalY, const int&, const std::string &operation );
-    int getSide() noexcept;
+        const int &finalY, const int&, const std::string &operation, const bool& );
+    int getSide();
     Posn* getOriginal();
     Posn* getEnd();
     bool isFirstMove();

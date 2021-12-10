@@ -11,7 +11,7 @@ std::string LevelTwo::makeMove(std::vector<std::vector<Piece *>>& board, std::ve
     Posn* maxCaptureDest = nullptr;
 
     for(it = am.begin(); it != am.end(); it++) {
-        if(toupper(it->getOperation()) == 'K') {    // a capture exists as an available move
+        if(it->getOperation() == "k") {    // a capture exists as an available move
             int destX = it->getEnd()->getX();
             int destY = it->getEnd()->getY();
             char destType = tolower(board[destX][destY]->getType());
@@ -27,10 +27,11 @@ std::string LevelTwo::makeMove(std::vector<std::vector<Piece *>>& board, std::ve
         }   // end if
     }   // end for loop going through am
 
-    if(maxCaptureWeight == -1)  // no capture move available
+    if(maxCaptureWeight == -1) { // no capture move available
         std::cerr << "No capture move available @ Line31, LevelTwo.cc";
         return LevelOne::makeMove(board, am);   // use LevelOne makeMove to randomly select one
-
+    }   // end if
+    
     std::string retStr;
     retStr = "move " + (char) (maxCaptureInit->getY() + 'a') + (maxCaptureInit->getX());
     retStr += " " +  (char) (maxCaptureDest->getY() + 'a') + (maxCaptureDest->getX());

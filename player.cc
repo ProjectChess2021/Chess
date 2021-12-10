@@ -27,7 +27,7 @@ void Player::emplacePieceMove(const int x, const int y, Game &game) {
                     op = "c";
                 else if (board[i][j] && board[i][j]->getSide() != id)    // piece of different side
                     op = "k";
-                availableMove.emplace_back(init, dest, id, op);
+                availableMove.emplace_back(init, dest, id, op, (1 && board[i][j]->isMoved()));
             }   // end if
         }   // end col for loop
     }   // end row for loop

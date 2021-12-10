@@ -3,6 +3,7 @@
 
 #include "textDisplay.h"
 #include <iostream>
+#include "game.h"
 #include "moveHistory.h"
 #include <iomanip>
 
@@ -13,9 +14,9 @@ TextDisplay::TextDisplay(Game& g) : g{g} {
 }  // end Constructor
 
 // update the TextObserver once get notified
-void TextDisplay::notify() {
+void TextDisplay::notify(Game& _g) {
     std::cerr << "begin notify() @ Line 26, textDisplay.cc" << std::endl;
-    std::vector<std::vector<Piece*>> aBoard = g.getBoard();
+    std::vector<std::vector<Piece*>>& aBoard = _g.getBoard();
     for(int i = 0; i < (int)aBoard.size(); i++) {
         for(int j = 0; j < (int)aBoard[i].size(); j++) {
             if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
@@ -29,7 +30,7 @@ void TextDisplay::notify() {
 std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     std::cerr << "Operator<< @ Line 39, textDisplay.cc" << std::endl;
     //system("clear");          // clear what's on the screen so it looks nicer
-    std::unique_ptr<MoveHistory> MHptr = txtOb.g.getMoveHistory();
+    MoveHistory* MHptr = txtOb.g.getMoveHistory();
     int displayNum = 0;               // the number of moveHistory piece to be displayed
     MoveHistory::MoveHistIter it = MHptr->end();
     while(displayNum <= 4 && it != MHptr->begin()) { // Only newest five moves (at most) will be displayed
@@ -53,6 +54,6 @@ std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     }   //end outer for loop
     out << std::endl << "  ";
     for(int i = 0; i < 8; i ++) out<<(char)( 'a' + i);
-    system("pause");
+    //system("pause");
     return out;
 }   // end operator<<

@@ -10,6 +10,7 @@
 class LevelOne : public Strategy{
     public:
     std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) override;
+    ~LevelOne() = default;
 };  // end LevelOne
 
 #endif
