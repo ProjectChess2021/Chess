@@ -79,7 +79,7 @@ const vector<pair<char, vector<vector<int>>>> POSWEIGHT {
 
 class Strategy {    
     public:
-    virtual ~Strategy();
+    virtual ~Strategy() = default;
     virtual std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&)  = 0;
 };  // end Strategy
 

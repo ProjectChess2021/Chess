@@ -6,9 +6,7 @@
 #include "observer.h"
 #include <vector>
 #include "posn.h"
-
-class game;
-
+#include "game.h"
 class TextDisplay : public Observer {
     Game &g;
     std::vector<std::vector<char>> display; // Holds the occupy status of the whole board
@@ -16,7 +14,7 @@ class TextDisplay : public Observer {
     TextDisplay( Game &game );
     ~TextDisplay() override;
 
-    void notify(Game&) override;
+    virtual void notify(Game& game) override;
 
     friend std::ostream &operator<<( std::ostream &, const TextDisplay& );
 };
