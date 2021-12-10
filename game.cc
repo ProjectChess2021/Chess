@@ -265,6 +265,7 @@ void Game::start() {
                 in >> endX;
                 in >> endY;
                 move( oriX, oriY, endX, endY );
+                board[endX][endY]->isMoved() = true;
             }
         }
     }
