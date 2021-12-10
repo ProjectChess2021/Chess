@@ -6,8 +6,8 @@
 #include "king.h"
 #include <vector>
 
-Human::Human( const int &side ) : 
-    Player{ side } { }
+Human::Human( const int &side, const int numUndos ) : 
+    Player{ side, numUndos } { }
 
 bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
     if ( iniX < 0 || iniX >= 8 ) {
@@ -46,9 +46,11 @@ std::string Human::cmd( Game &game ) {
         }
     }
 
-    while ( true ) {
-        std::cout << "Please enter command here: ";
-        std::cin >> cmd;
+    std::cout << "Please enter command here: ";
+
+    std::cerr << "I am " << getId() << std::endl;
+
+    while ( std::cin >> cmd ) {
         if ( cmd == "move" ) {
             std::cin >> iniPosn;
             std::cin >> endPosn;
@@ -59,6 +61,7 @@ std::string Human::cmd( Game &game ) {
 
             if ( !inRange( iniX, iniY, endX, endY ) ) {
                 std::cout << "Invalid coordinates" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             }
 
@@ -76,12 +79,14 @@ std::string Human::cmd( Game &game ) {
                 board[iniX][iniY] = nullptr;
             } else {
                 std::cout << "Invalid move!" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             }
 
             if ( IsChecked::isChecked( kingX, kingY, getId(), board ) ) {
                 std::cout << "Your king will be checked by this move" << std::endl;
                 std::cout << "Please think carefully before you make your move" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             } else { 
                 return cmd + " " + iniPosn + " " + endPosn;
@@ -89,7 +94,7 @@ std::string Human::cmd( Game &game ) {
 
         } else if ( cmd == "resign" ) {
             return cmd;
-        } else if ( cmd == "undo" && game.isAllowUndo() ) {
+        } else if ( cmd == "undo" && getNumUndo() != 0 ) {
             return cmd;
         } else {
             std::cout << "Invalid command!" << std::endl;
@@ -97,8 +102,11 @@ std::string Human::cmd( Game &game ) {
             std::cout << "move e1 e8" << std::endl;
             std::cout << "resign" << std::endl;
             std::cout << "undo" << std::endl;
+            std::cout << "Please enter command here: ";
         }   
     }
+
+    return cmd;
 }
 
 // test case

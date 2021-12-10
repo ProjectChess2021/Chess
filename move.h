@@ -10,14 +10,14 @@
 class Move {
     std::unique_ptr<Posn> original;
     std::unique_ptr<Posn> end;
-    const int &side;
-    const bool &firstMove;
+    const int side;
+    const bool firstMove;
     std::string operation; //(c)astling,(m)ove,(k)ill,(p)romotion
     public:
     Move(Posn&, Posn&, const int&, const std::string&, const bool &firstMove);
     Move( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalY, const int&, const std::string &operation, 
-        const bool &_isFirstMove);
+        const int &finalY, const int, const std::string operation, 
+        const bool _isFirstMove);
     int getSide();
     Posn* getOriginal();
     Posn* getEnd();

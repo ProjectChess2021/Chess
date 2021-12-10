@@ -5,8 +5,8 @@
 #include "game.h"
 
 const int SIZE = 8;
-Player::Player( const int &id ) : 
-    score{ 0 }, id{ id } { } // end constructor
+Player::Player( const int &id, const int numUndo ) : 
+    score{ 0 }, id{ id }, numUndo{ numUndo } { } // end constructor
 
 // This function adds a Piece's every avaiable move into the avaiableMove vector
 void Player::emplacePieceMove(const int x, const int y, Game &game) {
@@ -19,7 +19,7 @@ void Player::emplacePieceMove(const int x, const int y, Game &game) {
             Posn init{x,y};
             Posn dest{i,j};
             if(target->isValidMove(&init, &dest, board, game.getMoveHistory())) {
-                std::string op;
+                std::string op = "m";
                 // get movement type
                 std::cerr << __LINE__ << std::endl;
                 if(toupper(target->getType()) == 'P' && (i == 0 || i == 7))
@@ -28,11 +28,10 @@ void Player::emplacePieceMove(const int x, const int y, Game &game) {
                     op = "c";
                 else if (board[i][j] && board[i][j]->getSide() != id)    // piece of different side
                     op = "k";
-                else
-                    op = "m";
                 std::cerr << __LINE__ << std::endl;
                 availableMove.emplace_back(
-                    std::make_unique<Move>( x, y, i, j, id, op, board[i][j]->isMoved() ) );
+                    std::make_unique<Move>( x, y, i, j, id, op, 
+                        board[x][y]->isMoved() ) );
             }   // end if
         }   // end col for loop
     }   // end row for loop
@@ -55,6 +54,10 @@ void Player::notify( Game &game ) {
 float &Player::getScore() { return score; }
 
 int Player::getId() { return id; }
+
+int Player::getNumUndo() { return numUndo; }
+
+void Player::usedUndo() { numUndo--; }
 
 bool Player::hasAvaliableMove() { return availableMove.size() > 0; }
 

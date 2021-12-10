@@ -47,14 +47,9 @@ void Game::boardInit() {
     whiteStart = true;
 }
 
-Game::Game( std::vector<Player *> &players, bool allowUndo ) : 
-    players{ players }, mh{ std::make_unique<MoveHistory>() }, 
-    whiteStart{ true }, allowUndo{ allowUndo } {
+Game::Game() :  mh{ std::make_unique<MoveHistory>() }, whiteStart{ true } {
     board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     boardInit();
-    for ( auto player : players ) {
-        attach( player );
-    }
 }
 
 std::string Game::move( const int &originalX, const int &originalY, 
@@ -130,7 +125,7 @@ std::string Game::move( const int &originalX, const int &originalY,
             }
             deadPool.emplace_back( pc );
             board[endX][endY] = pieces.back().get();
-            pieces.back().get()->isMoved() = true;
+            pieces.back().get()->changeMoved( true );
             if ( retval == "k" ) {
                 retval += "+p";
             } else {
@@ -147,14 +142,14 @@ std::string Game::move( const int &originalX, const int &originalY,
                 board[endX][endY] = pc;
                 board[originalX][originalY] = nullptr;
                 board[endX - 1][endY] = board[7][endY];
-                board[endX - 1][endY]->isMoved() = true;
+                board[endX - 1][endY]->changeMoved( true );
                 board[7][endY] = nullptr; 
             } else {
                 board[endX][endY] = pc;
                 board[originalX][originalY] = nullptr;
                 board[endX + 1][endY] = board[0][endY];
                 board[0][endY] = nullptr; 
-                board[endX + 1][endY]->isMoved() = true;
+                board[endX + 1][endY]->changeMoved( true );
             }
             retval = "c";
         }
@@ -175,43 +170,44 @@ void Game::undo() {
         if ( hist->getOperation() == "m" ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
-            board[beginX][beginY]->isMoved() = hist->isFirstMove();
+            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
         } else if ( hist->getOperation() == "c" ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
-            board[beginX][beginY]->isMoved() = false;
+            board[beginX][beginY]->changeMoved( false );
             if ( endX > beginX ) {
                 board[7][endY] = board[endX - 1][endY];
-                board[7][endY]->isMoved() = false;
+                board[7][endY]->changeMoved( false );
                 board[endX + 1][endY] = nullptr;
             } else {
                 board[0][endY] = board[endX + 1][endY];
-                board[0][endY]->isMoved() = false;
+                board[0][endY]->changeMoved( false );
                 board[endX + 1][endY] = nullptr;
             }
         } else if ( hist->getOperation() == "k" ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
-            board[beginX][beginY]->isMoved() = hist->isFirstMove();
+            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
         } else if ( hist->getOperation() == "p" ) {
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
-            board[beginX][beginY]->isMoved() = hist->isFirstMove();
+            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
         } else if ( hist->getOperation() == "k+p" ) {
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
-            board[beginX][beginY]->isMoved() = hist->isFirstMove();
+            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
         }
     }
 }
 
 void Game::start() {
+    boardInit();
     bool end = false;
     notifyObservers( *this );
     int diffI = 1;
@@ -221,7 +217,7 @@ void Game::start() {
         diffI = 0;
     }
     while ( !end ) {
-        for ( int i = 0, k = 2; i < 2 && k >= 0; i += diffI, k+= diffK ) {
+        for ( int i = 0, k = 1; i < 2 && k >= 0; ) {
             Player *player = nullptr;
             if ( whiteStart ) {
                 player = players[i];
@@ -260,6 +256,7 @@ void Game::start() {
             
             if ( cmd == "undo" ) {
                 undo();
+                player->usedUndo();
             } else if ( cmd == "resign" ) {
                 if ( i == 0 ) {
                     std::cout << "Black wins!" << std::endl;
@@ -268,6 +265,9 @@ void Game::start() {
                     std::cout << "White wins!" << std::endl;
                     player[0].getScore()++;
                 }
+                end = true;
+                break;
+            } else if ( cmd == "" ) {
                 end = true;
                 break;
             } else {
@@ -282,10 +282,14 @@ void Game::start() {
                 int iniY = iniPosn[1] - '1';
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
-                move( iniX, iniY, endX, endY );
-                board[endX][endY]->isMoved() = true;
+                std::string op = move( iniX, iniY, endX, endY );
+                mh->add( iniX, iniY, endX, endY, player->getId(), op, 
+                    board[endX][endY]->isMoved() );
+                board[endX][endY]->changeMoved( true );
             }
             notifyObservers( *this );
+            i += diffI; 
+            k += diffK;
         }
     }
 }
@@ -301,8 +305,7 @@ void errorMsg() {
 
 void Game::setup() {
     std::string in = "";
-    pieces.clear();
-    board.clear();
+    boardInit();
     board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     notifyObservers(*this);
     std::cout << "Please enter command here" << std::endl;
@@ -437,6 +440,9 @@ std::vector<std::vector<Piece *>> &Game::getBoard() { return board; }
 
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
-int Game::getScore( int idx ) { return players[idx]->getScore(); }
+float Game::getScore( int idx ) { return players[idx]->getScore(); }
 
-bool Game::isAllowUndo() { return allowUndo; }
+void Game::addPlayer( Player *player ) { 
+    players.emplace_back( player ); 
+    attach( player );
+}

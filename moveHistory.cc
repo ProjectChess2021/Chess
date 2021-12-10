@@ -2,20 +2,18 @@
 // Last Modified At (UTC-5) 2259,20211207
 
 #include "moveHistory.h"
+#include "limits.h"
 
-MoveHistory::MoveHistory( const int& maxUndo  ) : maxUndos{ maxUndo }  { }
+MoveHistory::MoveHistory() { }
 // end constructor
 
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
     const int &finalX, const int &finalY, const int& side, const std::string &operation, 
-    const bool &firstMove ) {
+    bool firstMove ) {
     std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
     mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
         finalY, side, operation, firstMove) );
-    if ( (int)mh.size() > maxUndos * 2 ) {
-        mh.pop_back();
-    }
 }   // end add
 
 std::vector<Move *> MoveHistory::undo() {

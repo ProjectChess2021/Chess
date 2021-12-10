@@ -24,7 +24,6 @@ class Game : public Subject {
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
     bool whiteStart;
-    bool allowUndo;
 
     // will not change the moved status of the piece that is being changed
     std::string move( const int &originalX, const int &originalY, 
@@ -32,16 +31,16 @@ class Game : public Subject {
     void undo();
 
   public: 
-    Game( std::vector<Player *> &players, bool allowUndo = false );
+    Game();
     // Use board and movehistory in start, which is in each game
     void start();
     void setup();
     void boardInit();
 
     std::vector<std::vector<Piece *>>& getBoard();
-    bool isAllowUndo();
     MoveHistory*getMoveHistory();
-    int getScore(int idx);  // return the currentScore of a single player
+    float getScore(int idx);  // return the currentScore of a single player
+    void addPlayer( Player *player );
 };  // end Game
 
 #endif

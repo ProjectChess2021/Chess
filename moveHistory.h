@@ -8,14 +8,13 @@
 #include <memory>
 
 class MoveHistory {
-    int maxUndos;
     std::vector<std::unique_ptr<Move>> mh;
 
     public:
-    MoveHistory( const int &maxUndo = 15 );
+    MoveHistory();
 
     void add( const int &originalX, const int &originalY, const int &finalX, 
-        const int &finalY, const int& side, const std::string &operation, const bool &firstMove );
+        const int &finalY, const int& side, const std::string &operation, bool firstMove );
     std::vector<Move *> undo();
 
     Move *lastMove();

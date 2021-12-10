@@ -13,8 +13,8 @@ Move::Move(Posn& init, Posn& dest, const int& _side, const std::string& op,
     operation{op} {}    // end Constructor
 
 Move::Move( const int &initX, const int &initY, const int &destX, 
-    const int &destY, const int& _side, const std::string &operation, 
-    const bool &_isFirstMove) : 
+    const int &destY, const int _side, const std::string operation, 
+    bool _isFirstMove) : 
     original{ std::make_unique<Posn>( initX, initY ) },
     end{ std::make_unique<Posn>( destX, destY ) },
     side{_side},

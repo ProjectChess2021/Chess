@@ -7,6 +7,8 @@ int Piece::getSide() { return side; }
 
 char Piece::getType() { return type; }
 
-bool &Piece::isMoved() { return moved; }
+bool Piece::isMoved() { return moved; }
+
+void Piece::changeMoved( bool status ) { moved = status; }
 
 Piece::~Piece() { }

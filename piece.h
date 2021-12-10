@@ -21,7 +21,8 @@ class Piece {
     char getType();
     // return the reference of moved and then after the first move
     // the game will be able to change the moved status
-    bool &isMoved();
+    bool isMoved();
+    void changeMoved( bool status );
     // require: the input position must be on the board
     virtual bool isValidMove( Posn *original, Posn *end, 
       std::vector<std::vector<Piece *>> &board, MoveHistory *mh ) = 0;

@@ -50,15 +50,15 @@ bool Pawn::isValidMove( Posn *original, Posn *end,
 
     if ( ( diffX == 1 || diffX == -1 ) ) {
         if ( diffY == 1 && getSide() == 1 ) {
-            if ( board[oriX + diffX][oriY] != nullptr ) {
-                if ( board[oriX + diffX][oriY]->getSide() != getSide() ) {
+            if ( board[endX][endY] != nullptr ) {
+                if ( board[endX][endY]->getSide() != getSide() ) {
                     return true;
                 }
             }
         }
         if ( diffY == -1 && getSide() == 2 ) {
-            if ( board[oriX + diffX][oriY] != nullptr ) {
-                if ( board[oriX + diffX][oriY]->getSide() != getSide() ) {
+            if ( board[endX][endY] != nullptr ) {
+                if ( board[endX][endY]->getSide() != getSide() ) {
                     return true;
                 }
             }

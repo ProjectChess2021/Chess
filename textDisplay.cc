@@ -37,7 +37,7 @@ void TextDisplay::notify(Game& _g) {
         displayHistory.emplace_back(&(*it));
         ++it;
     }
-
+    system( "clear" );
     std::cout << *this << std::endl;
 }   // end notify
 

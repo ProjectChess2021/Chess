@@ -13,7 +13,7 @@ class Bot : public Player {
     public:
     Bot( const int &side, Strategy*);
     void setStrategy(Strategy*);        // change the strategy, which is the AI difficulty
-    std::string cmd( std::vector<std::vector<Piece *>> board) override;
+    std::string cmd( Game &game ) override;
 };
 
 #endif
