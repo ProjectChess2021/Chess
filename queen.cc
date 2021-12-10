@@ -18,34 +18,50 @@ bool Queen::isValidMove( Posn *original, Posn *end,
     // Moving vertically
     if ( diffX == 0 ) {
         if ( diffY > 0 ) {
-            for ( int y = oriY; y < endY; ++y ) {
-                if ( board[oriX][y] != nullptr ) return false;
+            for ( int y = oriY + 1; y < endY; ++y ) {
+                if ( board[oriX][y] != nullptr ) {
+                    if ( board[oriX][y]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( diffY < 0 ) {
-            for ( int y = oriY; y > endY; --y ) {
-                if ( board[oriX][y] != nullptr ) return false;
+            for ( int y = oriY - 1; y > endY; --y ) {
+                if ( board[oriX][y] != nullptr ) {
+                    if ( board[oriX][y]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( board[endX][endY] != nullptr ) 
-            return board[endX][endY]->getSide() != this->getSide();
+            return board[endX][endY]->getSide() != getSide();
         return true;
     }
 
     // Moving Horizontally
     if ( diffY == 0 ) {
         if ( diffX > 0 ) {
-            for ( int x = oriX; x < endX; ++x ) {
-                if ( board[x][oriY] != nullptr ) return false;
+            for ( int x = oriX + 1; x < endX; ++x ) {
+                if ( board[x][oriY] != nullptr ) {
+                    if ( board[x][oriY]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( diffX < 0 ) {
-            for ( int x = oriX; x > endX; --x ) {
-                if ( board[x][oriY] != nullptr ) return false;
+            for ( int x = oriX - 1; x > endX; --x ) {
+                if ( board[x][oriY] != nullptr ) {
+                    if ( board[x][oriY]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( board[endX][endY] != nullptr ) 
-            return board[endX][endY]->getSide() != this->getSide();
+            return board[endX][endY]->getSide() != getSide();
         return true;
     }
 
@@ -53,11 +69,19 @@ bool Queen::isValidMove( Posn *original, Posn *end,
     if ( diffX == diffY ) {
         if ( diffX > 0 ) {
             for ( int i = 1; i < diffX; ++i  ) {
-                if ( board[oriX + i][oriY + i] != nullptr ) return false; 
+                if ( board[oriX + i][oriY + i] != nullptr ) {
+                    if ( board[oriX + i][oriY + i]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         } else if ( diffX < 0 ) {
             for ( int i = 1; i < -diffX; ++i  ) {
-                if ( board[oriX - i][oriY - i] != nullptr ) return false; 
+                if ( board[oriX - i][oriY - i] != nullptr ) {
+                    if ( board[oriX - i][oriY - i]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( board[endX][endY] != nullptr ) 
@@ -68,11 +92,19 @@ bool Queen::isValidMove( Posn *original, Posn *end,
     if ( diffX == -diffY ) {
         if ( diffX > 0 ) {
             for ( int i = 1; i < diffX; ++i  ) {
-                if ( board[oriX + i][oriY - i] != nullptr ) return false; 
+                if ( board[oriX + i][oriY - i] != nullptr ) {
+                    if ( board[oriX + i][oriY - i]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         } else if ( diffX < 0 ) {
             for ( int i = 1; i < -diffX; ++i  ) {
-                if ( board[oriX - i][oriY + i] != nullptr ) return false; 
+                if ( board[oriX - i][oriY + i] != nullptr ) {
+                    if ( board[oriX - i][oriY + i]->getSide() == getSide() ) {
+                        return false;
+                    }
+                }
             }
         }
         if ( board[endX][endY] != nullptr ) 

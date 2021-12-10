@@ -301,6 +301,7 @@ void errorMsg() {
     std::cout << "- e1" << std::endl;
     std::cout << "= white" << std::endl;
     std::cout << "done" << std::endl;
+    std::cout << "Please enter command here: ";
 }
 
 void Game::setup() {
@@ -308,7 +309,7 @@ void Game::setup() {
     boardInit();
     board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     notifyObservers(*this);
-    std::cout << "Please enter command here" << std::endl;
+    std::cout << "Please enter command here: ";
     while( std::getline( std::cin, in ) ) {
         std::string op = "";
         std::stringstream cmd{ in };
@@ -341,6 +342,7 @@ void Game::setup() {
             } else if ( pc == 'P' ) {
                 pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
             } else {
+                notifyObservers(*this);
                 errorMsg();
                 continue;
             }
@@ -350,6 +352,7 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
+                notifyObservers(*this);
                 errorMsg();
                 continue;
             }
@@ -360,6 +363,7 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
+                notifyObservers(*this);
                 errorMsg();
                 continue;
             }
@@ -372,6 +376,7 @@ void Game::setup() {
             } else if ( side == "black" ) {
                 whiteStart = false;
             } else {
+                notifyObservers(*this);
                 errorMsg();
                 continue;
             }
@@ -380,58 +385,71 @@ void Game::setup() {
             int blackKing = 0;
             for ( int i = 0; i < 8; ++i ) {
                 for ( int k = 0; k < 8; ++k ) {
-                    if ( board[i][k]->getType() == 'k' ) {
-                        if ( board[i][k]->getSide() == 1 ) {
-                            whiteKing++;
-                        } else {
-                            blackKing++;
+                    if ( board[i][k] ) {
+                        if ( board[i][k]->getType() == 'k' ) {
+                            if ( board[i][k]->getSide() == 1 ) {
+                                whiteKing++;
+                            } else {
+                                blackKing++;
+                            }
                         }
                     }
+                    
                 }
             }
 
             if ( whiteKing != 1 && blackKing != 1 ) {
+                notifyObservers(*this);
                 std::cout << "There are more king than expected!" << std::endl;
                 std::cout << "Please reconsider your setup." << std::endl;
-                std::cout << "Please enter command here" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             }
 
             for ( int i = 0; i < 7; ++i ) {
-                if ( board[0][i]->getType() == 'p' ) {
-                    std::cout << "Pawns are not allowed to be at the first or" 
-                        << "last row of the board." << std::endl;
-                    std::cout << "Please reconsider your setup." << std::endl;
-                    std::cout << "Please enter command here" << std::endl;
-                    continue;
+                if ( board[0][i] ) {
+                    if ( board[0][i]->getType() == 'p' ) {
+                        notifyObservers(*this);
+                        std::cout << "Pawns are not allowed to be at the first or" 
+                            << "last row of the board." << std::endl;
+                        std::cout << "Please reconsider your setup." << std::endl;
+                        std::cout << "Please enter command here: ";
+                        continue;
+                    }
                 }
             }
 
             for ( int i = 0; i < 7; ++i ) {
-                if ( board[7][i]->getType() == 'p' ) {
-                    std::cout << "Pawns are not allowed to be at the first or" 
-                        << "last row of the board." << std::endl;
-                    std::cout << "Please reconsider your setup." << std::endl;
-                    std::cout << "Please enter command here" << std::endl;
-                    continue;
+                if ( board[7][i] ) {
+                    if ( board[7][i]->getType() == 'p' ) {
+                        notifyObservers(*this);
+                        std::cout << "Pawns are not allowed to be at the first or" 
+                            << "last row of the board." << std::endl;
+                        std::cout << "Please reconsider your setup." << std::endl;
+                        std::cout << "Please enter command here: ";
+                        continue;
+                    }
                 }
             }
 
             if ( IsChecked::isChecked( 1, board ) ) {
+                notifyObservers(*this);
                 std::cout << "White king is being checked." << std::endl;
                 std::cout << "Please reconsider your setup." << std::endl;
-                std::cout << "Please enter command here" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             } else if ( IsChecked::isChecked( 2, board ) ) {
+                notifyObservers(*this);
                 std::cout << "Black king is being checked." << std::endl;
                 std::cout << "Please reconsider your setup." << std::endl;
-                std::cout << "Please enter command here" << std::endl;
+                std::cout << "Please enter command here: ";
                 continue;
             }
 
             break;
         }
         notifyObservers(*this);
+        std::cout << "Please enter command here: ";
     }
     notifyObservers(*this);
 }

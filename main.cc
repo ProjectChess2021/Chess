@@ -16,6 +16,8 @@ int main() {
     int numUndo;
     bool end = false;
     std::unique_ptr<Game> g = std::make_unique<Game>();
+    std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
+    g->attach( td.get() );
 
     while ( !std::cin.eof() && !end ) {
         system( "clear" );
@@ -24,11 +26,12 @@ int main() {
         std::cout << "game white-player black-player allowUndo" << std::endl;
         std::cout << "setup" << std::endl << std::endl;
         std::cout << "(player can be either human or computer[1-4])" << std::endl;
-        std::cout << "If do not allow undo then put in 0, else put in the number"
-            << " of undos allowed. -1 for unlimited undo" << std::endl;
+        std::cout << "If do not allow undo then put in 0." << std::endl;
+        std::cout << "Else put in the number of undos allowed." << std::endl;
+        std::cout << "-1 for unlimited undo" << std::endl;
         std::cout << std::endl;
 
-        std::cout << "Please make command here: ";
+        std::cout << "Please enter command here: ";
         std::getline( std::cin, input );
         
         std::stringstream in{ input };
@@ -74,9 +77,6 @@ int main() {
                 } else {
                     continue;
                 }
-
-                std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
-                g->attach( td.get() );
 
                 for ( int i = 0; i < 2; ++i ) {
                     g->addPlayer( players[i].get() );
