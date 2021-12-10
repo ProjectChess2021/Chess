@@ -4,19 +4,22 @@
 #define __TEXTDISPLAY_H__
 
 #include "observer.h"
+#include "move.h"
+#include "moveHistory.h"
 #include <vector>
 #include "posn.h"
 #include "game.h"
+#include "game.h"
+
 class TextDisplay : public Observer {
-    Game &g;
-    std::vector<std::vector<char>> display; // Holds the occupy status of the whole board
+    std::vector<Move*> displayHistory;
+    std::vector<std::vector<char>> displayBoard; // Holds the occupy status of the whole board
     public:
-    TextDisplay( Game &game );
-    ~TextDisplay() override;
-
+    TextDisplay();
+    ~TextDisplay() = default;
     virtual void notify(Game& game) override;
-
-    friend std::ostream &operator<<( std::ostream &, const TextDisplay& );
+    friend std::ostream &operator<<( std::ostream &, TextDisplay& );
+    std::vector<Move*>* getDisplayHist();
 };
 
 #endif

@@ -3,52 +3,60 @@
 
 #include "textDisplay.h"
 #include <iostream>
-#include "game.h"
-#include "moveHistory.h"
 #include <iomanip>
 
 // Initialize the Board as a blank board.
-TextDisplay::TextDisplay( Game &game ) : g{ game } {
+TextDisplay::TextDisplay() {
     int occupy = 8 * 8;
-    display.resize(occupy, std::vector<char>(occupy, ' '));
+    displayBoard.resize(occupy, std::vector<char>(occupy, ' '));
 }  // end Constructor
 
 // update the TextObserver once get notified
 void TextDisplay::notify(Game& _g) {
     std::cerr << "begin notify() @ Line 26, textDisplay.cc" << std::endl;
     std::vector<std::vector<Piece*>>& aBoard = _g.getBoard();
-    for(int i = 0; i < (int)aBoard.size(); i++) {
-        for(int j = 0; j < (int)aBoard[i].size(); j++) {
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
             if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
-                display[i][j] = aBoard[i][j]->getType();
-            else display[i][j] =  (i + j ) % 2 ? ' ' : '_';
+                displayBoard[i][j] = aBoard[i][j]->getType();
+            else displayBoard[i][j] =  (i + j ) % 2 ? ' ' : '_';
         }   // end inner for loop
     }   // end outer for loop
+
+    // extract last five moves (at most)
+    displayHistory.clear();
+    MoveHistory* MHptr = _g.getMoveHistory();
+    int displayNum = 0;               // the number of moveHistory piece to be displayed
+    MoveHistory::MoveHistIter it = MHptr->begin();
+    while(displayNum < 5 && it != MHptr->end()) {       // display 5 pieces at most
+        displayNum ++;
+        displayHistory.emplace_back(&(*it));
+        ++it;
+    }
 }   // end notify
 
+std::vector<Move*>* TextDisplay::getDisplayHist() {
+    return &displayHistory;
+}   // end getDisplayHist()
+
 // This function returns the Board as ostream
-std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
+std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
     std::cerr << "Operator<< @ Line 39, textDisplay.cc" << std::endl;
     //system("clear");          // clear what's on the screen so it looks nicer
-    MoveHistory* MHptr = txtOb.g.getMoveHistory();
-    int displayNum = 0;               // the number of moveHistory piece to be displayed
-    MoveHistory::MoveHistIter it = MHptr->end();
-    while(displayNum <= 4 && it != MHptr->begin()) { // Only newest five moves (at most) will be displayed
-        --it;
-        displayNum ++;
-    }
+    auto histptr = txtOb.getDisplayHist();
+    std::vector<Move*>::iterator it = histptr->begin();
+
     for(int i = 7; i >= 0; i--) {
         out << i + 1 << " ";       // Line Num
-        for(int j = 0; j < (int)txtOb.display[i].size(); j++){
-                out << txtOb.display[i][j];
+        for(int j = 0; j < (int)txtOb.displayBoard[i].size(); j++){
+                out << txtOb.displayBoard[i][j];
         }    // end inner for loop 
         out << "      ";
-        // There are still Move History pieces to be displayed:
+
         if(i == 7)  out << "MoveHistory";
-        else if(displayNum > 0 && it != MHptr->end()) {
+        else if(it != histptr->end()) {
             out << *it;
             ++it;
-            displayNum--;
         }
         out << std::endl;
     }   //end outer for loop
@@ -57,5 +65,3 @@ std::ostream &operator<<(std::ostream & out, const TextDisplay& txtOb) {
     //system("pause");
     return out;
 }   // end operator<<
-
-TextDisplay::~TextDisplay() { } 
