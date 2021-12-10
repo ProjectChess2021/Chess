@@ -181,12 +181,15 @@ bool IsChecked::isChecked( const int &x, const int &y, const int &side,
 
     for ( int i = 0; i < 8; ++i ) {
         for ( int k = 0; k < 8; ++k ) {
-            if ( board[i][k]->getType() == 'k' && board[i][k]->getSide() == side ) {
-                board[i][k] = nullptr;
+            if ( board[i][k] ) {
+                if ( board[i][k]->getType() == 'k' && 
+                     board[i][k]->getSide() == side ) {
+                    board[i][k] = nullptr;
+                }
             }
         }
     }
-    
+
     // Vertical check
     if ( verticalChecked( x, y, side, board ) ) return true;
 
@@ -208,11 +211,14 @@ bool IsChecked::isChecked( const int &side,
     int kingY = 0;
     for ( int i = 0; i < 8; ++i ) {
         for ( int k = 0; k < 8; ++k ) {
-            if ( board[i][k]->getType() == 'k' && board[i][k]->getSide() == side ) {
-                kingX = i;
-                kingY = k;
-                i = 8;
-                k = 8;
+            if ( board[i][k] ) {
+                if ( board[i][k]->getType() == 'k' && 
+                     board[i][k]->getSide() == side ) {
+                    kingX = i;
+                    kingY = k;
+                    i = 8;
+                    k = 8;
+                }
             }
         }
     }

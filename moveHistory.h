@@ -12,7 +12,7 @@ class MoveHistory {
     std::vector<std::unique_ptr<Move>> mh;
 
     public:
-    MoveHistory( const int &maxUndo );
+    MoveHistory( const int &maxUndo = 15 );
 
     void add( const int &originalX, const int &originalY, const int &finalX, 
         const int &finalY, const int& side, const std::string &operation, const bool &firstMove );

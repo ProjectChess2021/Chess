@@ -70,7 +70,8 @@ std::string Human::cmd( Game &game ) {
             std::cerr << "endX = " << endX << std::endl;
             std::cerr << "endY = " << endY << std::endl;
 
-            if ( board[iniX][iniY]->isValidMove( &init, &end, board, game.getMoveHistory()) ) {
+            if ( board[iniX][iniY]->isValidMove( &init, &end, board, game.getMoveHistory())
+                 && board[iniX][iniY]->getSide() == getId() ) {
                 board[endX][endY] = board[iniX][iniY];
                 board[iniX][iniY] = nullptr;
             } else {
@@ -88,7 +89,7 @@ std::string Human::cmd( Game &game ) {
 
         } else if ( cmd == "resign" ) {
             return cmd;
-        } else if ( cmd == "undo" ) {
+        } else if ( cmd == "undo" && game.isAllowUndo() ) {
             return cmd;
         } else {
             std::cout << "Invalid command!" << std::endl;

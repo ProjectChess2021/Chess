@@ -21,13 +21,11 @@ bool King::isValidMove( Posn *original, Posn *end,
             return false;
         }
         if ( board[endX][endY] != nullptr ) {
-            if ( board[endX][endY] != nullptr ) {
-                return board[endX][endY]->getSide() == this->getSide();
-            }
+            return board[endX][endY]->getSide() != getSide();
         }
+        return true;
     }
         
-
     if ( diffX == 2 && diffY == 0 && ( oriY == 0 || oriY == 8 ) ) {
         for ( int i = oriX; i < 7; ++i ) {
             if ( board[i][oriY] != nullptr ) {

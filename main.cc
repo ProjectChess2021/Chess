@@ -2,6 +2,7 @@
 #include <memory>
 #include "game.h"
 #include "human.h"
+#include "textDisplay.h"
 
 int main() {
     std::vector<std::unique_ptr<Player>> players;
@@ -11,4 +12,7 @@ int main() {
     playerOfTheGame.emplace_back( players[0].get() );
     playerOfTheGame.emplace_back( players[1].get() );
     std::unique_ptr<Game> g = std::make_unique<Game>( playerOfTheGame );
+    std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
+    g->attach( td.get() );
+    g->start();
 }

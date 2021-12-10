@@ -18,7 +18,11 @@ void TextDisplay::notify(Game& _g) {
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
-                displayBoard[i][j] = aBoard[i][j]->getType();
+                if ( aBoard[i][j]->getSide() == 1 ) {
+                    displayBoard[i][j] = aBoard[i][j]->getType() - 'a' + 'A';
+                } else {
+                    displayBoard[i][j] = aBoard[i][j]->getType();
+                }
             else displayBoard[i][j] =  (i + j ) % 2 ? ' ' : '_';
         }   // end inner for loop
     }   // end outer for loop
@@ -33,6 +37,8 @@ void TextDisplay::notify(Game& _g) {
         displayHistory.emplace_back(&(*it));
         ++it;
     }
+
+    std::cout << *this << std::endl;
 }   // end notify
 
 std::vector<Move*>* TextDisplay::getDisplayHist() {
@@ -49,7 +55,7 @@ std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
     for(int i = 7; i >= 0; i--) {
         out << i + 1 << " ";       // Line Num
         for(int j = 0; j < (int)txtOb.displayBoard[i].size(); j++){
-                out << txtOb.displayBoard[i][j];
+                out << txtOb.displayBoard[j][i];
         }    // end inner for loop 
         out << "      ";
 
@@ -60,7 +66,7 @@ std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
         }
         out << std::endl;
     }   //end outer for loop
-    out << std::endl << "  ";
+    out << "  ";
     for(int i = 0; i < 8; i ++) out<<(char)( 'a' + i);
     //system("pause");
     return out;

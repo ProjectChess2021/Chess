@@ -59,5 +59,5 @@ MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator--() {
 }
 
 bool MoveHistory::MoveHistIter::operator!=( const MoveHistIter &it ) {
-    return curr == it.curr && mh == mh;
+    return curr != it.curr || mh != mh;
 }

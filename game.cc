@@ -6,49 +6,51 @@
 void Game::boardInit() {
     for ( int k = 0; k < 8; ++k ) {
         pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
-        board[1][k] = pieces.back().get();
+        board[k][1] = pieces.back().get();
     }
     pieces.emplace_back( std::make_unique<Rook>( 1 ) );
     board[0][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Knight>( 1 ) );
-    board[0][1] = pieces.back().get();
+    board[1][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Bishop>( 1 ) );
-    board[0][2] = pieces.back().get();
+    board[2][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Queen>( 1 ) );
-    board[0][3] = pieces.back().get();
+    board[3][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<King>( 1 ) );
-    board[0][4] = pieces.back().get();
+    board[4][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Bishop>( 1 ) );
-    board[0][5] = pieces.back().get();
+    board[5][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Knight>( 1 ) );
-    board[0][6] = pieces.back().get();
+    board[6][0] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Rook>( 1 ) );
-    board[0][7] = pieces.back().get();
+    board[7][0] = pieces.back().get();
     for ( int k = 0; k < 8; ++k ) {
         pieces.emplace_back( std::make_unique<Pawn>( 2 ) );
-        board[6][k] = pieces.back().get();
+        board[k][6] = pieces.back().get();
     }
     pieces.emplace_back( std::make_unique<Rook>( 2 ) );
-    board[7][0] = pieces.back().get();
+    board[0][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Knight>( 2 ) );
-    board[7][1] = pieces.back().get();
+    board[1][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Bishop>( 2 ) );
-    board[7][2] = pieces.back().get();
+    board[2][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Queen>( 2 ) );
-    board[7][3] = pieces.back().get();
+    board[3][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<King>( 2 ) );
-    board[7][4] = pieces.back().get();
+    board[4][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Bishop>( 2 ) );
-    board[7][5] = pieces.back().get();
+    board[5][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Knight>( 2 ) );
-    board[7][6] = pieces.back().get();
+    board[6][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Rook>( 2 ) );
     board[7][7] = pieces.back().get();
     whiteStart = true;
 }
 
-Game::Game( std::vector<Player *> &players ) : players{ players }, 
-    whiteStart{ true } {
+Game::Game( std::vector<Player *> &players, bool allowUndo ) : 
+    players{ players }, mh{ std::make_unique<MoveHistory>() }, 
+    whiteStart{ true }, allowUndo{ allowUndo } {
+    board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     boardInit();
     for ( auto player : players ) {
         attach( player );
@@ -67,6 +69,10 @@ std::string Game::move( const int &originalX, const int &originalY,
         board[originalX][originalY] = nullptr;
         board[endX][endY] = pc;
         retval = "k";
+    } else {
+        board[endX][endY] = pc;
+        board[originalX][originalY] = nullptr;
+        retval = "m";
     }
 
     // Checking pawn capture en passant
@@ -208,13 +214,20 @@ void Game::undo() {
 void Game::start() {
     bool end = false;
     notifyObservers( *this );
-    int diff = 1;
+    int diffI = 1;
+    int diffK = 0;
     if ( !whiteStart ) {
-        diff = -1;
+        diffK = -1;
+        diffI = 0;
     }
     while ( !end ) {
-        for ( int i = 0; i < 2 && i >= 0; i += diff ) {
-            Player *player = players[i];
+        for ( int i = 0, k = 2; i < 2 && k >= 0; i += diffI, k+= diffK ) {
+            Player *player = nullptr;
+            if ( whiteStart ) {
+                player = players[i];
+            } else {
+                player = players[k];
+            }
             if ( !player->hasAvaliableMove() && 
                 !IsChecked::isChecked( player->getId(), board ) ) {
                 std::cout << "Stalemate!" << std::endl;
@@ -241,6 +254,8 @@ void Game::start() {
                     std::cout << "Black is in check." << std::endl;
                 }
             }
+
+            std::cerr << __LINE__ << std::endl;
             std::string cmd = player->cmd( *this );
             
             if ( cmd == "undo" ) {
@@ -258,15 +273,19 @@ void Game::start() {
             } else {
                 std::stringstream in{ cmd };
                 std::string str = "";
+                std::string iniPosn = "";
+                std::string endPosn = "";
                 in >> str;
-                int oriX, oriY, endX, endY;
-                in >> oriX;
-                in >> oriY;
-                in >> endX;
-                in >> endY;
-                move( oriX, oriY, endX, endY );
+                in >> iniPosn;
+                in >> endPosn;
+                int iniX = iniPosn[0] - 'a';
+                int iniY = iniPosn[1] - '1';
+                int endX = endPosn[0] - 'a';
+                int endY = endPosn[1] - '1';
+                move( iniX, iniY, endX, endY );
                 board[endX][endY]->isMoved() = true;
             }
+            notifyObservers( *this );
         }
     }
 }
@@ -284,6 +303,7 @@ void Game::setup() {
     std::string in = "";
     pieces.clear();
     board.clear();
+    board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     notifyObservers(*this);
     std::cout << "Please enter command here" << std::endl;
     while( std::getline( std::cin, in ) ) {
@@ -418,3 +438,5 @@ std::vector<std::vector<Piece *>> &Game::getBoard() { return board; }
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
 int Game::getScore( int idx ) { return players[idx]->getScore(); }
+
+bool Game::isAllowUndo() { return allowUndo; }

@@ -1,5 +1,6 @@
 #include "queen.h"
 #include <vector>
+#include <iostream>
 
 Queen::Queen( const int &side ) : Piece{ side, 'q' } { }
 

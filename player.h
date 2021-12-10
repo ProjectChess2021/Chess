@@ -12,7 +12,7 @@
 class Player : public Observer {
     float score;
     int id;
-    std::vector<Move> availableMove;
+    std::vector<std::unique_ptr<Move>> availableMove;
     void emplacePieceMove(const int, const int, Game &game);
     public:
     Player( const int &id );
