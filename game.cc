@@ -265,6 +265,7 @@ void Game::start() {
                 in >> endX;
                 in >> endY;
                 move( oriX, oriY, endX, endY );
+                board[endX][endY]->isMoved() = true;
             }
         }
     }
@@ -283,7 +284,7 @@ void Game::setup() {
     std::string in = "";
     pieces.clear();
     board.clear();
-    notifyObservers();
+    notifyObservers( *this );
     std::cout << "Please enter command here" << std::endl;
     while( std::getline( std::cin, in ) ) {
         std::string op = "";
@@ -393,12 +394,12 @@ void Game::setup() {
                 }
             }
 
-            if ( IsChecked::ischecked( 1, board ) ) {
+            if ( IsChecked::isChecked( 1, board ) ) {
                 std::cout << "White king is being checked." << std::endl;
                 std::cout << "Please reconsider your setup." << std::endl;
                 std::cout << "Please enter command here" << std::endl;
                 continue;
-            } else if ( IsChecked::ischecked( 2, board ) ) {
+            } else if ( IsChecked::isChecked( 2, board ) ) {
                 std::cout << "Black king is being checked." << std::endl;
                 std::cout << "Please reconsider your setup." << std::endl;
                 std::cout << "Please enter command here" << std::endl;
@@ -407,7 +408,7 @@ void Game::setup() {
 
             break;
         }
-        notifyObservers();
+        notifyObservers( *this );
     }
-    notifyObservers();
+    notifyObservers( *this );
 }

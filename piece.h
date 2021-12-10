@@ -22,9 +22,6 @@ class Piece {
     // return the reference of moved and then after the first move
     // the game will be able to change the moved status
     bool &isMoved();
-    // return the reference of justMoved and then after the move
-    // the game will be able to change the moved status
-    bool &isJustMoved();
     // require: the input position must be on the board
     virtual bool isValidMove( Posn *original, Posn *end, 
       std::vector<std::vector<Piece *>> &board, MoveHistory *mh ) = 0;
