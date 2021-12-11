@@ -2,6 +2,24 @@
 #include "isChecked.h"
 #include <iostream>
 
+Posn getKingPosn(const int &side, std::vector<std::vector<Piece *>>& board ) {
+    for ( int i = 0; i < 8; ++i ) {
+        for ( int k = 0; k < 8; ++k ) {
+            if ( board[i][k] && board[i][k]->getType() == 'k') {
+                std::cerr <<  "Side = " << board[i][k]->getSide()  << "and curr side is " <<side << std::endl;
+                if(  board[i][k]->getSide() == side ) {
+                    std::cerr<< "retrieved successful" << std::endl;
+                    Posn ret{i,k};
+                    return ret;
+                }
+            }
+        }
+    }
+    std::cerr << "Error! King not found at " << __LINE__ << " in " << __FILE__  <<std::endl;
+    Posn ret{0,0};
+    return ret;
+}   // end getKingPosn
+
 bool verticalChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>> &board ) {
     std::cerr << "Starting vertical Check" << std::endl;
@@ -51,8 +69,10 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                 if ( type == 'b' || type == 'q' ) {
                     return true;
                 }   
-                if ( type == 'k' && i == 1 ) {
-                    return true;
+                if (i == 1 ) {
+                    if(type == 'k') return true;
+                    else if(type == 'p' && otherSide == 2)  // black pawn attack white king
+                        return true;                        // from [x+1][y+1]
                 }
             } 
             break;
@@ -67,8 +87,10 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                 if ( type == 'b' || type == 'q' ) {
                     return true;
                 }   
-                if ( type == 'k' && i == 1 ) {
-                    return true;
+                if (i == 1 ) {
+                    if(type == 'k') return true;
+                    else if(type == 'p' && otherSide == 1)  // white pawn attack black king
+                        return true;                        // from [x+1][y-1]
                 }
             } 
             break;
@@ -83,8 +105,10 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                 if ( type == 'b' || type == 'q' ) {
                     return true;
                 }   
-                if ( type == 'k' && i == 1 ) {
-                    return true;
+                if (i == 1 ) {
+                    if(type == 'k') return true;
+                    else if(type == 'p' && otherSide == 2)  // black pawn attack white king
+                        return true;                        // from [x-1][y+1]
                 }
             } 
             break;
@@ -99,8 +123,10 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                 if ( type == 'b' || type == 'q' ) {
                     return true;
                 }   
-                if ( type == 'k' && i == 1 ) {
-                    return true;
+                if (i == 1 ) {
+                    if(type == 'k') return true;
+                    else if(type == 'p' && otherSide == 1)  // white pawn attack black king
+                        return true;                        // from [x-1][y-1]
                 }
             } 
             break;
@@ -177,7 +203,7 @@ bool knightChecked( const int &x, const int &y, const int &side,
 }
 
 bool IsChecked::isChecked( const int &x, const int &y, const int &side,
-    std::vector<std::vector<Piece *>> board ) {
+    std::vector<std::vector<Piece *>>& board ) {
 
     for ( int i = 0; i < 8; ++i ) {
         for ( int k = 0; k < 8; ++k ) {
@@ -206,7 +232,7 @@ bool IsChecked::isChecked( const int &x, const int &y, const int &side,
 }
 
 bool IsChecked::isChecked( const int &side,
-    std::vector<std::vector<Piece *>> board ) {
+    std::vector<std::vector<Piece *>>& board ) {
     int kingX = 0;
     int kingY = 0;
     for ( int i = 0; i < 8; ++i ) {
@@ -224,3 +250,29 @@ bool IsChecked::isChecked( const int &side,
     }
     return isChecked( kingX, kingY, side, board );
 }
+
+// This function returns true if a move from (initX,initY) to (destX,destY) causes player being checked.
+// Noticed that board is passed by value thus can be safely modifed without affecting the true board
+bool IsChecked::isCheckMove(const int initX, const int initY, const int destX, const int destY,
+    const int side, std::vector<std::vector<Piece *>>& board) {
+        std::cerr<<"Check for side="<<side<<std::endl;
+    Posn kingPosn = getKingPosn(side, board);
+    std::cerr<<"get king from  side="<<side<< " at " << kingPosn << std::endl;
+    int kingX = kingPosn.getX();
+    int kingY = kingPosn.getY();
+    Piece* temp = nullptr;
+
+    std::swap(board[initX][initY], temp); //move this piece
+    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+
+    std::swap(temp, board[destX][destY]);
+    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+    bool ans = isChecked(kingX, kingY, side, board);
+    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+
+    std::swap(temp, board[destX][destY]);
+    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+    std::swap(board[initX][initY], temp); //move the piece back
+    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+    return ans;
+}   // end isCheckMove

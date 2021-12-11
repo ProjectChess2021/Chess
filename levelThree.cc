@@ -7,7 +7,7 @@
 int calcEffect(Posn* init, Posn* dest, char type) {
      // the effect of this move, new Effect - old effect
     std::map<char, vector<vector<int>>>::const_iterator it = POSWEIGHT.find(type);
-    (it->second)[dest->getX()][dest->getY()] -(it->second)[init->getX()][init->getY()];
+    return (it->second)[dest->getX()][dest->getY()] -(it->second)[init->getX()][init->getY()];
 }   // end calculateEffect
 
 // Level Three AI tries not to get the pieces captured, if no pieces are possible to be captured
@@ -27,7 +27,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
 
     Player* opponentPtr = nullptr;
 
-    for(int i = 0; i < playerLst.size(); i++)
+    for(long unsigned int i = 0; i < playerLst.size(); i++)
         if(playerLst[i]->getSide() != side) opponentPtr = playerLst[i];
     
     std::vector<std::unique_ptr<Move>>& opponentAM = opponentPtr->getAM();
@@ -55,7 +55,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
 
     if(maxCaptureWeight == -1)  // enemy is impossible to caputure a piece
         return LevelTwo::makeMove(game, my_am, side);
-    int destX, destY;
+    int destX = -1, destY = -1;
     for(std::vector<std::unique_ptr<Move>>::iterator it = my_am.begin(); it != my_am.end(); ++it) {
         Move* aMove = it->get();
         if(aMove->getOriginal() == maxPosn){
@@ -68,7 +68,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
         }
     }   // end for
     std::string retStr = "move " + (char) (maxPosn->getX() + 'a') + (maxPosn->getY());
-    retStr += " " +  (char) (destX + 'a') + (destY);
+    retStr += " " +  std::to_string(destX + 'a') + std::to_string(destY);
     std::cerr << "Capture move found @ Line 38, LevelTwo.cc. Produced str:" << retStr;
     return retStr; 
 }   // end makeMove

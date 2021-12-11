@@ -3,10 +3,10 @@
 
 #include "player.h"
 #include "game.h"
-
+#include "isChecked.h"
 const int SIZE = 8;
 Player::Player( const int _id, const int _numUndo ) : 
-    score{ 0 }, id{_id }, side{1 - (_id % 2)}, numUndo{ _numUndo } { } 
+    score{ 0 }, id{_id }, side{2- (_id % 2)}, numUndo{ _numUndo } { } 
 
 Player::Player(const int _id, const int _side, const int _numUndo) : // team specified
     score{0}, id{_id}, side{_side}, numUndo{_numUndo}   {}
@@ -25,15 +25,24 @@ void Player::emplacePieceMove(const int x, const int y, Game &game) {
             if(target->isValidMove(&init, &dest, board, game.getMoveHistory())) {
                 std::string op = "m";
                 // get movement type
-                if(toupper(target->getType()) == 'P' && (i == 0 || i == 7))
-                    op = "p";
-                else if (toupper(target->getType()) == 'K' && abs(j - y) == 2)  // move king two steps
+                if(toupper(target->getType()) == 'P' && (j == 0 || j == 7)){
+                    if(x != i){
+std::cerr << "add a p+k from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
+                        op = "k+p";
+                    } else {     // goes to a different row, means  promotion and kill
+std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
+                        op = "p";  // just promotion
+                    }
+                }  else if (toupper(target->getType()) == 'K' && abs(j - y) == 2)  // move king two steps
                     op = "c";
                 else if (board[i][j] && board[i][j]->getSide() != id)    // piece of different side
                     op = "k";
+
+            if(!IsChecked::isCheckMove(x, y, i, j, side, board)){
                 availableMove.emplace_back(
-                    std::make_unique<Move>( x, y, i, j, id, op, 
-                        board[x][y]->isMoved() ) );
+                std::make_unique<Move>( x, y, i, j, id, op, 
+                board[x][y]->isMoved() ) );
+            }
             }   // end if
         }   // end col for loop
     }   // end row for loop

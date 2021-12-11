@@ -6,8 +6,11 @@
 #include "king.h"
 #include <vector>
 
-Human::Human( const int &side, const int numUndos ) : 
-    Player{ side, numUndos } { }
+Human::Human( const int &_id, const int numUndos ) : 
+    Player{ _id, numUndos } { }
+
+Human::Human( const int& _id, const int _side, const int numUndos ) : 
+    Player{ _id, _side, numUndos } { }    // end Constructor
 
 bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
     if ( iniX < 0 || iniX >= 8 ) {
