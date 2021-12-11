@@ -23,13 +23,13 @@ class Game : public Subject {
     std::vector<std::unique_ptr<Piece>> pieces;
     std::vector<std::vector<Piece *>> board;
     std::vector<Piece *> deadPool;
-    bool whiteStart;
+    bool whiteStart,isSetup;
 
     // will not change the moved status of the piece that is being changed
     std::string move( const int &originalX, const int &originalY, 
       const int &finalX, const int &finalY );
     void undo();
-
+    bool isValidSetup(const int, const int, std::string&);
   public: 
     Game();
     // Use board and movehistory in start, which is in each game
@@ -37,6 +37,7 @@ class Game : public Subject {
     void setup();
     void boardInit();
 
+    std::vector<Player*>& getPlayers();
     std::vector<std::vector<Piece *>>& getBoard();
     MoveHistory*getMoveHistory();
     float getScore(int idx);  // return the currentScore of a single player

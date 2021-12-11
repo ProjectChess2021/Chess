@@ -19,10 +19,7 @@ Move::Move( const int &initX, const int &initY, const int &destX,
     end{ std::make_unique<Posn>( destX, destY ) },
     side{_side},
     firstMove{_isFirstMove},
-    operation{ operation } { 
-        std::cerr << __LINE__ << std::endl;
-        std::cerr << __LINE__ << std::endl;
-    } // end Constructor
+    operation{ operation } { } // end Constructor
 
 int Move::getSide() {return side;}
 
@@ -36,7 +33,6 @@ std::string Move::getOperation() { return operation; }
 
 // This function translates the side number to a string (colour representing the player)
 std::string getSideStr(const int x){
-    std::cerr << "translate side to string @ Line 25, move.cc" << std::endl;
     if(x == 1)     return "white";
     else if(x == 2) return "black";
     else if(x == 3) return "azure";
@@ -57,7 +53,6 @@ std::string getTypeStr(const char c) {
 }   // end getTypeStr
 
 std::ostream &operator<<( std::ostream & out, const Move& _move){
-    std::cerr << "Printing out a move info @ Line 44, move.cc" << std::endl;
     std::string sideStr = getSideStr(_move.side);
     sideStr[0] = toupper(sideStr[0]);
     // out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.operation) << " ";

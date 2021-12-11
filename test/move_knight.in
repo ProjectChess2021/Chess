@@ -1,6 +1,6 @@
 game human human
-move b2 c3
-move b8 c6
+move b1 c3
+move b8 a6
 move c3 a4
 move g8 h6
 move a4 c5
