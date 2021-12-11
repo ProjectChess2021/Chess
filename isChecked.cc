@@ -74,6 +74,9 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     else if(type == 'p' && otherSide == 2)  // black pawn attack white king
                         return true;                        // from [x+1][y+1]
                 }
+                if ( type == 'p' && i == 1 ) {
+                    return true;
+                }
             } 
             break;
         }
@@ -91,6 +94,9 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 1)  // white pawn attack black king
                         return true;                        // from [x+1][y-1]
+                }
+                if ( type == 'p' && i == 1 ) {
+                    return true;
                 }
             } 
             break;
@@ -110,6 +116,9 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     else if(type == 'p' && otherSide == 2)  // black pawn attack white king
                         return true;                        // from [x-1][y+1]
                 }
+                if ( type == 'p' && i == 1 ) {
+                    return true;
+                }
             } 
             break;
         }
@@ -127,6 +136,9 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 1)  // white pawn attack black king
                         return true;                        // from [x-1][y-1]
+                }
+                if ( type == 'p' && i == 1 ) {
+                    return true;
                 }
             } 
             break;

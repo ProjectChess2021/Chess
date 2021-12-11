@@ -12,9 +12,9 @@ TextDisplay::TextDisplay() {
 }  // end Constructor
 
 // update the TextObserver once get notified
-void TextDisplay::notify(Game& _g) {
+void TextDisplay::notify( std::vector<std::vector<Piece *>> &aBoard, 
+    MoveHistory &mh ) {
     std::cerr << "begin notify() @ Line 26, textDisplay.cc" << std::endl;
-    std::vector<std::vector<Piece*>>& aBoard = _g.getBoard();
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
@@ -29,7 +29,7 @@ void TextDisplay::notify(Game& _g) {
 
     // extract last five moves (at most)
     displayHistory.clear();
-    MoveHistory* MHptr = _g.getMoveHistory();
+    MoveHistory* MHptr = &mh;
     int displayNum = 0;               // the number of moveHistory piece to be displayed
     MoveHistory::MoveHistIter it = MHptr->begin();
     while(displayNum < 5 && it != MHptr->end()) {       // display 5 pieces at most

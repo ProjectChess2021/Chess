@@ -5,7 +5,7 @@
 
 std::string LevelTwo::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& am, const int side) {
     std::cerr << "Level2 AI makesMove now @ Line7, LevelTwo.cc.";
-    std::vector<std::vector<Piece *>>& board = game.getBoard();
+    std::vector<std::vector<Piece *>> &board = game.getBoard();
     std::vector<std::unique_ptr<Move>>::iterator it;
     int maxCaptureWeight = -1;
     Posn* maxCaptureInit = nullptr;

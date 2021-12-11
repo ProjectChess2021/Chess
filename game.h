@@ -9,26 +9,19 @@
 #include "subject.h"
 #include "player.h"
 #include "moveHistory.h"
-#include "rook.h"
-#include "pawn.h"
-#include "knight.h"
-#include "bishop.h"
-#include "queen.h"
-#include "king.h"
 #include "piece.h"
+#include "board.h"
+
+class Player;
 
 class Game : public Subject {
     std::vector<Player *> players;
     std::unique_ptr<MoveHistory> mh;
-    std::vector<std::unique_ptr<Piece>> pieces;
-    std::vector<std::vector<Piece *>> board;
-    std::vector<std::vector<Piece *>> setUpBoard;
-    std::vector<Piece *> deadPool;
-    bool whiteStart,isSetup;
+    std::unique_ptr<Board> b;
+    bool whiteStart, isSetup;
 
-    // will not change the moved status of the piece that is being changed
     std::string move( const int &originalX, const int &originalY, 
-      const int &finalX, const int &finalY );
+    const int &endX, const int &endY );
     void undo();
     bool isValidSetup(const int, const int, std::string&);
   public: 
@@ -39,7 +32,7 @@ class Game : public Subject {
     void boardInit();
 
     std::vector<Player*>& getPlayers();
-    std::vector<std::vector<Piece *>>& getBoard();
+    std::vector<std::vector<Piece *>> &getBoard();
     MoveHistory*getMoveHistory();
     float getScore(int idx);  // return the currentScore of a single player
     void addPlayer( Player *player );

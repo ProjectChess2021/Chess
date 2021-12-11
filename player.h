@@ -10,15 +10,19 @@
 #include "move.h"
 #include "observer.h"
 
+class Game;
+
 class Player : public Observer {
     float score;
     int id,side,numUndo;
     std::vector<std::unique_ptr<Move>> availableMove;
-    void emplacePieceMove(const int, const int, Game &game);
+    void emplacePieceMove( const int x, const int y, 
+        std::vector<std::vector<Piece *>> &b, MoveHistory &mh );
     public:
     Player( const int id, const int numUndo );
     Player(const int, const int, const int);  //tean specified
-    void notify( Game &game ) override;
+    void notify( std::vector<std::vector<Piece *>> &b, 
+        MoveHistory &mh ) override;
     float &getScore();
     int getId();
     int getSide();

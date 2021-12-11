@@ -1,11 +1,15 @@
 #ifndef __OBSERVER_H__
 #define __OBSERVER_H__
 
-class Game;
+#include <vector>
+
+class Piece;
+class MoveHistory;
 
 class Observer {
     public:
-    virtual void notify( Game &game ) = 0;
+    virtual void notify( std::vector<std::vector<Piece *>> &b, 
+        MoveHistory &mh ) = 0;
     virtual ~Observer() = default;
 };
 

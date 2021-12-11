@@ -3,7 +3,6 @@
 
 #include "piece.h"
 #include "posn.h"
-#include "game.h"
 
 class King :public Piece {
     public:

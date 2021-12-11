@@ -20,7 +20,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     Posn* maxPosn = nullptr;
     Piece* maxPiece = nullptr;
 
-    std::vector<std::vector<Piece *>>& board = game.getBoard();
+    std::vector<std::vector<Piece *>> &board = game.getBoard();
     std::vector<Player*>& playerLst = game.getPlayers();
     std::vector<std::vector<int>> controlArea;
     controlArea.resize(8, std::vector<int>(8, -100));

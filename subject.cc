@@ -10,8 +10,9 @@ void Subject::detach( Observer *o ) {
     }
 }
 
-void Subject::notifyObservers( Game &game) {
+void Subject::notifyObservers( std::vector<std::vector<Piece *>> &b, 
+    MoveHistory &mh ) {
     for ( auto &ob : obs ) {
-        ob->notify( game );
+        ob->notify( b, mh );
     }
 }

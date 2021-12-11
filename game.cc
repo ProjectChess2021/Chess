@@ -7,79 +7,28 @@ using std::cout;
 
 void Game::boardInit() {
     mh->clearHistory();
-    if ( isSetup ) {
-        for ( int i = 0; i < 8; ++i ) {
-            for ( int k = 0; k < 8; ++k ) {
-                board[i][k] = setUpBoard[i][k];
-            }
-        }
-        return;
-    }
-    for ( int k = 0; k < 8; ++k ) {
-        pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
-        board[k][1] = pieces.back().get();
-    }
-    pieces.emplace_back( std::make_unique<Rook>( 1 ) );
-    board[0][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Knight>( 1 ) );
-    board[1][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Bishop>( 1 ) );
-    board[2][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Queen>( 1 ) );
-    board[3][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<King>( 1 ) );
-    board[4][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Bishop>( 1 ) );
-    board[5][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Knight>( 1 ) );
-    board[6][0] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Rook>( 1 ) );
-    board[7][0] = pieces.back().get();
-    for ( int k = 0; k < 8; ++k ) {
-        pieces.emplace_back( std::make_unique<Pawn>( 2 ) );
-        board[k][6] = pieces.back().get();
-    }
-    pieces.emplace_back( std::make_unique<Rook>( 2 ) );
-    board[0][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Knight>( 2 ) );
-    board[1][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Bishop>( 2 ) );
-    board[2][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Queen>( 2 ) );
-    board[3][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<King>( 2 ) );
-    board[4][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Bishop>( 2 ) );
-    board[5][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Knight>( 2 ) );
-    board[6][7] = pieces.back().get();
-    pieces.emplace_back( std::make_unique<Rook>( 2 ) );
-    board[7][7] = pieces.back().get();
+    b->boardInit( isSetup );
     whiteStart = true;
 }
 
-Game::Game() :  mh{ std::make_unique<MoveHistory>() }, whiteStart{ true }, isSetup{false} {
-    board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
+Game::Game() :  mh{ std::make_unique<MoveHistory>() }, 
+    b{ std::make_unique<Board>() },
+    whiteStart{ true }, isSetup{false} {
     boardInit();
 }
 
 std::string Game::move( const int &originalX, const int &originalY, 
     const int &endX, const int &endY ) {
+    std::vector<std::vector<Piece *>> board = b->getBoard();
     Piece *pc =  board[originalX][originalY];
     int side = board[originalX][originalY]->getSide();
     std::string retval = "";
 
     // The case when piece is going to kill another piece
     if ( board[endX][endY] != nullptr ) {
-        deadPool.emplace_back( board[endX][endY] );
-        board[originalX][originalY] = nullptr;
-        board[endX][endY] = pc;
+        b->kill( originalX, originalY, endX, endY );
         retval = "k";
-    } else {
-        board[endX][endY] = pc;
-        board[originalX][originalY] = nullptr;
-        retval = "m";
-    }
+    } 
 
     // Checking pawn capture en passant
     if ( pc->getType() == 'p' && mh->hasMoved() ) {
@@ -94,6 +43,7 @@ std::string Game::move( const int &originalX, const int &originalY,
                      endX == lastMoveBegin->getX() && 
                      endY + 1 == lastMoveBegin->getY() &&
                      lastPiece->getSide() != pc->getSide() ) {
+                    b->CEP( originalX, originalY, endX, endY );
                     retval = "k";
                 }
             } else if ( side == 2 ) {
@@ -102,6 +52,7 @@ std::string Game::move( const int &originalX, const int &originalY,
                      endX == lastMoveBegin->getX() && 
                      endY - 1 == lastMoveBegin->getY() &&
                      lastPiece->getSide() != pc->getSide() ) {
+                    b->CEP( originalX, originalY, endX, endY );
                     retval = "k";
                 }
             }
@@ -120,23 +71,12 @@ std::string Game::move( const int &originalX, const int &originalY,
                 cout << "(b)ishop" << endl;
                 cout << "(q)ueen" << endl;
                 std::cin >> promptTo;
-                if ( promptTo == 'r' ) {
-                    pieces.emplace_back( std::make_unique<Rook>( pc->getSide() ) );
-                    break;
-                } else if ( promptTo == 'n' ) {
-                    pieces.emplace_back( std::make_unique<Knight>( pc->getSide() ) );
-                    break;
-                } else if ( promptTo == 'b' ) {
-                    pieces.emplace_back( std::make_unique<Bishop>( pc->getSide() ) );
-                    break;
-                } else if ( promptTo == 'q' ) {
-                    pieces.emplace_back( std::make_unique<Queen>( pc->getSide() ) );
+                if ( promptTo == 'r' || promptTo == 'n' || 
+                    promptTo == 'b' || promptTo == 'q' ) {
                     break;
                 }
             }
-            deadPool.emplace_back( pc );
-            board[endX][endY] = pieces.back().get();
-            pieces.back().get()->changeMoved( true );
+            b->promotion( originalX, originalY, endX, endY, promptTo );
             if ( retval == "k" ) {
                 retval += "+p";
             } else {
@@ -149,21 +89,13 @@ std::string Game::move( const int &originalX, const int &originalY,
     if ( pc->getType() == 'k' ) {
         int diffX = endX - originalX;
         if ( diffX == 2 || diffX == -2 ) {
-            if ( diffX == 2 ) {
-                board[endX][endY] = pc;
-                board[originalX][originalY] = nullptr;
-                board[endX - 1][endY] = board[7][endY];
-                board[endX - 1][endY]->changeMoved( true );
-                board[7][endY] = nullptr; 
-            } else {
-                board[endX][endY] = pc;
-                board[originalX][originalY] = nullptr;
-                board[endX + 1][endY] = board[0][endY];
-                board[0][endY] = nullptr; 
-                board[endX + 1][endY]->changeMoved( true );
-            }
+            b->castle( originalX, originalY, endX, endY );
             retval = "c";
         }
+    } else {
+        std::cerr << __LINE__ << std::endl;
+        b->move( originalX, originalY, endX, endY );
+        retval = "m";
     }
 
     return retval;
@@ -171,50 +103,7 @@ std::string Game::move( const int &originalX, const int &originalY,
 
 void Game::undo() {
     std::vector<Move *> undoHist = mh->undo();
-    for ( auto hist : undoHist ) {
-        Posn *end = hist->getEnd();
-        Posn *begin = hist->getOriginal();
-        int endX = end->getX();
-        int endY = end->getY();
-        int beginX = begin->getX();
-        int beginY = begin->getY();
-        if ( hist->getOperation() == "m" ) {
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = nullptr;
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        } else if ( hist->getOperation() == "c" ) {
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = nullptr;
-            board[beginX][beginY]->changeMoved( false );
-            if ( endX > beginX ) {
-                board[7][endY] = board[endX - 1][endY];
-                board[7][endY]->changeMoved( false );
-                board[endX - 1][endY] = nullptr;
-            } else {
-                board[0][endY] = board[endX + 1][endY];
-                board[0][endY]->changeMoved( false );
-                board[endX + 1][endY] = nullptr;
-            }
-        } else if ( hist->getOperation() == "k" ) {
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = deadPool.back();
-            deadPool.pop_back();
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        } else if ( hist->getOperation() == "p" ) {
-            board[endX][endY] = deadPool.back();
-            deadPool.pop_back();
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = nullptr;
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        } else if ( hist->getOperation() == "k+p" ) {
-            board[endX][endY] = deadPool.back();
-            deadPool.pop_back();
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = deadPool.back();
-            deadPool.pop_back();
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        }
-    }
+    b->undo( undoHist );
 }
 
 void goOn() {
@@ -226,7 +115,8 @@ void goOn() {
 void Game::start() {
     boardInit();
     bool end = false;
-    notifyObservers( *this );
+    std::vector<std::vector<Piece *>> &board = b->getBoard();
+    notifyObservers( board, *(mh.get()) );
     int diffI = 1;
     int diffK = 0;
     if ( !whiteStart ) {
@@ -307,11 +197,13 @@ void Game::start() {
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
                 std::string op = move( iniX, iniY, endX, endY );
+                std::cerr << __LINE__ << std::endl;
                 mh->add( iniX, iniY, endX, endY, player->getId(), op, 
                     board[endX][endY]->isMoved() );
+                std::cerr << __LINE__ << std::endl;
                 board[endX][endY]->changeMoved( true );
             }
-            notifyObservers( *this );
+            notifyObservers( board, *(mh.get()) );
             i += diffI; 
             k += diffK;
         }
@@ -331,12 +223,9 @@ void Game::setup() {
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
     std::string in = "";
-    setUpBoard.clear();
-    setUpBoard.resize( 8, std::vector<Piece *>( 8, nullptr ) );
-    board.clear();
-    board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
-    pieces.clear();
-    notifyObservers(*this);
+    std::vector<std::unique_ptr<Piece>> &pieces = b->getPieces();
+    std::vector<std::vector<Piece *>> &setUpBoard = b->getSetUpBoard();
+    notifyObservers( setUpBoard, *(mh.get()) );
     cout << "Please enter command here: ";
     while( std::getline( std::cin, in ) ) {
         std::string op = "";
@@ -373,7 +262,7 @@ void Game::setup() {
             } else if ( pc == 'P' ) {
                 pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
             } else {
-                notifyObservers(*this);
+                notifyObservers( setUpBoard, *(mh.get()) );
                 errorMsg();
                 continue;
             }
@@ -384,7 +273,7 @@ void Game::setup() {
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
                 pieces.pop_back();
-                notifyObservers(*this);
+                notifyObservers( setUpBoard, *(mh.get()) );
                 errorMsg();
                 continue;
             }
@@ -401,7 +290,6 @@ void Game::setup() {
                 pieces.pop_back();
             } else {
                 prompt += "Add piece successful.\n";
-                board[x - 'a'][y - 1] = pieces.back().get();
                 setUpBoard[x - 'a'][y - 1] = pieces.back().get();
             }
         } else if ( op == "-" ) {       // remove a piece
@@ -410,7 +298,7 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {   // bad Position
-                notifyObservers(*this);
+                notifyObservers( setUpBoard, *(mh.get()) );
                 errorMsg();
                 continue;
             }
@@ -426,7 +314,6 @@ void Game::setup() {
                             if(piecePtr->getSide() == 1) whiteKingNum--;          // white king removed
                             else if(piecePtr->getSide() == 2) blackKingNum--;     // black king removed
                         }
-                        board[x - 'a'][y - 1] = nullptr;
                         setUpBoard[x - 'a'][y - 1] = nullptr;    // remove from board
                         pieces.erase(it);                   // remove from pieces list
                         prompt += "Remove piece successful.\n";
@@ -440,7 +327,7 @@ void Game::setup() {
             if ( side == "white" || side == "black" ) {
                 whiteStart = (side == "white");
             } else {
-                notifyObservers(*this);
+                notifyObservers( setUpBoard, *(mh.get()) );
                 errorMsg();
                 continue;
             }
@@ -451,23 +338,23 @@ void Game::setup() {
                 isSetup = true;
                 break;
             } else {
-                notifyObservers(*this);
+                notifyObservers( setUpBoard, *(mh.get()) );
                 prompt += "Invalid Setup. Please replace pieces accordingly.\nPlease enter command here: ";
                 cout << prompt;
                 continue;
             }
         }   else {  // unrecognized command
-            notifyObservers(*this);
+            notifyObservers( setUpBoard, *(mh.get()) );
             errorMsg();
             continue;
         }//end command selection
-        notifyObservers(*this);
+        notifyObservers( setUpBoard, *(mh.get()) );
         prompt += "Continue to enter command here: ";
         cout << prompt;
     }   // end while
 }   // end setup
 
-std::vector<std::vector<Piece *>> &Game::getBoard() { return board; }
+std::vector<std::vector<Piece *>> &Game::getBoard() { return b->getBoard(); }
 
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
@@ -483,6 +370,8 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
     std::cerr << "Goes here At " << __LINE__ << " at "<<__FILE__<<endl;
     bool whiteKing = false;
     bool blackKing = false;
+
+    std::vector<std::vector<Piece *>> board = b->getSetUpBoard();
     // check the number of king
     if (whiteKingNum > 1)   prompt += "Multiple white kings detected.\n";
         else if (whiteKingNum < 1)  prompt += "No white king detected.\n";
@@ -498,7 +387,7 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
     for( int i = 0; i < 2; i++) {
         for ( int j = 0; j < 7; j++ ) {
             if (board[i * 7][j] && board[i * 7][j]->getType() == 'p' ) {
-                notifyObservers(*this);
+                notifyObservers( board, *(mh.get()) );
                 prompt +="Pawns cannot be placed at the first or last row of the board.\n";
                 hasInvalidPawn = true;
                 break;
@@ -508,11 +397,11 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
 
     bool inCheck = false;   // check if any player is in check
     if ( IsChecked::isChecked( 1, board ) ) {
-        notifyObservers(*this);
+        notifyObservers( board, *(mh.get()) );
         prompt += "White king is being checked.\n";
         inCheck = true;
     } else if ( IsChecked::isChecked( 2, board ) ) {
-        notifyObservers(*this);
+        notifyObservers( board, *(mh.get()) );
         prompt += "Black king is being checked.\n";
         inCheck = true;
     }   // end if-else statement

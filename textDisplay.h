@@ -8,8 +8,7 @@
 #include "moveHistory.h"
 #include <vector>
 #include "posn.h"
-#include "game.h"
-#include "game.h"
+#include "board.h"
 
 class TextDisplay : public Observer {
     std::vector<Move*> displayHistory;
@@ -17,7 +16,8 @@ class TextDisplay : public Observer {
     public:
     TextDisplay();
     ~TextDisplay() = default;
-    virtual void notify(Game& game) override;
+    virtual void notify( std::vector<std::vector<Piece *>> &b, 
+        MoveHistory &mh ) override;
     friend std::ostream &operator<<( std::ostream &, TextDisplay& );
     std::vector<Move*>* getDisplayHist();
 };
