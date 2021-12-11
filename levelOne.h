@@ -1,5 +1,5 @@
 // Kunling Yang
-// Last Modified At (UTC-5)1905, 20211203
+// Last Modified At (UTC-5) 1907, 20211210
 
 #ifndef __LEVELONE_H__
 #define __LEVELONE_H__
@@ -9,7 +9,7 @@
 
 class LevelOne : public Strategy{
     public:
-    std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) override;
+    std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int) override;
     ~LevelOne() = default;
 };  // end LevelOne
 
