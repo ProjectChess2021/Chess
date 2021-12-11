@@ -47,26 +47,24 @@ std::vector<Move*>* TextDisplay::getDisplayHist() {
 
 // This function returns the Board as ostream
 std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
-    std::cerr << "Operator<< @ Line 39, textDisplay.cc" << std::endl;
     //system("clear");          // clear what's on the screen so it looks nicer
     auto histptr = txtOb.getDisplayHist();
     std::vector<Move*>::iterator it = histptr->begin();
 
     for(int i = 7; i >= 0; i--) {
         out << i + 1 << " ";       // Line Num
-        for(int j = 0; j < (int)txtOb.displayBoard[i].size(); j++){
+        for(int j = 0; j < (int)txtOb.displayBoard[i].size(); j++) // print cells
                 out << txtOb.displayBoard[j][i];
-        }    // end inner for loop 
-        out << "      ";
+        out << " ";
 
-        if(i == 7)  out << "MoveHistory";
+        if(i == 7)  out << "MoveHistory (Newest at top)";
         else if(it != histptr->end()) {
-            out << *it;
+            out << *(*it);
             ++it;
         }
         out << std::endl;
     }   //end outer for loop
-    out << "  ";
+    out << std::endl << "  ";
     for(int i = 0; i < 8; i ++) out<<(char)( 'a' + i);
     //system("pause");
     return out;

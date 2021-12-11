@@ -11,7 +11,7 @@
 
 class LevelTwo : public LevelOne{
     public:
-    std::string makeMove(std::vector<std::vector<Piece *>>&, std::vector<Move>&) override;
+    std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int) override;
 };  // end LevelTwo
 
 #endif

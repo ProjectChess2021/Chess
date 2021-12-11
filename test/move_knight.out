@@ -8,9 +8,19 @@
 1 RNBQKBNR
 
   abcdefgh
-8 rnbqkbnr      MoveHistory
-7 pppppppp      White:knight b2 -> c3
-6  _ _ _ _
+8 rnbqkbnr                                                         MoveHistory (Newest at top)
+7 pppppppp                                                         White: b1 -> c3
+6  _ _ _ _                                                         
+5 _ _ _ _                                                          
+4  _ _ _ _                                                         
+3 _ N _ _                                                          
+2 PPPPPPPP                                                         
+1 R BQKBNR                                                            
+
+  abcdefgh
+8 r bqkbnr      MoveHistory
+7 pppppppp      White:knight b1 -> c3
+6 n_ _ _ _      Black:knight b8 -> a6
 5 _ _ _ _
 4  _ _ _ _
 3 _ N _ _
@@ -19,18 +29,8 @@
 
   abcdefgh
 8 r bqkbnr      MoveHistory
-7 pppppppp      White:knight b2 -> c3
-6 n_ _ _ _      Black:knight b8 -> c6
-5 _ _ _ _
-4  _ _ _ _
-3 _ N _ _
-2 PPPPPPPP
-1 R BQKBNR
-
-  abcdefgh
-8 r bqkbnr      MoveHistory
-7 pppppppp      White:knight b2 -> c3
-6 n_ _ _ _      Black:knight b8 -> c6
+7 pppppppp      White:knight b1 -> c3
+6 n_ _ _ _      Black:knight b8 -> a6
 5 _ _ _ _       White:knight c3 -> a4
 4 N_ _ _ _
 3 _ _ _ _
@@ -39,8 +39,8 @@
 
   abcdefgh
 8 r bqkb r      MoveHistory
-7 pppppppp      White:knight b2 -> c3
-6 n_ _ _ n      Black:knight b8 -> c6
+7 pppppppp      White:knight b1 -> c3
+6 n_ _ _ n      Black:knight b8 -> a6
 5 _ _ _ _       White:knight c3 -> a4
 4 N_ _ _ _      Black:knight g8 -> h6
 3 _ _ _ _
@@ -49,8 +49,8 @@
 
   abcdefgh
 8 r bqkb r      MoveHistory
-7 pppppppp      White:knight b2 -> c3
-6 n_ _ _ n      Black:knight b8 -> c6
+7 pppppppp      White:knight b1 -> c3
+6 n_ _ _ n      Black:knight b8 -> a6
 5 _ N _ _       White:knight c3 -> a4
 4  _ _ _ _      Black:knight g8 -> h6
 3 _ _ _ _       White:knight a4 -> c5

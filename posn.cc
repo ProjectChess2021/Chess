@@ -10,5 +10,5 @@ int Posn::getX() const noexcept { return x; }
 int Posn::getY() const noexcept { return y; }
 
 std::ostream &operator<<( std::ostream& out, const Posn& aPosn) {
-    return out << aPosn.getX() << aPosn.getY();
+    return out << (char) (aPosn.getX() + 'a') << aPosn.getY() + 1;
 }   // end Operator<<
