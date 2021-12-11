@@ -30,6 +30,8 @@ Move *MoveHistory::lastMove() { return mh[0].get(); }
 
 bool MoveHistory::hasMoved() { return mh.size() >= 1; }
 
+void MoveHistory::clearHistory() { mh.clear(); }
+
 MoveHistory::MoveHistIter::MoveHistIter( const int &index, 
     std::vector<std::unique_ptr<Move>> &mh ) : 
     curr{ index }, mh{ mh } { }

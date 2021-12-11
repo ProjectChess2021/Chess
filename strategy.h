@@ -14,7 +14,8 @@
 class Strategy {    
     public:
     virtual ~Strategy() = default;
-    virtual std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int)  = 0;
+    virtual std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, 
+        const int)  = 0;
 };  // end Strategy
 
 #endif
