@@ -22,6 +22,7 @@ class Game : public Subject {
     std::unique_ptr<MoveHistory> mh;
     std::vector<std::unique_ptr<Piece>> pieces;
     std::vector<std::vector<Piece *>> board;
+    std::vector<std::vector<Piece *>> setUpBoard;
     std::vector<Piece *> deadPool;
     bool whiteStart,isSetup;
 
