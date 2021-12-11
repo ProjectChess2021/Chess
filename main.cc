@@ -28,7 +28,7 @@ int main() {
         std::cout << "(player can be either human or computer[1-4])" << std::endl;
         std::cout << "If do not allow undo then put in 0." << std::endl;
         std::cout << "Else put in the number of undos allowed." << std::endl;
-        std::cout << "-1 for unlimited undo" << std::endl;
+        std::cout << "Negative for unlimited undo" << std::endl;
         std::cout << std::endl;
 
         std::cout << "Please enter command here: ";
