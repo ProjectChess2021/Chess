@@ -27,7 +27,7 @@ bool King::isValidMove( Posn *original, Posn *end,
     }
         
     if ( diffX == 2 && diffY == 0 && ( oriY == 0 || oriY == 8 ) ) {
-        for ( int i = oriX; i < 7; ++i ) {
+        for ( int i = oriX + 1; i < 7; ++i ) {
             if ( board[i][oriY] != nullptr ) {
                 return false;
             }
@@ -42,7 +42,7 @@ bool King::isValidMove( Posn *original, Posn *end,
         }
     }
     else if ( diffX == -2 && diffY == 0 && ( oriY == 0 || oriY == 8 ) ) {
-        for ( int i = oriX; i > 0; --i ) {
+        for ( int i = oriX - 1; i > 0; --i ) {
             if ( board[i][oriY] != nullptr ) {
                 return false;
             }

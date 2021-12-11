@@ -367,7 +367,7 @@ void Game::setup() {
                 errorMsg();
                 continue;
             }
-            board[x - 'a'][y - 1] = pieces.back().get();
+            board[x - 'a'][y - 1] = nullptr;
         } else if ( op == "=" ) {
             std::string side = "";
             cmd >> side;

@@ -48,8 +48,6 @@ std::string Human::cmd( Game &game ) {
 
     std::cout << "Please enter command here: ";
 
-    std::cerr << "I am " << getId() << std::endl;
-
     while ( std::cin >> cmd ) {
         if ( cmd == "move" ) {
             std::cin >> iniPosn;
@@ -59,7 +57,8 @@ std::string Human::cmd( Game &game ) {
             int endX = endPosn[0] - 'a';
             int endY = endPosn[1] - '1';
 
-            if ( !inRange( iniX, iniY, endX, endY ) ) {
+            if ( !inRange( iniX, iniY, endX, endY ) || 
+                 board[iniX][iniY] == nullptr ) {
                 std::cout << "Invalid coordinates" << std::endl;
                 std::cout << "Please enter command here: ";
                 continue;
