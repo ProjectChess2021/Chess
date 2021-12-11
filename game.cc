@@ -6,7 +6,15 @@ using std::endl;
 using std::cout;
 
 void Game::boardInit() {
-    isSetup = false;
+    mh->clearHistory();
+    if ( isSetup ) {
+        for ( int i = 0; i < 8; ++i ) {
+            for ( int k = 0; k < 8; ++k ) {
+                board[i][k] = setUpBoard[i][k];
+            }
+        }
+        return;
+    }
     for ( int k = 0; k < 8; ++k ) {
         pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
         board[k][1] = pieces.back().get();
@@ -181,7 +189,7 @@ void Game::undo() {
             if ( endX > beginX ) {
                 board[7][endY] = board[endX - 1][endY];
                 board[7][endY]->changeMoved( false );
-                board[endX + 1][endY] = nullptr;
+                board[endX - 1][endY] = nullptr;
             } else {
                 board[0][endY] = board[endX + 1][endY];
                 board[0][endY]->changeMoved( false );
@@ -209,8 +217,14 @@ void Game::undo() {
     }
 }
 
+void goOn() {
+    std::string str = "";
+    std::cout << "Press any key to continue: ";
+    std::cin >> str;
+}
+
 void Game::start() {
-    if(!isSetup)  boardInit();
+    boardInit();
     bool end = false;
     notifyObservers( *this );
     int diffI = 1;
@@ -233,16 +247,19 @@ void Game::start() {
                 players[0]->getScore() += 0.5;
                 players[1]->getScore() += 0.5;
                 end = true;
+                goOn();
                 break;
             } else if ( !player->hasAvaliableMove() && 
                 IsChecked::isChecked( player->getId(), board ) ) {
                 if ( i == 0 ) {
                     cout << "Checkamte! Black wins!" << endl;
                     player[1].getScore()++;
+                    end = true;
                 } else {
                     cout << "Checkamte! White wins!" << endl;
                     player[0].getScore()++;
                 }
+                goOn();
                 end = true;
                 break;
             } else if ( player->hasAvaliableMove() && 
@@ -252,12 +269,15 @@ void Game::start() {
                 } else {
                     cout << "Black is in check." << endl;
                 }
+                goOn();
             }
 
             std::cerr << __LINE__ << endl;
             std::string cmd = player->cmd( *this );
             
             if ( cmd == "undo" ) {
+                i -= diffI; 
+                k -= diffK;
                 undo();
                 player->usedUndo();
             } else if ( cmd == "resign" ) {
@@ -268,6 +288,7 @@ void Game::start() {
                     cout << "White wins!" << endl;
                     player[0].getScore()++;
                 }
+                goOn();
                 end = true;
                 break;
             } else if ( cmd == "" ) {
@@ -310,8 +331,11 @@ void Game::setup() {
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
     std::string in = "";
+    setUpBoard.clear();
+    setUpBoard.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     board.clear();
     board.resize( 8, std::vector<Piece *>( 8, nullptr ) );
+    pieces.clear();
     notifyObservers(*this);
     cout << "Please enter command here: ";
     while( std::getline( std::cin, in ) ) {
@@ -359,12 +383,27 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
+                pieces.pop_back();
                 notifyObservers(*this);
                 errorMsg();
                 continue;
             }
-            prompt += "Add piece successful.\n";
-            board[x - 'a'][y - 1] = pieces.back().get();
+            if ( setUpBoard[x - 'a'][y - 1] != nullptr &&
+                pieces.back()->getType() == 'k' &&
+                setUpBoard[x - 'a'][y - 1]->getType() == 'k' && 
+                pieces.back()->getSide() == setUpBoard[x - 'a'][y - 1]->getSide() ) {
+                prompt += "Nothing changed \n";
+                if ( pieces.back()->getSide() == 1 ) {
+                    whiteKingNum--;
+                } else {
+                    blackKingNum--;
+                }
+                pieces.pop_back();
+            } else {
+                prompt += "Add piece successful.\n";
+                board[x - 'a'][y - 1] = pieces.back().get();
+                setUpBoard[x - 'a'][y - 1] = pieces.back().get();
+            }
         } else if ( op == "-" ) {       // remove a piece
             char x = 'a';
             int y = 0;
@@ -376,18 +415,19 @@ void Game::setup() {
                 continue;
             }
             //board[x - 'a'][y - 1] = pieces.back().get();
-            if(board[x - 'a'][y - 1] == nullptr) {
+            if(setUpBoard[x - 'a'][y - 1] == nullptr) {
                 prompt += "No piece is detected there. Remove nothing.\n";
             }   else {
                 std::vector<std::unique_ptr<Piece>>::iterator it;
                 for(it = pieces.begin(); it != pieces.end(); ++it){
                     Piece* piecePtr = it->get();
-                    if(piecePtr == board[x - 'a'][y - 1]) {  //find the right pointer
+                    if(piecePtr == setUpBoard[x - 'a'][y - 1]) {  //find the right pointer
                         if(piecePtr->getType() == 'k') {          // a king is to be removed
                             if(piecePtr->getSide() == 1) whiteKingNum--;          // white king removed
                             else if(piecePtr->getSide() == 2) blackKingNum--;     // black king removed
                         }
-                        board[x - 'a'][y - 1] = nullptr;    // remove from board
+                        board[x - 'a'][y - 1] = nullptr;
+                        setUpBoard[x - 'a'][y - 1] = nullptr;    // remove from board
                         pieces.erase(it);                   // remove from pieces list
                         prompt += "Remove piece successful.\n";
                         break;
@@ -422,7 +462,7 @@ void Game::setup() {
             continue;
         }//end command selection
         notifyObservers(*this);
-        prompt += "Continue to enter command here:";
+        prompt += "Continue to enter command here: ";
         cout << prompt;
     }   // end while
 }   // end setup
