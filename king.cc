@@ -41,14 +41,9 @@ bool King::isValidMove( Posn *original, Posn *end,
             return true;
         }
     }
-<<<<<<< HEAD
     if ( diffX == -2 && diffY == 0 ) {
         if ( board[0][oriY] == nullptr ) return false;
         for ( int i = oriX - 1; i > 0; --i ) {
-=======
-    else if ( diffX == -2 && diffY == 0 && ( oriY == 0 || oriY == 8 ) ) {
-        for ( int i = oriX; i > 0; --i ) {
->>>>>>> 18b53b60bc07068560d80386c909f1891800cecf
             if ( board[i][oriY] != nullptr ) {
                 return false;
             }

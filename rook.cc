@@ -17,12 +17,12 @@ bool Rook::isValidMove( Posn *original, Posn *end,
     // Moving vertically
     if ( diffX == 0 ) {
         if ( diffY > 0 ) {
-            for ( int y = oriY; y < endY; ++y ) {
+            for ( int y = oriY + 1; y < endY; ++y ) {
                 if ( board[oriX][y] != nullptr ) return false;
             }
         }
         if ( diffY < 0 ) {
-            for ( int y = oriY; y > endY; --y ) {
+            for ( int y = oriY - 1; y > endY; --y ) {
                 if ( board[oriX][y] != nullptr ) return false;
             }
         }
@@ -34,12 +34,12 @@ bool Rook::isValidMove( Posn *original, Posn *end,
     // Moving Horizontally
     if ( diffY == 0 ) {
         if ( diffX > 0 ) {
-            for ( int x = oriX; x < endX; ++x ) {
+            for ( int x = oriX + 1; x < endX; ++x ) {
                 if ( board[x][oriY] != nullptr ) return false;
             }
         }
         if ( diffX < 0 ) {
-            for ( int x = oriX; x > endX; --x ) {
+            for ( int x = oriX - 1; x > endX; --x ) {
                 if ( board[x][oriY] != nullptr ) return false;
             }
         }
