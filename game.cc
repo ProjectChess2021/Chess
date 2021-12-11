@@ -92,7 +92,9 @@ std::string Game::move( const int &originalX, const int &originalY,
             b->castle( originalX, originalY, endX, endY );
             retval = "c";
         }
-    } else {
+    }
+    
+    if ( board[endX][endY] == nullptr ) {
         std::cerr << __LINE__ << std::endl;
         b->move( originalX, originalY, endX, endY );
         retval = "m";
@@ -141,27 +143,33 @@ void Game::start() {
                 break;
             } else if ( !player->hasAvaliableMove() && 
                 IsChecked::isChecked( player->getId(), board ) ) {
-                if ( i == 0 ) {
+                if ( player->getId() == 1 ) {
                     cout << "Checkamte! Black wins!" << endl;
-                    player[1].getScore()++;
-                    end = true;
+                    for ( int i = 0; i < players.size(); ++i ) {
+                        if ( players[i]->getId() == 2 ) {
+                            players[i]->getScore()++;
+                        }
+                    }
                 } else {
                     cout << "Checkamte! White wins!" << endl;
-                    player[0].getScore()++;
+                    for ( int i = 0; i < players.size(); ++i ) {
+                        if ( players[i]->getId() == 1 ) {
+                            players[i]->getScore()++;
+                        }
+                    }
                 }
                 goOn();
                 end = true;
                 break;
             } else if ( player->hasAvaliableMove() && 
                 IsChecked::isChecked( player->getId(), board ) ) {
-                if ( i == 0 ) {
+                if ( player->getId() == 1 ) {
                     cout << "White is in check." << endl;
                 } else {
                     cout << "Black is in check." << endl;
                 }
                 goOn();
             }
-
             std::cerr << __LINE__ << endl;
             std::string cmd = player->cmd( *this );
             
@@ -197,13 +205,15 @@ void Game::start() {
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
                 std::string op = move( iniX, iniY, endX, endY );
-                std::cerr << __LINE__ << std::endl;
+                std::cerr << "iniX = " << iniX << " iniY = " << iniY << std::endl;
+                std::cerr << "endX = " << endX << " endY = " << endY << std::endl;
                 mh->add( iniX, iniY, endX, endY, player->getId(), op, 
                     board[endX][endY]->isMoved() );
                 std::cerr << __LINE__ << std::endl;
                 board[endX][endY]->changeMoved( true );
             }
             notifyObservers( board, *(mh.get()) );
+            std::cerr << __LINE__ << std::endl;
             i += diffI; 
             k += diffK;
         }
@@ -272,6 +282,13 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
+                if ( pieces.back()->getType() == 'k' ) {
+                    if ( pieces.back()->getSide() == 1 ) {
+                        whiteKingNum--;
+                    } else {
+                        blackKingNum--;
+                    }
+                }
                 pieces.pop_back();
                 notifyObservers( setUpBoard, *(mh.get()) );
                 errorMsg();
@@ -363,6 +380,13 @@ float Game::getScore( int idx ) { return players[idx]->getScore(); }
 void Game::addPlayer( Player *player ) { 
     players.emplace_back( player ); 
     attach( player );
+}
+
+void Game::clearPlayer() { 
+    for ( int i = 0; i < players.size(); ++i ) {
+        detach( players[i] );
+    }
+    players.clear(); 
 }
 
 // This function returns true if the setup is valid, false ow.

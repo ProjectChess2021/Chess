@@ -217,28 +217,51 @@ bool knightChecked( const int &x, const int &y, const int &side,
 bool IsChecked::isChecked( const int &x, const int &y, const int &side,
     std::vector<std::vector<Piece *>>& board ) {
 
+    Piece *pc = nullptr;
+    int kingX = 0;
+    int kingY = 0;
+
     for ( int i = 0; i < 8; ++i ) {
         for ( int k = 0; k < 8; ++k ) {
             if ( board[i][k] ) {
                 if ( board[i][k]->getType() == 'k' && 
                      board[i][k]->getSide() == side ) {
-                    board[i][k] = nullptr;
+                    kingX = i;
+                    kingY = k;
                 }
             }
         }
     }
 
+    std::cerr << std::endl;
+    std::cerr << "The King for side = " << side << " is at " << kingX << kingY << std::endl;
+    std::cerr << std::endl;
+    
+    std::swap( board[kingX][kingY], pc );
+
     // Vertical check
-    if ( verticalChecked( x, y, side, board ) ) return true;
+    if ( verticalChecked( x, y, side, board ) ) {
+        std::swap( board[kingX][kingY], pc );
+        return true;
+    }
 
     // Diagnal check
-    if ( diagonalChecked( x, y, side, board ) ) return true;
-
+    if ( diagonalChecked( x, y, side, board ) ) {
+        std::swap( board[kingX][kingY], pc );
+        return true;
+    }
     // Horizontal checked
-    if ( horizontalChecked( x, y, side, board ) ) return true;
-
+    if ( horizontalChecked( x, y, side, board ) ) {
+        std::swap( board[kingX][kingY], pc );
+        return true;
+    }
     // Knight checked
-    if ( knightChecked( x, y, side, board ) ) return true;
+    if ( knightChecked( x, y, side, board ) ) {
+        std::swap( board[kingX][kingY], pc );
+        return true;
+    }
+
+    std::swap( board[kingX][kingY], pc );
 
     return false;
 }
@@ -268,23 +291,17 @@ bool IsChecked::isChecked( const int &side,
 bool IsChecked::isCheckMove(const int initX, const int initY, const int destX, const int destY,
     const int side, std::vector<std::vector<Piece *>>& board) {
         std::cerr<<"Check for side="<<side<<std::endl;
-    Posn kingPosn = getKingPosn(side, board);
-    std::cerr<<"get king from  side="<<side<< " at " << kingPosn << std::endl;
-    int kingX = kingPosn.getX();
-    int kingY = kingPosn.getY();
     Piece* temp = nullptr;
 
-    std::swap(board[initX][initY], temp); //move this piece
-    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+    std::swap(temp, board[destX][destY]);
+
+    std::swap(board[initX][initY], board[destX][destY]); //move this piece
+
+    bool ans = isChecked( side, board );
+ 
+    std::swap(board[initX][initY], board[destX][destY]); //move the piece back
 
     std::swap(temp, board[destX][destY]);
-    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
-    bool ans = isChecked(kingX, kingY, side, board);
-    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
-
-    std::swap(temp, board[destX][destY]);
-    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
-    std::swap(board[initX][initY], temp); //move the piece back
-    std:: cerr << board[4][0]->getType() << board[4][0]->getSide() << "at" << __LINE__ <<std::endl; 
+ 
     return ans;
 }   // end isCheckMove

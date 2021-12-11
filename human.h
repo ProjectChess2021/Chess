@@ -5,8 +5,7 @@
 
 class Human : public Player {
     public:
-    Human( const int &_id, const int numUndos );
-    Human( const int &_id, const int _side, const int numUndos );
+    Human( const int &_id, const int numUndos, const float score = 0 );
     std::string cmd( Game &game ) override;
 };
 

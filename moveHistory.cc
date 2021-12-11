@@ -9,8 +9,8 @@ MoveHistory::MoveHistory() { }
 
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
-    const int &finalX, const int &finalY, const int& side, const std::string &operation, 
-    bool firstMove ) {
+    const int &finalX, const int &finalY, const int& side, 
+    const std::string &operation, bool firstMove ) {
     std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
     mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
         finalY, side, operation, firstMove) );

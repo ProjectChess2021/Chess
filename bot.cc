@@ -21,7 +21,7 @@ void Bot::setStrategy(const int difficulty) {
 
 // return the command AI put based on current Strategy
 std::string Bot::cmd(Game &game) {
-    std::string retStr = _strategy->makeMove(game,getAM(),getSide());
+    std::string retStr = _strategy->makeMove(game,getAM(),getId());
     std::cerr << "AI commands:" << retStr;
     return retStr;
 }   // end cmd

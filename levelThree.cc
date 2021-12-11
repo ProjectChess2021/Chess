@@ -28,7 +28,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     Player* opponentPtr = nullptr;
 
     for(long unsigned int i = 0; i < playerLst.size(); i++)
-        if(playerLst[i]->getSide() != side) opponentPtr = playerLst[i];
+        if(playerLst[i]->getId() != side) opponentPtr = playerLst[i];
     
     std::vector<std::unique_ptr<Move>>& opponentAM = opponentPtr->getAM();
     std::vector<std::unique_ptr<Move>>::iterator it;

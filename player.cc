@@ -5,12 +5,9 @@
 #include "game.h"
 #include "isChecked.h"
 const int SIZE = 8;
-Player::Player( const int _id, const int _numUndo ) : 
-    score{ 0 }, id{_id }, side{2- (_id % 2)}, numUndo{ _numUndo } { } 
 
-Player::Player(const int _id, const int _side, const int _numUndo) : // team specified
-    score{0}, id{_id}, side{_side}, numUndo{_numUndo}   {}
-// end constructor
+Player::Player(const int _id, const int _numUndo, const float score ) : // team specified
+    score{ score }, id{_id}, numUndo{_numUndo}   { }
 
 // This function adds a Piece's every avaiable move into the avaiableMove vector
 void Player::emplacePieceMove( const int x, const int y, 
@@ -38,11 +35,12 @@ std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << "
                 else if (board[i][j] && board[i][j]->getSide() != id)    // piece of different side
                     op = "k";
 
-            if(!IsChecked::isCheckMove(x, y, i, j, side, board)){
-                availableMove.emplace_back(
-                std::make_unique<Move>( x, y, i, j, id, op, 
-                board[x][y]->isMoved() ) );
-            }
+                if(!IsChecked::isCheckMove(x, y, i, j, id, board)){
+                    std::cerr << "Moving from " << x << y << " to " << i << j << std::endl;
+                    availableMove.emplace_back(
+                        std::make_unique<Move>( x, y, i, j, id, op, 
+                            board[x][y]->isMoved() ) );
+                }
             }   // end if
         }   // end col for loop
     }   // end row for loop
@@ -70,8 +68,6 @@ int Player::getNumUndo() { return numUndo; }
 void Player::usedUndo() { numUndo--; }
 
 bool Player::hasAvaliableMove() { return availableMove.size() > 0; }
-
-int Player::getSide() {return side;}
 
 std::vector<std::unique_ptr<Move>>& Player::getAM() {
     return availableMove;

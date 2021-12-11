@@ -36,13 +36,25 @@ int main() {
         
         std::stringstream in{ input };
         if ( in >> cmd ) {
+            std::vector<std::unique_ptr<Player>> temp;
             if ( cmd == "game" ) {
                 if ( in >> player ) {
                     if ( !in >> numUndo ) {
                         continue;
                     }
                     if ( player == "human" ) {
-                        players.emplace_back( std::make_unique<Human>( 1, numUndo ) );
+                        if ( players.size() == 2 ) {
+                            int score = players[0]->getScore();
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 1, numUndo, score ) );
+                        } else if ( players.size() == 4) {
+                            int score = players[0]->getScore();
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 1, numUndo, score ) );
+                        } else {
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 1, numUndo ) );
+                        }
                     } else if ( player == "computer1" ) {
                         // emplace_back a computer1 to players
                     } else if ( player == "computer2" ) {
@@ -62,7 +74,18 @@ int main() {
                         continue;
                     }
                     if ( player == "human" ) {
-                        players.emplace_back( std::make_unique<Human>( 2, numUndo ) );
+                        if ( players.size() == 2 ) {
+                            int score = players[1]->getScore();
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 2, numUndo, score ) );
+                        } else if ( players.size() == 4) {
+                            int score = players[2]->getScore();
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 2, numUndo, score ) );
+                        } else {
+                            temp.emplace_back( 
+                                std::make_unique<Human>( 2, numUndo ) );
+                        }
                     } else if ( player == "computer1" ) {
                         // emplace_back a computer1 to players
                     } else if ( player == "computer2" ) {
@@ -78,13 +101,14 @@ int main() {
                     continue;
                 }
 
-                for ( int i = 0; i < 2; ++i ) {
+                std::swap( players, temp );
+
+                g->clearPlayer();
+
+                for ( int i = 0; i < players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
-                while ( !std::cin.eof() ) {
-                    g->start();
-                }
-                end = true;
+                g->start();
             } else if ( cmd == "setup" ) {
                 g->setup();
             }
@@ -93,7 +117,6 @@ int main() {
 
     system( "clear" );
 
-    std::cout << std::endl;
     std::cout << "Final Score:" << std::endl;
     std::cout << "White: " << g->getScore( 0 ) << std::endl;
     std::cout << "Black: " << g->getScore( 1 ) << std::endl;

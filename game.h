@@ -36,6 +36,7 @@ class Game : public Subject {
     MoveHistory*getMoveHistory();
     float getScore(int idx);  // return the currentScore of a single player
     void addPlayer( Player *player );
+    void clearPlayer();
 };  // end Game
 
 #endif
