@@ -6,8 +6,8 @@
 #include "king.h"
 #include <vector>
 
-Human::Human( const int &_id, const int numUndos, const float score ) : 
-    Player{ _id, numUndos, score } { }
+Human::Human( const int &_id, const float score ) : 
+    Player{ _id, score } { }
 
 bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
     if ( iniX < 0 || iniX >= 8 ) {
@@ -83,7 +83,8 @@ std::string Human::cmd( Game &game ) {
                 continue;
             }
 
-            if ( IsChecked::isChecked( kingX, kingY, getId(), board ) ) {
+            if ( IsChecked::isCheckMove( 
+                iniX, iniY, endX, endY, getId(), board ) ) {
                 std::cout << "Your king will be checked by this move" << std::endl;
                 std::cout << "Please think carefully before you make your move" << std::endl;
                 std::cout << "Please enter command here: ";

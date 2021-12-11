@@ -19,12 +19,13 @@ class Player : public Observer {
     void emplacePieceMove( const int x, const int y, 
         std::vector<std::vector<Piece *>> &b, MoveHistory &mh );
     public:
-    Player(const int, const int, const float score = 0);
+    Player(const int, const float score = 0);
     void notify( std::vector<std::vector<Piece *>> &b, 
         MoveHistory &mh ) override;
     float &getScore();
     int getId();
     int getNumUndo();
+    void changeUndo( const int num );
     void usedUndo();
     bool hasAvaliableMove();        // return true if this player still has possible movement, false otherwise
     virtual std::string cmd( Game &game ) = 0;

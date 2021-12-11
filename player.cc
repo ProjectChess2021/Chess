@@ -6,8 +6,8 @@
 #include "isChecked.h"
 const int SIZE = 8;
 
-Player::Player(const int _id, const int _numUndo, const float score ) : // team specified
-    score{ score }, id{_id}, numUndo{_numUndo}   { }
+Player::Player(const int _id, const float score ) : // team specified
+    score{ score }, id{_id}, numUndo{ 0 }   { }
 
 // This function adds a Piece's every avaiable move into the avaiableMove vector
 void Player::emplacePieceMove( const int x, const int y, 
@@ -72,5 +72,7 @@ bool Player::hasAvaliableMove() { return availableMove.size() > 0; }
 std::vector<std::unique_ptr<Move>>& Player::getAM() {
     return availableMove;
 }   // end getAM
+
+void Player::changeUndo( const int num ) { numUndo = num; }
 
 Player::~Player() { }

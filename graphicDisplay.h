@@ -6,16 +6,19 @@
 #include "window.h"
 #include "game.h"
 #include <vector>
+#include "piece.h"
 
 class GraphicDisplay : public Observer {
-    Game &g;
+    int width;
+    int height;
     std::unique_ptr<Xwindow> display;
     std::vector<std::vector<char>> d;
     public:
-    GraphicDisplay( Game &g );
+    GraphicDisplay( const int width, const int height );
     ~GraphicDisplay();
 
-    void notify() override;
+    void notify( std::vector<std::vector<Piece *>> &b, 
+        MoveHistory &mh ) override;
 };
 
 #endif

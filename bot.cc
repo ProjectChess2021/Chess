@@ -6,10 +6,7 @@
 #include "levelThree.h"
 #include "levelFour.h"
 
-Bot::Bot(const int id, const int side, const int numUndo) : 
-    Player{id, side, numUndo} {}    // end Constructor
-
-Bot::Bot(const int _id, const int _numUndo) : Player{_id, _numUndo} {}
+Bot::Bot(const int _id, const int score) : Player{_id, score} {}
 
 // This function changes the strategy (the difficulty) AI adapts
 void Bot::setStrategy(const int difficulty) {

@@ -7,6 +7,7 @@
 #include "levelOne.h"
 #include "levelTwo.h"
 #include "levelThree.h"
+#include "graphicDisplay.h"
 
 int main() {
     std::vector<std::unique_ptr<Player>> players;
@@ -17,7 +18,9 @@ int main() {
     bool end = false;
     std::unique_ptr<Game> g = std::make_unique<Game>();
     std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
+    // std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
     g->attach( td.get() );
+    // g->attach( gd.get() );
 
     while ( !std::cin.eof() && !end ) {
         system( "clear" );
@@ -39,21 +42,18 @@ int main() {
             std::vector<std::unique_ptr<Player>> temp;
             if ( cmd == "game" ) {
                 if ( in >> player ) {
-                    if ( !in >> numUndo ) {
-                        continue;
-                    }
                     if ( player == "human" ) {
                         if ( players.size() == 2 ) {
                             int score = players[0]->getScore();
                             temp.emplace_back( 
-                                std::make_unique<Human>( 1, numUndo, score ) );
+                                std::make_unique<Human>( 1, score ) );
                         } else if ( players.size() == 4) {
                             int score = players[0]->getScore();
                             temp.emplace_back( 
-                                std::make_unique<Human>( 1, numUndo, score ) );
+                                std::make_unique<Human>( 1, score ) );
                         } else {
                             temp.emplace_back( 
-                                std::make_unique<Human>( 1, numUndo ) );
+                                std::make_unique<Human>( 1 ) );
                         }
                     } else if ( player == "computer1" ) {
                         // emplace_back a computer1 to players
@@ -70,21 +70,18 @@ int main() {
                     continue;
                 }
                 if ( in >> player ) {
-                    if ( !in >> numUndo ) {
-                        continue;
-                    }
                     if ( player == "human" ) {
                         if ( players.size() == 2 ) {
-                            int score = players[1]->getScore();
+                            float score = players[1]->getScore();
                             temp.emplace_back( 
-                                std::make_unique<Human>( 2, numUndo, score ) );
+                                std::make_unique<Human>( 2, score ) );
                         } else if ( players.size() == 4) {
-                            int score = players[2]->getScore();
+                            float score = players[2]->getScore();
                             temp.emplace_back( 
-                                std::make_unique<Human>( 2, numUndo, score ) );
+                                std::make_unique<Human>( 2, score ) );
                         } else {
                             temp.emplace_back( 
-                                std::make_unique<Human>( 2, numUndo ) );
+                                std::make_unique<Human>( 2 ) );
                         }
                     } else if ( player == "computer1" ) {
                         // emplace_back a computer1 to players
@@ -101,13 +98,28 @@ int main() {
                     continue;
                 }
 
+                if ( !(in >> numUndo) ) {
+                    continue;
+                } else {
+                    temp[0]->changeUndo( numUndo );
+                    temp[1]->changeUndo( numUndo );
+                }
+
+                std::cerr << __LINE__ << std::endl;
+
                 std::swap( players, temp );
+
+                std::cerr << __LINE__ << std::endl;
 
                 g->clearPlayer();
 
-                for ( int i = 0; i < players.size(); ++i ) {
+                std::cerr << __LINE__ << std::endl;
+
+                for ( int i = 0; i < (int)players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
+
+                std::cerr << __LINE__ << std::endl;
                 g->start();
             } else if ( cmd == "setup" ) {
                 g->setup();

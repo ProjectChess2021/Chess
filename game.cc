@@ -8,7 +8,6 @@ using std::cout;
 void Game::boardInit() {
     mh->clearHistory();
     b->boardInit( isSetup );
-    whiteStart = true;
 }
 
 Game::Game() :  mh{ std::make_unique<MoveHistory>() }, 
@@ -44,6 +43,7 @@ std::string Game::move( const int &originalX, const int &originalY,
                      endY + 1 == lastMoveBegin->getY() &&
                      lastPiece->getSide() != pc->getSide() ) {
                     b->CEP( originalX, originalY, endX, endY );
+                    std::cerr << "Performed CEP" << std::endl;
                     retval = "k";
                 }
             } else if ( side == 2 ) {
@@ -53,6 +53,7 @@ std::string Game::move( const int &originalX, const int &originalY,
                      endY - 1 == lastMoveBegin->getY() &&
                      lastPiece->getSide() != pc->getSide() ) {
                     b->CEP( originalX, originalY, endX, endY );
+                    std::cerr << "Performed CEP" << std::endl;
                     retval = "k";
                 }
             }
@@ -70,6 +71,7 @@ std::string Game::move( const int &originalX, const int &originalY,
                 cout << "k(n)ight" << endl;
                 cout << "(b)ishop" << endl;
                 cout << "(q)ueen" << endl;
+                std::cout << "Please enter command here: ";
                 std::cin >> promptTo;
                 if ( promptTo == 'r' || promptTo == 'n' || 
                     promptTo == 'b' || promptTo == 'q' ) {
@@ -94,7 +96,7 @@ std::string Game::move( const int &originalX, const int &originalY,
         }
     }
     
-    if ( board[endX][endY] == nullptr ) {
+    if ( board[endX][endY] == nullptr && retval == "" ) {
         std::cerr << __LINE__ << std::endl;
         b->move( originalX, originalY, endX, endY );
         retval = "m";
@@ -120,19 +122,19 @@ void Game::start() {
     std::vector<std::vector<Piece *>> &board = b->getBoard();
     notifyObservers( board, *(mh.get()) );
     int diffI = 1;
-    int diffK = 0;
-    if ( !whiteStart ) {
-        diffK = -1;
-        diffI = 0;
-    }
+    int i = 0;
     while ( !end ) {
-        for ( int i = 0, k = 1; i < 2 && k >= 0; ) {
+        if ( !whiteStart ) {
+            std::cerr << __LINE__ << std::endl;
+            diffI = -1;
+            i = 1;
+        } else {
+            diffI = 1;
+            i = 0;
+        }
+        for ( ; i < 2 && i >= 0; ) {
             Player *player = nullptr;
-            if ( whiteStart ) {
-                player = players[i];
-            } else {
-                player = players[k];
-            }
+            player = players[i];
             if ( !player->hasAvaliableMove() && 
                 !IsChecked::isChecked( player->getId(), board ) ) {
                 cout << "Stalemate!" << endl;
@@ -145,14 +147,14 @@ void Game::start() {
                 IsChecked::isChecked( player->getId(), board ) ) {
                 if ( player->getId() == 1 ) {
                     cout << "Checkamte! Black wins!" << endl;
-                    for ( int i = 0; i < players.size(); ++i ) {
+                    for ( int i = 0; i < (int)players.size(); ++i ) {
                         if ( players[i]->getId() == 2 ) {
                             players[i]->getScore()++;
                         }
                     }
                 } else {
                     cout << "Checkamte! White wins!" << endl;
-                    for ( int i = 0; i < players.size(); ++i ) {
+                    for ( int i = 0; i < (int)players.size(); ++i ) {
                         if ( players[i]->getId() == 1 ) {
                             players[i]->getScore()++;
                         }
@@ -168,23 +170,21 @@ void Game::start() {
                 } else {
                     cout << "Black is in check." << endl;
                 }
-                goOn();
             }
             std::cerr << __LINE__ << endl;
             std::string cmd = player->cmd( *this );
             
             if ( cmd == "undo" ) {
                 i -= diffI; 
-                k -= diffK;
                 undo();
                 player->usedUndo();
             } else if ( cmd == "resign" ) {
                 if ( i == 0 ) {
                     cout << "Black wins!" << endl;
-                    player[1].getScore()++;
+                    players[1]->getScore()++;
                 } else {
                     cout << "White wins!" << endl;
-                    player[0].getScore()++;
+                    players[0]->getScore()++;
                 }
                 goOn();
                 end = true;
@@ -215,7 +215,6 @@ void Game::start() {
             notifyObservers( board, *(mh.get()) );
             std::cerr << __LINE__ << std::endl;
             i += diffI; 
-            k += diffK;
         }
     }
 }
@@ -232,9 +231,12 @@ void errorMsg() {
 void Game::setup() {
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
+    b->getPieces().clear();
+    b->getSetUpBoard().clear();
     std::string in = "";
     std::vector<std::unique_ptr<Piece>> &pieces = b->getPieces();
     std::vector<std::vector<Piece *>> &setUpBoard = b->getSetUpBoard();
+    setUpBoard.resize( 8, std::vector<Piece *>( 8, nullptr ) );
     notifyObservers( setUpBoard, *(mh.get()) );
     cout << "Please enter command here: ";
     while( std::getline( std::cin, in ) ) {
@@ -367,6 +369,13 @@ void Game::setup() {
         }//end command selection
         notifyObservers( setUpBoard, *(mh.get()) );
         prompt += "Continue to enter command here: ";
+        if ( op == "=" ) {
+            if ( whiteStart ) {
+                std::cout << "White will make the next move." << std::endl;
+            } else {
+                std::cout << "Black will make the next move." << std::endl;
+            }
+        }
         cout << prompt;
     }   // end while
 }   // end setup
@@ -375,7 +384,12 @@ std::vector<std::vector<Piece *>> &Game::getBoard() { return b->getBoard(); }
 
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
-float Game::getScore( int idx ) { return players[idx]->getScore(); }
+float Game::getScore( int idx ) { 
+    if ( players.size() > 1 )
+        return players[idx]->getScore(); 
+    else
+        return 0;
+}
 
 void Game::addPlayer( Player *player ) { 
     players.emplace_back( player ); 
@@ -383,7 +397,7 @@ void Game::addPlayer( Player *player ) {
 }
 
 void Game::clearPlayer() { 
-    for ( int i = 0; i < players.size(); ++i ) {
+    for ( int i = 0; i < (int)players.size(); ++i ) {
         detach( players[i] );
     }
     players.clear(); 

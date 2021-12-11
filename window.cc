@@ -16,7 +16,7 @@ Xwindow::Xwindow(int width, int height) {
     exit(1);
   }
   s = DefaultScreen(d);
-  w = XCreateSimpleWindow(d, RootWindow(d, s), 10, 10, width, height, 1,
+  w = XCreateSimpleWindow(d, RootWindow(d, s), 50, 50, width, height, 1,
                           BlackPixel(d, s), WhitePixel(d, s));
   XSelectInput(d, w, ExposureMask | KeyPressMask);
   XMapRaised(d, w);
@@ -31,10 +31,10 @@ Xwindow::Xwindow(int width, int height) {
   // Set up colours.
   XColor xcolour;
   Colormap cmap;
-  char color_vals[10][10]={"white", "black", "red", "green", "blue", "cyan", "yellow", "magenta", "orange", "brown"};
+  char color_vals[10][10]={"white", "black", "#FDF5E6", "#D2B48C", "#8B4513", "cyan", "yellow", "magenta", "orange", "brown"};
 
   cmap=DefaultColormap(d,DefaultScreen(d));
-  for(int i=0; i < 5; ++i) {
+  for(int i=0; i < 10; ++i) {
       XParseColor(d,cmap,color_vals[i],&xcolour);
       XAllocColor(d,cmap,&xcolour);
       colours[i]=xcolour.pixel;
@@ -62,7 +62,6 @@ Xwindow::~Xwindow() {
 void Xwindow::fillRectangle(int x, int y, int width, int height, int colour) {
   XSetForeground(d, gc, colours[colour]);
   XFillRectangle(d, w, gc, x, y, width, height);
-  XSetForeground(d, gc, colours[Black]);
 }
 
 void Xwindow::drawString(int x, int y, string msg) {
