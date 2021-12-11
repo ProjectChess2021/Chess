@@ -6,7 +6,8 @@
 // calculate the change in effect when a piece performs given _move
 int calcEffect(Posn* init, Posn* dest, char type) {
      // the effect of this move, new Effect - old effect
-    POSWEIGHT.find(type)[dest->getX()][dest->getY()] - POSWEIGHT.find(initType)[init->getX()][init->getY()]
+    std::map<char, vector<vector<int>>>::const_iterator it = POSWEIGHT.find(type);
+    (it->second)[dest->getX()][dest->getY()] -(it->second)[init->getX()][init->getY()];
 }   // end calculateEffect
 
 // Level Three AI tries not to get the pieces captured, if no pieces are possible to be captured
@@ -22,7 +23,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     std::vector<std::vector<Piece *>>& board = game.getBoard();
     std::vector<Player*>& playerLst = game.getPlayers();
     std::vector<std::vector<int>> controlArea;
-    controlArea.resize(8, std::vector<int>(8, 0));
+    controlArea.resize(8, std::vector<int>(8, -100));
 
     Player* opponentPtr = nullptr;
 
@@ -36,9 +37,9 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
         Move* aMove = it->get();
         Posn* dest = aMove->getEnd();
         Posn* init = aMove->getOriginal();
-        char initType = tolower(board[init->getX][init->getY()]->getType());
-
-        controlArea[dest->getX()][dest->getY()] = max(calcEffect(init,dest,initType),
+        char initType = tolower(board[init->getX()][init->getY()]->getType());
+        char destType = tolower(board[dest->getX()][dest->getY()]->getType());
+        controlArea[dest->getX()][dest->getY()] = std::max(calcEffect(init,dest,initType),
                                                       controlArea[dest->getX()][dest->getY()]);
         if(aMove->getOperation() == "k") {    // a capture exists as an available move
             auto it2 = PIECEWEIGHT.find(destType);
@@ -52,17 +53,22 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
         }   // end if
     }   // end for loop going through am
 
-    for(int i = 0; i < 8; i++){
-        for(int j = 0; j < 8; j++) {
-            if(maxPiece->isValidMove(maxPosn,Posn{i,j})) {
-                
+    if(maxCaptureWeight == -1)  // enemy is impossible to caputure a piece
+        return LevelTwo::makeMove(game, my_am, side);
+    int destX, destY;
+    for(std::vector<std::unique_ptr<Move>>::iterator it = my_am.begin(); it != my_am.end(); ++it) {
+        Move* aMove = it->get();
+        if(aMove->getOriginal() == maxPosn){
+            int currEffect = calcEffect(maxPosn,aMove->getEnd(),maxPiece->getType());
+            if(currEffect < minEffect){     // found a better move
+                destX = aMove->getEnd()->getX();
+                destY = aMove->getEnd()->getY();
+                minEffect = currEffect;
             }
         }
-    }
-
-    int initX = maxCapturePosn->getX();
-    int initY = maxCapturePosn->getY();
-    
-    // search a best valid move
-    
+    }   // end for
+    std::string retStr = "move " + (char) (maxPosn->getX() + 'a') + (maxPosn->getY());
+    retStr += " " +  (char) (destX + 'a') + (destY);
+    std::cerr << "Capture move found @ Line 38, LevelTwo.cc. Produced str:" << retStr;
+    return retStr; 
 }   // end makeMove

@@ -14,6 +14,7 @@ class Posn {
     int getX() const noexcept;
     int getY() const noexcept;
     friend std::ostream &operator<<( std::ostream& , const Posn& );
+    bool operator==(Posn&);
 };
 
 #endif

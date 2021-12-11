@@ -12,3 +12,7 @@ int Posn::getY() const noexcept { return y; }
 std::ostream &operator<<( std::ostream& out, const Posn& aPosn) {
     return out << (char) (aPosn.getX() + 'a') << aPosn.getY() + 1;
 }   // end Operator<<
+
+bool Posn::operator==(Posn&b){
+    return (x == b.getX()) && (y == b.getY());
+}   // end Operator==

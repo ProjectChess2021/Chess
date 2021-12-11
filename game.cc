@@ -375,7 +375,6 @@ void Game::setup() {
                 errorMsg();
                 continue;
             }
-            board[x - 'a'][y - 1] = nullptr;
             //board[x - 'a'][y - 1] = pieces.back().get();
             if(board[x - 'a'][y - 1] == nullptr) {
                 prompt += "No piece is detected there. Remove nothing.\n";
