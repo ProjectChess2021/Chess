@@ -34,7 +34,6 @@ int main() {
         std::cout << "Please enter command here: ";
         std::getline( std::cin, input );
         
-        
         std::stringstream in{ input };
         if ( in >> cmd ) {
             if ( cmd == "game" ) {
