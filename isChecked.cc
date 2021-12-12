@@ -224,11 +224,6 @@ bool IsChecked::isChecked( const int &x, const int &y, const int &side,
             }
         }
     }
-
-    std::cerr << std::endl;
-    std::cerr << "The King for side = " << side << " is at " << kingX << kingY << std::endl;
-    std::cerr << std::endl;
-    
     std::swap( board[kingX][kingY], pc );
 
     // Vertical check

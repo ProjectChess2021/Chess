@@ -11,7 +11,7 @@ class Strategy;
 class Bot : public Player {
     std::unique_ptr<Strategy> _strategy;
     public:
-    Bot(const int _id, const int score);
+    Bot(const int _id, const int level, const float score);
     void setStrategy(const int);        // change the strategy, which is the AI difficulty
     std::string cmd( Game &game ) override;
 };

@@ -8,6 +8,7 @@
 #include "levelTwo.h"
 #include "levelThree.h"
 #include "graphicDisplay.h"
+#include "bot.h"
 
 int main() {
     std::vector<std::unique_ptr<Player>> players;
@@ -28,7 +29,7 @@ int main() {
         std::cout << "Select command from below:" << std::endl << std::endl;
         std::cout << "game white-player black-player allowUndo" << std::endl;
         std::cout << "setup" << std::endl << std::endl;
-        std::cout << "(player can be either human or computer[1-4])" << std::endl;
+        std::cout << "(player can be either human or bot[1-4])" << std::endl;
         std::cout << "If do not allow undo then put in 0." << std::endl;
         std::cout << "Else put in the number of undos allowed." << std::endl;
         std::cout << "Negative for unlimited undo" << std::endl;
@@ -40,64 +41,37 @@ int main() {
         std::stringstream in{ input };
         if ( in >> cmd ) {
             std::vector<std::unique_ptr<Player>> temp;
-            if ( cmd == "game" ) {
-                if ( in >> player ) {
+            if ( cmd == "game" ) {          // 2 player games
+                if ( in >> player ) {       // input first player
+                    float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
-                        if ( players.size() == 2 ) {
-                            int score = players[0]->getScore();
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 1, score ) );
-                        } else if ( players.size() == 4) {
-                            int score = players[0]->getScore();
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 1, score ) );
-                        } else {
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 1 ) );
+                        temp.emplace_back( std::make_unique<Human>( 1, score ) );
+                    } else if ( player.substr(0,3) == "bot" ) {
+                        std::cerr << __LINE__ << std::endl;                
+                        int level = 1;
+                        try{ level = std::stoi(player.substr(3)); } 
+                        catch(const std::invalid_argument& ia) {  // not valid ai level
+                            level = 1;
                         }
-                    } else if ( player == "computer1" ) {
-                        // emplace_back a computer1 to players
-                    } else if ( player == "computer2" ) {
-                        // emplace_back a computer2 to players
-                    } else if ( player == "computer3" ) {
-                        // emplace_back a computer3 to players
-                    } else if ( player == "computer4" ) {
-                        // emplace_back a computer4 to players
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-                if ( in >> player ) {
+                        std::cerr << __LINE__ << std::endl;
+                        temp.emplace_back(std::make_unique<Bot>(1, level, score));
+                        std::cerr << __LINE__ << std::endl;
+                    } else continue;    // unrecognized player input
+                } else continue;        //no first player detected
+                if ( in >> player ) {    // input second player
+                    float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
-                        if ( players.size() == 2 ) {
-                            float score = players[1]->getScore();
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 2, score ) );
-                        } else if ( players.size() == 4) {
-                            float score = players[2]->getScore();
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 2, score ) );
-                        } else {
-                            temp.emplace_back( 
-                                std::make_unique<Human>( 2 ) );
+                        temp.emplace_back( std::make_unique<Human>( 2, score ) );
+                    } else if ( player.substr(0,3) == "bot" ) {
+                        
+                        int level = 1;
+                        try{ level = std::stoi(player.substr(3)); } 
+                        catch(const std::invalid_argument& ia) {  // not valid ai level
+                            level = 1;
                         }
-                    } else if ( player == "computer1" ) {
-                        // emplace_back a computer1 to players
-                    } else if ( player == "computer2" ) {
-                        // emplace_back a computer2 to players
-                    } else if ( player == "computer3" ) {
-                        // emplace_back a computer3 to players
-                    } else if ( player == "computer4" ) {
-                        // emplace_back a computer4 to players
-                    } else {
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
-
+                        temp.emplace_back(std::make_unique<Bot>(2, level, score));
+                    } else continue;    // unrecognized player input
+                } else continue;        // no second player
                 if ( !(in >> numUndo) ) {
                     continue;
                 } else {
@@ -105,23 +79,13 @@ int main() {
                     temp[1]->changeUndo( numUndo );
                 }
 
-                std::cerr << __LINE__ << std::endl;
-
                 std::swap( players, temp );
-
-                std::cerr << __LINE__ << std::endl;
-
                 g->clearPlayer();
-
-                std::cerr << __LINE__ << std::endl;
-
                 for ( int i = 0; i < (int)players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
-
-                std::cerr << __LINE__ << std::endl;
                 g->start();
-            } else if ( cmd == "setup" ) {
+            } else if ( cmd == "setup" ) {      // setup mode
                 g->setup();
             }
         }

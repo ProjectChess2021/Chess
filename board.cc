@@ -140,6 +140,7 @@ void Board::smart_move(Move& _move) {
     int sy = _move.getsy();
     int ex = _move.getex();
     int ey = _move.getey();
+    std::string op = _move.getOperation();
     if(board[sx][sy] == nullptr)    throw "Initial Position has no piece!";
     if(board[ex][ey] == nullptr && (op == "k" || op == "k+p"))     
         throw "Kill Or KnP has no Piece at dest";
@@ -152,7 +153,7 @@ void Board::smart_move(Move& _move) {
     else if(_move.getOperation() == "e")    CEP(sx, sy, ex, ey);
     else move(sx, sy, ex, ey);
 
-    if(_move.isFirstMove()) board[ex][ey]->changeMoved(true);
+    if(_move.isFirstMove()) board[ex][ey]->changeMoved(false);
 }   // end smart_move
 
 void Board::undo( std::vector<Move *> &undoHist ) {
@@ -196,16 +197,6 @@ void Board::undo( std::vector<Move *> &undoHist ) {
             deadPool.pop_back();
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = deadPool.back();
-            deadPool.pop_back();
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        } else if ( hist->getOperation() == "e" ) {
-            board[beginX][beginY] = board[endX][endY];
-            board[endX][endY] = nullptr;
-            if ( board[beginX][beginY]->getSide() == 1 ) {
-                board[endX][endY - 1] = deadPool.back();
-            } else {
-                board[endX][endY + 1] = deadPool.back();
-            }
             deadPool.pop_back();
             board[beginX][beginY]->changeMoved( hist->isFirstMove() );
         }
