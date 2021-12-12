@@ -27,6 +27,7 @@ bool Bishop::isValidMove( Posn *original, Posn *end,
         }
         if ( board[endX][endY] != nullptr ) 
             return board[endX][endY]->getSide() != this->getSide();
+        return true;
     } else if ( diffX == -diffY ) {
         if ( diffX > 0 ) {
             for ( int i = 1; i < diffX; ++i  ) {
@@ -39,6 +40,7 @@ bool Bishop::isValidMove( Posn *original, Posn *end,
         }
         if ( board[endX][endY] != nullptr ) 
             return board[endX][endY]->getSide() != this->getSide();
+        return true;
     }
 
     return false;
