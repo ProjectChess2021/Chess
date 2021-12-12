@@ -140,6 +140,11 @@ void Board::smart_move(Move& _move) {
     int sy = _move.getsy();
     int ex = _move.getex();
     int ey = _move.getey();
+    if(board[sx][sy] == nullptr)    throw "Initial Position has no piece!";
+    if(board[ex][ey] == nullptr && (op == "k" || op == "k+p"))     
+        throw "Kill Or KnP has no Piece at dest";
+    if(board[ex][ey] != nullptr && (op == "c" || op == "m" || op == "e"))
+        throw "Castling or Move has Piece at dest";
     if (_move.getOperation() == "k")        kill(sx, sy, ex, ey);
     else if(_move.getOperation() == "c")    castle(sx, sy, ex, ey);
     else if(_move.getOperation() == "p")    promotion(sx, sy, ex, ey, 'q');
