@@ -14,6 +14,7 @@ class Bot : public Player {
     Bot(const int _id, const int level, const float score);
     void setStrategy(const int);        // change the strategy, which is the AI difficulty
     std::string cmd( Game &game ) override;
+    char promptTo() override;
 };
 
 #endif

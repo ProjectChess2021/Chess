@@ -36,7 +36,7 @@ class Board {
       const int &finalX, const int &finalY, const char promptTo );
     void CEP( const int &originalX, const int &originalY, 
       const int &finalX, const int &finalY );
-    void smart_move(Move&);
+    void smart_move(Move&, const char promptTo);
     void undo( std::vector<Move *> &undoHist );
     
     // This function calculates the weight of board in the perspective of given side

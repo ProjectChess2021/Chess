@@ -5,6 +5,21 @@
 #include "board.h"
 #include <iostream>
 
+std::string findOp( Board &b, Posn &start, Posn &end ) {
+    char initType = b.at(start)->getType();
+    if(initType == 'k' && std::abs(start.getX() - end.getX()) == 2) { // castling
+        return "c";
+    } else if (initType == 'p' && (end.getY() == 0 || end.getY() == 7)) { // promotion
+        return  (b.at(end) == nullptr) ? "p" : "k+p";   // promotion + kill
+    } else if(initType == 'p' && std::abs(end.getX() - start.getX()) == 1 && 
+        !b.at(end)) {
+        return  "e";    // En passant
+    } else if(b.at(end)) {   // there is a piece at dest, thus a caputre
+        return  "k";
+    } else 
+        return  "m";
+}
+
 Move::Move(Posn& init, Posn& dest, const int& _side, const std::string& op, 
     const bool &_isFirstMove) :
     original{ std::make_unique<Posn>(init) },
@@ -26,25 +41,17 @@ Move::Move(Board& _board, Posn& init, Posn& dest) :
     original{ std::make_unique<Posn>(init) },
     end{ std::make_unique<Posn>(dest) },
     side{_board.at(init)->getSide()},
-    firstMove{_board.at(init)->isMoved()} {
-        char initType = _board.at(init)->getType();
-    if(initType == 'k' && std::abs(init.getX() - dest.getX()) == 2) { // castling
-        operation = "c";
-    } else if (initType == 'p' && (dest.getY() == 0 || dest.getY() == 7)) { // promotion
-        operation = (_board.at(dest) == nullptr) ? "p" : "k+p";   // promotion + kill
-    }  else if(initType == 'p' && std::abs(dest.getX() - init.getX()) == 1 && !_board.at(dest)) {
-        operation = "e";    // En passant
-    }
-    else if(_board.at(dest)) {   // there is a piece at dest, thus a caputre
-        operation = "k";
-    } else operation = "m";
+    firstMove{_board.at(init)->isMoved()}, 
+    operation{ findOp( _board, init, dest ) } {
+    
 }   // end Constructor
 
-Move::Move(Board& _board, const int sx, const int sy, const int ex, const int ey) {
-    Posn st{sx,sy};
-    Posn ed{ex,ey};
-    Move(_board, st, ed);
-}   // end Constructor
+Move::Move(Board& _board, const int sx, const int sy, const int ex, const int ey) :
+    original{ std::make_unique<Posn>( sx, sy ) },
+    end{ std::make_unique<Posn>( ex, ey ) },
+    side{ _board.at( sx, sy )->getSide() },
+    firstMove{ _board.at( sx, sy )->isMoved() },
+    operation{ findOp( _board, *original, *end ) } { }   // end Constructor
 
 int Move::getSide() {return side;}
 

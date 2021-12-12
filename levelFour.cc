@@ -33,7 +33,7 @@ int LevelFour::minimax(int depth, Game& game, Player* currPlayer, int maximizedI
     std::vector<std::unique_ptr<Move>>& am = currPlayer->getAM();
     for(auto it = am.begin(); it != am.end(); ++it) {
         Move* movePtr= it->get();
-        board.smart_move(*movePtr);
+        board.smart_move(*movePtr, 'q');
         std::vector<Move*> undoLst;
         undoLst.emplace_back(movePtr);
         Player* next = game.nextPlayer(currPlayer->getId());

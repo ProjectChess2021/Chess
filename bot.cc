@@ -24,3 +24,7 @@ std::string Bot::cmd(Game &game) {
     std::cerr << "AI commands:" << retStr << ", at " << __LINE__ << " from " << __FILE__ << std::endl;
     return retStr;
 }   // end cmd
+
+char Bot::promptTo() {
+    return 'q';
+}

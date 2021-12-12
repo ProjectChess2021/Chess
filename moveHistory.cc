@@ -9,24 +9,23 @@ MoveHistory::MoveHistory() { }
 
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
-    const int &finalX, const int &finalY, const int& side, 
-    const std::string &operation, bool firstMove ) {
+    const int &finalX, const int &finalY, Board &b ) {
     std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
-    mh.emplace( mh.begin(), std::make_unique<Move>( originalX, originalY, finalX, 
-        finalY, side, operation, firstMove) );
+    mh.emplace_back( 
+        std::make_unique<Move>( b, originalX, originalY, finalX, finalY ) );
 }   // end add
 
 std::vector<Move *> MoveHistory::undo() {
     std::cerr << "undo @ Line21, moveHistory.cc" << std::endl;
     std::vector<Move *> undos;
     undos.emplace_back( mh[0].release() );
-    mh.erase( mh.begin() );
+    mh.pop_back();
     undos.emplace_back( mh[0].release() );
-    mh.erase( mh.begin() );
+    mh.pop_back();
     return undos;
 }   // end undo
 
-Move *MoveHistory::lastMove() { return mh[0].get(); }
+Move *MoveHistory::lastMove() { return mh.back().get(); }
 
 bool MoveHistory::hasMoved() { return mh.size() >= 1; }
 
@@ -37,11 +36,11 @@ MoveHistory::MoveHistIter::MoveHistIter( const int &index,
     curr{ index }, mh{ mh } { }
 
 MoveHistory::MoveHistIter MoveHistory::begin()  {
-    return MoveHistIter{ 0, mh };
+    return MoveHistIter{ (int)mh.size() - 1, mh };
 }   // end begin
 
 MoveHistory::MoveHistIter MoveHistory::end()   {
-    return MoveHistIter{ (int)mh.size(), mh };
+    return MoveHistIter{ -1, mh };
 }   // end end
 
 Move &MoveHistory::MoveHistIter::operator*()    {
@@ -49,12 +48,12 @@ Move &MoveHistory::MoveHistIter::operator*()    {
 }   // end operator*
 
 MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator++() {
-    curr++;
+    curr--;
     return *this;
 }
 
 MoveHistory::MoveHistIter &MoveHistory::MoveHistIter::operator--() {
-    curr--;
+    curr++;
     return *this;
 }
 

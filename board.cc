@@ -135,7 +135,7 @@ void Board::CEP( const int &originalX, const int &originalY,
     }
 }
 
-void Board::smart_move(Move& _move) {
+void Board::smart_move(Move& _move, const char promptTo) {
     int sx = _move.getsx();
     int sy = _move.getsy();
     int ex = _move.getex();

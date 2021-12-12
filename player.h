@@ -29,6 +29,7 @@ class Player : public Observer {
     void usedUndo();
     bool hasAvaliableMove();        // return true if this player still has possible movement, false otherwise
     virtual std::string cmd( Game &game ) = 0;
+    virtual char promptTo() = 0;
     virtual ~Player();
     std::vector<std::unique_ptr<Move>>& getAM();
 };

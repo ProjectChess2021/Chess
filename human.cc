@@ -29,22 +29,7 @@ std::string Human::cmd( Game &game ) {
     std::string cmd = "";
     std::string iniPosn = "";
     std::string endPosn = "";
-    int kingX = 0;
-    int kingY = 0;
     std::vector<std::vector<Piece *>> board = game.getBoard();
-
-    for ( int i = 0; i < 8; ++i ) {
-        for ( int k = 0; k < 8; ++k ) {
-            if ( board[i][k] != nullptr ) {
-                if ( board[i][k]->getType() == 'k' ) {
-                    if ( board[i][k]->getSide() == getId() ) {
-                        kingX = i;
-                        kingY = k;
-                    }
-                }
-            }
-        }
-    }
 
     std::cout << "Please enter command here: ";
 
@@ -72,6 +57,12 @@ std::string Human::cmd( Game &game ) {
             std::cerr << "iniY = " << iniY << std::endl;
             std::cerr << "endX = " << endX << std::endl;
             std::cerr << "endY = " << endY << std::endl;
+
+            if ( board[iniX][iniY] == nullptr ) {
+                std::cout << "Invalid move!" << std::endl;
+                std::cout << "Please enter command here: ";
+                continue;
+            }
 
             if ( board[iniX][iniY]->isValidMove( &init, &end, board, game.getMoveHistory())
                  && board[iniX][iniY]->getSide() == getId() ) {
@@ -108,6 +99,27 @@ std::string Human::cmd( Game &game ) {
     }
 
     return cmd;
+}
+
+char Human::promptTo() {
+    char prom = 'q';
+    std::cout << "Your pawn is being granted a promotion" << std::endl;
+    std::cout << "You can change your pawn into:" << std::endl;
+    std::cout << "(r)ook" << std::endl;
+    std::cout << "k(n)ight" << std::endl;
+    std::cout << "(b)ishop" << std::endl;
+    std::cout << "(q)ueen" << std::endl;
+    while ( true ) {
+        std::cout << "Please enter command here: ";
+        std::cin >> prom;
+        if ( prom == 'r' || prom == 'n' || 
+            prom == 'b' || prom == 'q' ) {
+            break;
+        } else {
+            std::cout << "Invalid promotion!" << std::endl;
+        }
+    }
+    return prom;
 }
 
 // test case

@@ -16,93 +16,105 @@ Game::Game() :  mh{ std::make_unique<MoveHistory>() },
     boardInit();
 }
 
-std::string Game::move( const int &originalX, const int &originalY, 
-    const int &endX, const int &endY ) {
-    std::vector<std::vector<Piece *>> board = b->getBoard();
-    Piece *pc =  board[originalX][originalY];
-    int side = board[originalX][originalY]->getSide();
-    std::string retval = "";
+void Game::move( const int &originalX, const int &originalY, 
+    const int &endX, const int &endY, const int id ) {
+    // std::vector<std::vector<Piece *>> board = b->getBoard();
+    // Piece *pc =  board[originalX][originalY];
+    // int side = board[originalX][originalY]->getSide();
+    // std::string retval = "";
 
-    // The case when piece is going to kill another piece
-    if ( board[endX][endY] != nullptr ) {
-        b->kill( originalX, originalY, endX, endY );
-        retval = "k";
-    } 
+    // // The case when piece is going to kill another piece
+    // if ( board[endX][endY] != nullptr ) {
+    //     b->kill( originalX, originalY, endX, endY );
+    //     retval = "k";
+    // } 
 
-    // Checking pawn capture en passant
-    if ( pc->getType() == 'p' && mh->hasMoved() ) {
-        Move *lastMove = mh->lastMove();
-        Posn *lastMoveEnd = lastMove->getEnd();
-        Posn *lastMoveBegin = lastMove->getOriginal();
-        Piece *lastPiece = board[lastMoveEnd->getX()][lastMoveEnd->getY()];
-        if ( lastPiece->getType() == 'p' ) {
-            if ( side == 1 ) {
-                if ( endX == lastMoveEnd->getX() && 
-                     endY - 1 == lastMoveEnd->getY() &&
-                     endX == lastMoveBegin->getX() && 
-                     endY + 1 == lastMoveBegin->getY() &&
-                     lastPiece->getSide() != pc->getSide() ) {
-                    b->CEP( originalX, originalY, endX, endY );
-                    std::cerr << "Performed CEP" << std::endl;
-                    retval = "k";
-                }
-            } else if ( side == 2 ) {
-                if ( endX == lastMoveEnd->getX() && 
-                     endY + 1 == lastMoveEnd->getY() &&
-                     endX == lastMoveBegin->getX() && 
-                     endY - 1 == lastMoveBegin->getY() &&
-                     lastPiece->getSide() != pc->getSide() ) {
-                    b->CEP( originalX, originalY, endX, endY );
-                    std::cerr << "Performed CEP" << std::endl;
-                    retval = "k";
-                }
-            }
-        }
-    }
+    // // Checking pawn capture en passant
+    // if ( pc->getType() == 'p' && mh->hasMoved() ) {
+    //     Move *lastMove = mh->lastMove();
+    //     Posn *lastMoveEnd = lastMove->getEnd();
+    //     Posn *lastMoveBegin = lastMove->getOriginal();
+    //     Piece *lastPiece = board[lastMoveEnd->getX()][lastMoveEnd->getY()];
+    //     if ( lastPiece->getType() == 'p' ) {
+    //         if ( side == 1 ) {
+    //             if ( endX == lastMoveEnd->getX() && 
+    //                  endY - 1 == lastMoveEnd->getY() &&
+    //                  endX == lastMoveBegin->getX() && 
+    //                  endY + 1 == lastMoveBegin->getY() &&
+    //                  lastPiece->getSide() != pc->getSide() ) {
+    //                 b->CEP( originalX, originalY, endX, endY );
+    //                 std::cerr << "Performed CEP" << std::endl;
+    //                 retval = "k";
+    //             }
+    //         } else if ( side == 2 ) {
+    //             if ( endX == lastMoveEnd->getX() && 
+    //                  endY + 1 == lastMoveEnd->getY() &&
+    //                  endX == lastMoveBegin->getX() && 
+    //                  endY - 1 == lastMoveBegin->getY() &&
+    //                  lastPiece->getSide() != pc->getSide() ) {
+    //                 b->CEP( originalX, originalY, endX, endY );
+    //                 std::cerr << "Performed CEP" << std::endl;
+    //                 retval = "k";
+    //             }
+    //         }
+    //     }
+    // }
 
-    // Now checking if this is a promotion
-    if ( pc->getType() == 'p' ) {
-        if ( endY == 7 || endY == 0 ) {
-            char promptTo = 'a';
-            while ( true ) {
-                cout << "Your pawn is being granted a promotion" << endl;
-                cout << "You can change your pawn into:" << endl;
-                cout << "(r)ook" << endl;
-                cout << "k(n)ight" << endl;
-                cout << "(b)ishop" << endl;
-                cout << "(q)ueen" << endl;
-                std::cout << "Please enter command here: ";
-                std::cin >> promptTo;
-                if ( promptTo == 'r' || promptTo == 'n' || 
-                    promptTo == 'b' || promptTo == 'q' ) {
-                    break;
-                }
-            }
-            b->promotion( originalX, originalY, endX, endY, promptTo );
-            if ( retval == "k" ) {
-                retval += "+p";
-            } else {
-                retval = "p";
-            }
-        }
-    }
+    // // Now checking if this is a promotion
+    // if ( pc->getType() == 'p' ) {
+    //     if ( endY == 7 || endY == 0 ) {
+    //         char promptTo = 'a';
+    //         while ( true ) {
+    //             cout << "Your pawn is being granted a promotion" << endl;
+    //             cout << "You can change your pawn into:" << endl;
+    //             cout << "(r)ook" << endl;
+    //             cout << "k(n)ight" << endl;
+    //             cout << "(b)ishop" << endl;
+    //             cout << "(q)ueen" << endl;
+    //             std::cout << "Please enter command here: ";
+    //             std::cin >> promptTo;
+    //             if ( promptTo == 'r' || promptTo == 'n' || 
+    //                 promptTo == 'b' || promptTo == 'q' ) {
+    //                 break;
+    //             }
+    //         }
+    //         b->promotion( originalX, originalY, endX, endY, promptTo );
+    //         if ( retval == "k" ) {
+    //             retval += "+p";
+    //         } else {
+    //             retval = "p";
+    //         }
+    //     }
+    // }
 
-    // Now check for castling
-    if ( pc->getType() == 'k' ) {
-        int diffX = endX - originalX;
-        if ( diffX == 2 || diffX == -2 ) {
-            b->castle( originalX, originalY, endX, endY );
-            retval = "c";
-        }
+    // // Now check for castling
+    // if ( pc->getType() == 'k' ) {
+    //     int diffX = endX - originalX;
+    //     if ( diffX == 2 || diffX == -2 ) {
+    //         b->castle( originalX, originalY, endX, endY );
+    //         retval = "c";
+    //     }
+    // }
+    
+    // if ( board[endX][endY] == nullptr && retval == "" ) {
+    //     std::cerr << __LINE__ << std::endl;
+    //     b->move( originalX, originalY, endX, endY );
+    //     retval = "m";
+    // }
+
+    // return retval;
+
+    mh->add( originalX, originalY, endX, endY, *b );
+    char promptTo = 'q';
+    Move *last = mh->lastMove();
+    if ( last->getOperation() == "p" ) {
+        notifyObservers( b->getBoard(), *mh );
+
+        promptTo = players[id]->promptTo();
     }
     
-    if ( board[endX][endY] == nullptr && retval == "" ) {
-        std::cerr << __LINE__ << std::endl;
-        b->move( originalX, originalY, endX, endY );
-        retval = "m";
-    }
 
-    return retval;
+    b->smart_move( *last, promptTo );
 }
 
 void Game::undo() {
@@ -120,7 +132,7 @@ void Game::start() {
     boardInit();
     bool end = false;
     std::vector<std::vector<Piece *>> &board = b->getBoard();
-    notifyObservers( board, *(mh.get()) );
+    notifyObservers( board, *mh );
     int diffI = 1;
     int i = 0;
     while ( !end ) {
@@ -204,15 +216,11 @@ void Game::start() {
                 int iniY = iniPosn[1] - '1';
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
-                std::string op = move( iniX, iniY, endX, endY );
+                move( iniX, iniY, endX, endY, i );
                 std::cerr << "iniX = " << iniX << " iniY = " << iniY << std::endl;
                 std::cerr << "endX = " << endX << " endY = " << endY << std::endl;
-                mh->add( iniX, iniY, endX, endY, player->getId(), op, 
-                    board[endX][endY]->isMoved() );
-                std::cerr << __LINE__ << std::endl;
-                board[endX][endY]->changeMoved( true );
             }
-            notifyObservers( board, *(mh.get()) );
+            notifyObservers( board, *mh );
             std::cerr << __LINE__ << std::endl;
             i += diffI; 
         }
@@ -237,7 +245,7 @@ void Game::setup() {
     std::vector<std::unique_ptr<Piece>> &pieces = b->getPieces();
     std::vector<std::vector<Piece *>> &setUpBoard = b->getSetUpBoard();
     setUpBoard.resize( 8, std::vector<Piece *>( 8, nullptr ) );
-    notifyObservers( setUpBoard, *(mh.get()) );
+    notifyObservers( setUpBoard, *mh );
     cout << "Please enter command here: ";
     while( std::getline( std::cin, in ) ) {
         std::string op = "";
@@ -274,7 +282,7 @@ void Game::setup() {
             } else if ( pc == 'P' ) {
                 pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
             } else {
-                notifyObservers( setUpBoard, *(mh.get()) );
+                notifyObservers( setUpBoard, *mh );
                 errorMsg();
                 continue;
             }
@@ -292,7 +300,7 @@ void Game::setup() {
                     }
                 }
                 pieces.pop_back();
-                notifyObservers( setUpBoard, *(mh.get()) );
+                notifyObservers( setUpBoard, *mh );
                 errorMsg();
                 continue;
             }
@@ -317,7 +325,7 @@ void Game::setup() {
             cmd >> x;
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {   // bad Position
-                notifyObservers( setUpBoard, *(mh.get()) );
+                notifyObservers( setUpBoard, *mh );
                 errorMsg();
                 continue;
             }
@@ -346,7 +354,7 @@ void Game::setup() {
             if ( side == "white" || side == "black" ) {
                 whiteStart = (side == "white");
             } else {
-                notifyObservers( setUpBoard, *(mh.get()) );
+                notifyObservers( setUpBoard, *mh );
                 errorMsg();
                 continue;
             }
@@ -357,17 +365,17 @@ void Game::setup() {
                 isSetup = true;
                 break;
             } else {
-                notifyObservers( setUpBoard, *(mh.get()) );
+                notifyObservers( setUpBoard, *mh );
                 prompt += "Invalid Setup. Please replace pieces accordingly.\nPlease enter command here: ";
                 cout << prompt;
                 continue;
             }
         }   else {  // unrecognized command
-            notifyObservers( setUpBoard, *(mh.get()) );
+            notifyObservers( setUpBoard, *mh );
             errorMsg();
             continue;
         }//end command selection
-        notifyObservers( setUpBoard, *(mh.get()) );
+        notifyObservers( setUpBoard, *mh );
         prompt += "Continue to enter command here: ";
         if ( op == "=" ) {
             if ( whiteStart ) {
@@ -382,7 +390,7 @@ void Game::setup() {
 
 std::vector<std::vector<Piece *>> &Game::getBoard() { return b->getBoard(); }
 
-Board& Game::getb() {return *(b.get());}
+Board& Game::getb() {return *b;}
 
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
@@ -427,7 +435,7 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
     for( int i = 0; i < 2; i++) {
         for ( int j = 0; j < 7; j++ ) {
             if (board[i * 7][j] && board[i * 7][j]->getType() == 'p' ) {
-                notifyObservers( board, *(mh.get()) );
+                notifyObservers( board, *mh );
                 prompt +="Pawns cannot be placed at the first or last row of the board.\n";
                 hasInvalidPawn = true;
                 break;
@@ -437,11 +445,11 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
 
     bool inCheck = false;   // check if any player is in check
     if ( IsChecked::isChecked( 1, board ) ) {
-        notifyObservers( board, *(mh.get()) );
+        notifyObservers( board, *mh );
         prompt += "White king is being checked.\n";
         inCheck = true;
     } else if ( IsChecked::isChecked( 2, board ) ) {
-        notifyObservers( board, *(mh.get()) );
+        notifyObservers( board, *mh );
         prompt += "Black king is being checked.\n";
         inCheck = true;
     }   // end if-else statement
