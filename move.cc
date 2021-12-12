@@ -50,8 +50,10 @@ Move::Move(Board& _board, const int sx, const int sy, const int ex, const int ey
     original{ std::make_unique<Posn>( sx, sy ) },
     end{ std::make_unique<Posn>( ex, ey ) },
     side{ _board.at( sx, sy )->getSide() },
-    firstMove{ _board.at( sx, sy )->isMoved() },
-    operation{ findOp( _board, *original, *end ) } { }   // end Constructor
+    firstMove{ !_board.at( sx, sy )->isMoved() },
+    operation{ findOp( _board, *original, *end ) } { 
+    std::cerr << "Finished move" << std::endl; 
+}   // end Constructor
 
 int Move::getSide() {return side;}
 

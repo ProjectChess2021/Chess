@@ -96,9 +96,8 @@ void Board::castle( const int &originalX, const int &originalY,
     }
 }
 
-void Board::promotion( const int &originalX, const int &originalY,
-    const int &endX, const int &endY, const char promptTo ) {
-    Piece *pc =  board[originalX][originalY];
+void Board::promotion( const int &endX, const int &endY, const char promptTo ) {
+    Piece *pc =  board[endX][endY];
     if ( promptTo == 'r' ) {
         pieces.emplace_back( std::make_unique<Rook>( pc->getSide() ) );
     } else if ( promptTo == 'n' ) {
@@ -108,16 +107,21 @@ void Board::promotion( const int &originalX, const int &originalY,
     } else if ( promptTo == 'q' ) {
         pieces.emplace_back( std::make_unique<Queen>( pc->getSide() ) );
     }
-    deadPool.emplace_back( pc );
-    board[originalX][originalY] = nullptr;
+    deadPool.emplace_back( board[endX][endY] );
     board[endX][endY] = pieces.back().get();
     pieces.back().get()->changeMoved( true );
+}
+
+void Board::moveNProm( const int &originalX, const int &originalY, 
+    const int &endX, const int &endY, const char promptTo ) {
+    move( originalX, originalY, endX, endY );
+    promotion( endX, endY, promptTo );
 }
 
 void Board::killNProm( const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const char promptTo ) {
     kill( originalX, originalY, endX, endY );
-    promotion( originalX, originalY, endX, endY, promptTo );
+    promotion( endX, endY, promptTo );
 }
 
 void Board::CEP( const int &originalX, const int &originalY, 
@@ -148,12 +152,12 @@ void Board::smart_move(Move& _move, const char promptTo) {
         throw "Castling or Move has Piece at dest";
     if (_move.getOperation() == "k")        kill(sx, sy, ex, ey);
     else if(_move.getOperation() == "c")    castle(sx, sy, ex, ey);
-    else if(_move.getOperation() == "p")    promotion(sx, sy, ex, ey, 'q');
-    else if(_move.getOperation() == "k+p")  killNProm(sx, sy, ex, ey, 'q');
+    else if(_move.getOperation() == "p")    moveNProm(sx, sy, ex, ey, promptTo );
+    else if(_move.getOperation() == "k+p")  killNProm(sx, sy, ex, ey, promptTo );
     else if(_move.getOperation() == "e")    CEP(sx, sy, ex, ey);
     else move(sx, sy, ex, ey);
 
-    if(_move.isFirstMove()) board[ex][ey]->changeMoved(false);
+    board[ex][ey]->changeMoved(true);
 }   // end smart_move
 
 void Board::undo( std::vector<Move *> &undoHist ) {

@@ -30,8 +30,9 @@ class Board {
       const int &finalX, const int &finalY );
     void castle( const int &originalX, const int &originalY, 
       const int &finalX, const int &finalY );
-    void promotion( const int &originalX, const int &originalY,
-        const int &finalX, const int &finalY, const char promptTo );
+    void promotion( const int &finalX, const int &finalY, const char promptTo );
+    void moveNProm( const int &originalX, const int &originalY, 
+      const int &finalX, const int &finalY, const char promptTo );
     void killNProm( const int &originalX, const int &originalY, 
       const int &finalX, const int &finalY, const char promptTo );
     void CEP( const int &originalX, const int &originalY, 

@@ -9,19 +9,19 @@
 Human::Human( const int &_id, const float score ) : 
     Player{ _id, score } { }
 
-bool inRange( const int &iniX, const int &iniY, const int &endX, const int &endY ) {
-    if ( iniX < 0 || iniX >= 8 ) {
-        return false;
-    }
-    if ( iniY < 0 || iniY >= 8 ) {
-        return false;
-    }
-    if ( endX < 0 || endX >= 8 ) {
-        return false;
-    }
-    if ( endY < 0 || endY >= 8 ) {
-        return false;
-    }
+bool Human::valid( const int &iniX, const int &iniY, const int &endX, 
+    const int &endY, Game &g ) {
+    Posn init{ iniX, iniY };
+    Posn end{ endX, endY };
+    if ( iniX < 0 || iniX >= 8 ) return false;
+    if ( iniY < 0 || iniY >= 8 ) return false;
+    if ( endX < 0 || endX >= 8 ) return false;
+    if ( endY < 0 || endY >= 8 ) return false;
+    std::vector<std::vector<Piece *>> board = g.getBoard();
+    if ( board[iniX][iniY] == nullptr ) return false;
+    if ( !board[iniX][iniY]->isValidMove( &init, &end, 
+            board, g.getMoveHistory() ) ) return false;
+    if ( board[iniX][iniY]->getSide() != getId() ) return false;
     return true;
 }
 
@@ -44,35 +44,16 @@ std::string Human::cmd( Game &game ) {
             int endX = endPosn[0] - 'a';
             int endY = endPosn[1] - '1';
 
-            if ( !inRange( iniX, iniY, endX, endY ) ) {
+            if ( !valid( iniX, iniY, endX, endY, game ) ) {
                 std::cout << "Invalid coordinates" << std::endl;
                 std::cout << "Please enter command here: ";
                 continue;
             }
 
-            Posn init{ iniX, iniY };
-            Posn end{ endX, endY };
-
             std::cerr << "iniX = " << iniX << std::endl;
             std::cerr << "iniY = " << iniY << std::endl;
             std::cerr << "endX = " << endX << std::endl;
             std::cerr << "endY = " << endY << std::endl;
-
-            if ( board[iniX][iniY] == nullptr ) {
-                std::cout << "Invalid move!" << std::endl;
-                std::cout << "Please enter command here: ";
-                continue;
-            }
-
-            if ( board[iniX][iniY]->isValidMove( &init, &end, board, game.getMoveHistory())
-                 && board[iniX][iniY]->getSide() == getId() ) {
-                board[endX][endY] = board[iniX][iniY];
-                board[iniX][iniY] = nullptr;
-            } else {
-                std::cout << "Invalid move!" << std::endl;
-                std::cout << "Please enter command here: ";
-                continue;
-            }
 
             if ( IsChecked::isCheckMove( 
                 iniX, iniY, endX, endY, getId(), board ) ) {
@@ -86,16 +67,26 @@ std::string Human::cmd( Game &game ) {
 
         } else if ( cmd == "resign" ) {
             return cmd;
-        } else if ( cmd == "undo" && getNumUndo() != 0 ) {
+        } else if ( cmd == "undo" ) {
+            if ( getNumUndo() != 0 ) {
+                return cmd;
+            } else {
+                std::cout << "You have used out your undos" << std::endl;
+            }
             return cmd;
         } else {
             std::cout << "Invalid command!" << std::endl;
-            std::cout << "Command template: " << std::endl;
-            std::cout << "move e1 e8" << std::endl;
-            std::cout << "resign" << std::endl;
-            std::cout << "undo" << std::endl;
-            std::cout << "Please enter command here: ";
-        }   
+        }
+
+        std::cout << "Command template: " << std::endl;
+        std::cout << "move e1 e8" << std::endl;
+        std::cout << "resign" << std::endl;
+        if ( getNumUndo() <= 0 ) {
+            std::cout << "undo(0)" << std::endl;
+        } else {
+            std::cout << "undo(" << getNumUndo() << ")" << std::endl;
+        }
+        std::cout << "Please enter command here: ";
     }
 
     return cmd;

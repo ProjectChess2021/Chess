@@ -18,9 +18,9 @@ void MoveHistory::add ( const int &originalX, const int &originalY,
 std::vector<Move *> MoveHistory::undo() {
     std::cerr << "undo @ Line21, moveHistory.cc" << std::endl;
     std::vector<Move *> undos;
-    undos.emplace_back( mh[0].release() );
+    undos.emplace_back( mh.back().release() );
     mh.pop_back();
-    undos.emplace_back( mh[0].release() );
+    undos.emplace_back( mh.back().release() );
     mh.pop_back();
     return undos;
 }   // end undo

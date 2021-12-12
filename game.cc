@@ -107,7 +107,8 @@ void Game::move( const int &originalX, const int &originalY,
     mh->add( originalX, originalY, endX, endY, *b );
     char promptTo = 'q';
     Move *last = mh->lastMove();
-    if ( last->getOperation() == "p" ) {
+    if ( last->getOperation() == "p" || 
+        last->getOperation() == "k+p" ) {
         notifyObservers( b->getBoard(), *mh );
 
         promptTo = players[id]->promptTo();
