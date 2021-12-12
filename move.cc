@@ -2,6 +2,7 @@
 // Last Modified At 2259, (UTC-5)20211207 (By Kunling)
 #include "move.h"
 #include <iomanip>
+#include "board.h"
 #include <iostream>
 
 Move::Move(Posn& init, Posn& dest, const int& _side, const std::string& op, 
@@ -21,6 +22,30 @@ Move::Move( const int &initX, const int &initY, const int &destX,
     firstMove{_isFirstMove},
     operation{ operation } { } // end Constructor
 
+Move::Move(Board& _board, Posn& init, Posn& dest) : 
+    original{ std::make_unique<Posn>(init) },
+    end{ std::make_unique<Posn>(dest) },
+    side{_board.at(init)->getSide()},
+    firstMove{_board.at(init)->isMoved()} {
+        char initType = _board.at(init)->getType();
+    if(initType == 'k' && std::abs(init.getX() - dest.getX()) == 2) { // castling
+        operation = "c";
+    } else if (initType == 'p' && (dest.getY() == 0 || dest.getY() == 7)) { // promotion
+        operation = (_board.at(dest) == nullptr) ? "p" : "k+p";   // promotion + kill
+    }  else if(initType == 'p' && std::abs(dest.getX() - init.getX()) == 1 && !_board.at(dest)) {
+        operation = "e";    // En passant
+    }
+    else if(_board.at(dest)) {   // there is a piece at dest, thus a caputre
+        operation = "k";
+    } else operation = "m";
+}   // end Constructor
+
+Move::Move(Board& _board, const int sx, const int sy, const int ex, const int ey) {
+    Posn st{sx,sy};
+    Posn ed{ex,ey};
+    Move(_board, st, ed);
+}   // end Constructor
+
 int Move::getSide() {return side;}
 
 Posn *Move::getOriginal() { return original.get(); }
@@ -30,6 +55,11 @@ Posn *Move::getEnd() { return end.get(); }
 bool Move::isFirstMove() { return firstMove; }
 
 std::string Move::getOperation() { return operation; }
+
+int Move::getsx() {return original.get()->getX();}
+int Move::getsy() {return original.get()->getY();}
+int Move::getex() {return end.get()->getX();}
+int Move::getey() {return end.get()->getY();}
 
 // This function translates the side number to a string (colour representing the player)
 std::string getSideStr(const int x){

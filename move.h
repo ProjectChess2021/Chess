@@ -10,7 +10,7 @@
 #include <map>
 
 using std::vector;
-
+class Board;
 const std::map<char,int> PIECEWEIGHT{
     {'p', 5}, {'r', 25}, {'n', 15}, {'b', 20}, {'q', 100}, {'k', 9999}
 };
@@ -27,7 +27,7 @@ const std::map<char, vector<vector<int>>> POSWEIGHT {
         vector<int> {10, 10, 10, 10, 10, 10, 10, 10},            // 7th Line
         vector<int> {50, 50, 50, 50, 50, 50, 50, 50} }},         // 8th Line
     {'r', vector<vector<int>>{      // rook position weight
-        vector<int>{0,  0,  0,  1,  1,  0,  0,  0},              // 1st Line
+        vector<int>{0,  0,  1,  1,  1,  1,  0,  0},              // 1st Line
         vector<int>{-1, 0,  0,  0,  0,  0,  0,  -1},             // 2nd Line
         vector<int>{-1, 0,  0,  0,  0,  0,  0,  -1},             // 3rd Line
         vector<int>{-1, 0,  0,  0,  0,  0,  0,  -1},             // 3rd Line
@@ -77,18 +77,25 @@ const std::map<char, vector<vector<int>>> POSWEIGHT {
 class Move {
     std::unique_ptr<Posn> original;
     std::unique_ptr<Posn> end;
-    const int side;
-    const bool firstMove;
+    int side;
+    bool firstMove;
     std::string operation; //(c)astling,(m)ove,(k)ill,(p)romotion
     public:
     Move(Posn&, Posn&, const int&, const std::string&, const bool &firstMove);
     Move( const int &originalX, const int &originalY, const int &finalX, 
         const int &finalY, const int, const std::string operation, 
         const bool _isFirstMove);
+    Move(Board&, Posn&, Posn&);
+    Move(Board&, const int, const int, const int, const int);
+
     int getSide();
     int getEffect();      // the effect towards the board for the White player
     Posn* getOriginal();
     Posn* getEnd();
+    int getsx();
+    int getsy();
+    int getex();
+    int getey();
     bool isFirstMove();
     std::string getOperation();
     friend std::ostream &operator<<( std::ostream &, const Move& ); 

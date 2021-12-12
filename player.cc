@@ -19,7 +19,8 @@ void Player::emplacePieceMove( const int x, const int y,
         for(int i = 0; i < SIZE; i++) {     // col
             Posn init{x,y};
             Posn dest{i,j};
-            if(target->isValidMove(&init, &dest, board, &mh)) {
+            if( target->isValidMove(&init, &dest, board, &mh) && 
+                !IsChecked::isCheckMove(x,y,i,j,target->getSide(),board)) {
                 std::string op = "m";
                 // get movement type
                 if(toupper(target->getType()) == 'P' && (j == 0 || j == 7)){

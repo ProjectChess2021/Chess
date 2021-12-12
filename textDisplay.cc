@@ -12,16 +12,15 @@ TextDisplay::TextDisplay() {
 }  // end Constructor
 
 // update the TextObserver once get notified
-void TextDisplay::notify( std::vector<std::vector<Piece *>> &aBoard, 
-    MoveHistory &mh ) {
+void TextDisplay::notify( std::vector<std::vector<Piece *>>& b, MoveHistory &mh ) {
     std::cerr << "begin notify() @ Line 26, textDisplay.cc" << std::endl;
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
-            if(aBoard[i][j])        // not nullptr, there is piece on [i][j]
-                if ( aBoard[i][j]->getSide() == 1 ) {
-                    displayBoard[i][j] = aBoard[i][j]->getType() - 'a' + 'A';
+            if(b[i][j])        // not nullptr, there is piece on [i][j]
+                if (b[i][j]->getSide() == 1 ) {
+                    displayBoard[i][j] = b[i][j]->getType() - 'a' + 'A';
                 } else {
-                    displayBoard[i][j] = aBoard[i][j]->getType();
+                    displayBoard[i][j] = b[i][j]->getType();
                 }
             else displayBoard[i][j] =  (i + j ) % 2 ? ' ' : '_';
         }   // end inner for loop

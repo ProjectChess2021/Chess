@@ -8,6 +8,8 @@
 #include "piece.h"
 
 class LevelFour : public Strategy{
+    std::string cmd;
+    int minimax(int depth, Game&, Player* currPlayer, int maximizeID);
     public:
     std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int) override;
 };  // end LevelThree

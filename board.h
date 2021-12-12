@@ -36,8 +36,18 @@ class Board {
       const int &finalX, const int &finalY, const char promptTo );
     void CEP( const int &originalX, const int &originalY, 
       const int &finalX, const int &finalY );
+    void smart_move(Move&);
     void undo( std::vector<Move *> &undoHist );
     
+    // This function calculates the weight of board in the perspective of given side
+    int evaluateBoard(int);
+    int evaluateMove(Posn*,Posn*,int);
+    int evaluateMove(const int sx, const int sy, 
+        const int ex, const int ey, const int side); //start & end Posn not construced
+    int evaluateMove(Move&);
+    Piece* at(const int, const int);
+    Piece* at(Posn&);
+    Piece* at(Posn*);
     std::vector<std::vector<Piece *>> &getBoard();
     std::vector<std::vector<Piece *>> &getSetUpBoard();
     std::vector<std::unique_ptr<Piece>> &getPieces();

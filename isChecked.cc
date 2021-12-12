@@ -284,16 +284,10 @@ bool IsChecked::isCheckMove(const int initX, const int initY, const int destX, c
     const int side, std::vector<std::vector<Piece *>>& board) {
         std::cerr<<"Check for side="<<side<<std::endl;
     Piece* temp = nullptr;
-
     std::swap(temp, board[destX][destY]);
-
     std::swap(board[initX][initY], board[destX][destY]); //move this piece
-
     bool ans = isChecked( side, board );
- 
     std::swap(board[initX][initY], board[destX][destY]); //move the piece back
-
     std::swap(temp, board[destX][destY]);
- 
     return ans;
 }   // end isCheckMove

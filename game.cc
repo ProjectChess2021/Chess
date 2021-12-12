@@ -382,6 +382,8 @@ void Game::setup() {
 
 std::vector<std::vector<Piece *>> &Game::getBoard() { return b->getBoard(); }
 
+Board& Game::getb() {return *(b.get());}
+
 MoveHistory *Game::getMoveHistory() { return mh.get(); }
 
 float Game::getScore( int idx ) { 
@@ -450,3 +452,17 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
 std::vector<Player*>& Game::getPlayers() {
     return players;
 }   // end getPlayers
+
+Player* Game::nextPlayer(int currId) {
+    Player* retPtr = nullptr;
+    for(std::vector<Player*>::iterator it = players.begin(); it != players.end(); it++){
+        if((*it)->getId() == currId) {  // locate current player
+            it++;
+            if(it == players.end())     // currPlayer is the last player
+                retPtr = *(players.begin());
+            else    retPtr = *it;
+            break;
+        }
+    }
+    return retPtr;
+}   //end nextPlayer

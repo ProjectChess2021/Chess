@@ -2,13 +2,7 @@
 // Last Modified At (UTC-5)
 
 #include "levelThree.h"
-
-// calculate the change in effect when a piece performs given _move
-int calcEffect(Posn* init, Posn* dest, char type) {
-     // the effect of this move, new Effect - old effect
-    std::map<char, vector<vector<int>>>::const_iterator it = POSWEIGHT.find(type);
-    return (it->second)[dest->getX()][dest->getY()] -(it->second)[init->getX()][init->getY()];
-}   // end calculateEffect
+#include "board.h"
 
 // Level Three AI tries not to get the pieces captured, if no pieces are possible to be captured
 // it will try to make a capture move (Level Two)
@@ -20,10 +14,10 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     Posn* maxPosn = nullptr;
     Piece* maxPiece = nullptr;
 
-    std::vector<std::vector<Piece *>> &board = game.getBoard();
+    Board& board = game.getb();
     std::vector<Player*>& playerLst = game.getPlayers();
     std::vector<std::vector<int>> controlArea;
-    controlArea.resize(8, std::vector<int>(8, -100));
+    controlArea.resize(8, std::vector<int>(8, -1000));
 
     Player* opponentPtr = nullptr;
 
@@ -37,9 +31,8 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
         Move* aMove = it->get();
         Posn* dest = aMove->getEnd();
         Posn* init = aMove->getOriginal();
-        char initType = tolower(board[init->getX()][init->getY()]->getType());
-        char destType = tolower(board[dest->getX()][dest->getY()]->getType());
-        controlArea[dest->getX()][dest->getY()] = std::max(calcEffect(init,dest,initType),
+        char destType = tolower(board.at(dest)->getType());
+        controlArea[dest->getX()][dest->getY()] = std::max(board.evaluateMove(init,dest, 3 - side),
                                                       controlArea[dest->getX()][dest->getY()]);
         if(aMove->getOperation() == "k") {    // a capture exists as an available move
             auto it2 = PIECEWEIGHT.find(destType);
@@ -47,7 +40,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
                 if(it2 ->second > maxCaptureWeight) { // can caputure a more valuable piece
                     maxCaptureWeight = it2->second;
                     maxPosn = aMove->getEnd();
-                    maxPiece = board[dest->getX()][dest->getY()];
+                    maxPiece = board.at(dest);
                 }   // end if
             }   // end if
         }   // end if
@@ -59,7 +52,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     for(std::vector<std::unique_ptr<Move>>::iterator it = my_am.begin(); it != my_am.end(); ++it) {
         Move* aMove = it->get();
         if(aMove->getOriginal() == maxPosn){
-            int currEffect = calcEffect(maxPosn,aMove->getEnd(),maxPiece->getType());
+            int currEffect = board.evaluateMove(maxPosn,aMove->getEnd(),maxPiece->getType());
             if(currEffect < minEffect){     // found a better move
                 destX = aMove->getEnd()->getX();
                 destY = aMove->getEnd()->getY();

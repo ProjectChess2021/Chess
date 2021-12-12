@@ -33,9 +33,11 @@ class Game : public Subject {
 
     std::vector<Player*>& getPlayers();
     std::vector<std::vector<Piece *>> &getBoard();
+    Board& getb();
     MoveHistory*getMoveHistory();
     float getScore(int idx);  // return the currentScore of a single player
     void addPlayer( Player *player );
+    Player* nextPlayer(int currId);
     void clearPlayer();
 };  // end Game
 
