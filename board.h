@@ -39,6 +39,7 @@ class Board {
       const int &finalX, const int &finalY );
     void smart_move(Move&, const char promptTo);
     void undo( std::vector<Move *> &undoHist );
+    void undo(Move*);
     
     // This function calculates the weight of board in the perspective of given side
     int evaluateBoard(int);

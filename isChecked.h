@@ -12,6 +12,8 @@ class IsChecked {
         std::vector<std::vector<Piece *>>& board );
     bool static isCheckMove(const int, const int, const int, const int, const int,
         std::vector<std::vector<Piece *>>& board);
+    bool static canCheckMove(Move&, std::vector<std::vector<Piece*>>&);
+    //bool static canCheckMove(Move&, Board&);
 };
 
 #endif

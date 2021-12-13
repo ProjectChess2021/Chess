@@ -24,7 +24,7 @@ int main() {
     // g->attach( gd.get() );
 
     while ( !std::cin.eof() && !end ) {
-        system( "clear" );
+        //system( "clear" );
         std::cout << "Welcome to the game of chess!" << std::endl;
         std::cout << "Select command from below:" << std::endl << std::endl;
         std::cout << "game white-player black-player allowUndo" << std::endl;
@@ -46,12 +46,11 @@ int main() {
                     float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 1, score ) );
-                    } else if ( player.substr(0,3) == "bot" ) {
-                        std::cerr << __LINE__ << std::endl;                
+                    } else if ( player.substr(0,3) == "bot" ) {            
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
-                            level = 1;
+                            continue;
                         }
                         std::cerr << __LINE__ << std::endl;
                         temp.emplace_back(std::make_unique<Bot>(1, level, score));
@@ -63,12 +62,12 @@ int main() {
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 2, score ) );
                     } else if ( player.substr(0,3) == "bot" ) {
-                        
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
-                            level = 1;
+                            continue;
                         }
+                        std::cerr << "Add a bot player at level " << level << std::endl;    
                         temp.emplace_back(std::make_unique<Bot>(2, level, score));
                     } else continue;    // unrecognized player input
                 } else continue;        // no second player

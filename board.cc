@@ -160,6 +160,13 @@ void Board::smart_move(Move& _move, const char promptTo) {
     board[ex][ey]->changeMoved(true);
 }   // end smart_move
 
+// This function undos a single move in convinience of bot
+void Board::undo(Move* _move) {
+    std::vector<Move*> undoLst;
+    undoLst.emplace_back(_move);
+    undo(undoLst);
+}   // end undo
+
 void Board::undo( std::vector<Move *> &undoHist ) {
     for ( auto hist : undoHist ) {
         Posn *end = hist->getEnd();

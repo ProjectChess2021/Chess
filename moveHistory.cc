@@ -25,7 +25,10 @@ std::vector<Move *> MoveHistory::undo() {
     return undos;
 }   // end undo
 
-Move *MoveHistory::lastMove() { return mh.back().get(); }
+// This function returns the pointer to the last move in the MH if found. Otherwise a nullptr is returned.
+Move *MoveHistory::lastMove() {
+    return mh.size() ? mh.back().get() : nullptr;
+}   // end lastMove
 
 bool MoveHistory::hasMoved() { return mh.size() >= 1; }
 

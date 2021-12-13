@@ -89,7 +89,6 @@ class Move {
     Move(Board&, const int, const int, const int, const int);
 
     int getSide();
-    int getEffect();      // the effect towards the board for the White player
     Posn* getOriginal();
     Posn* getEnd();
     int getsx();

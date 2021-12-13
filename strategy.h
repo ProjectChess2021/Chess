@@ -8,6 +8,7 @@
 #include "move.h"
 #include <string>
 #include <vector>
+#include "board.h"
 #include "game.h"
 
 
