@@ -66,7 +66,7 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     for(auto it = my_am.begin(); it != my_am.end(); ++it) {
         Move* aMove = it->get();
         char type = board.at(aMove->getOriginal())->getType();
-        int level = type == 'p' ? 0 : 1;
+        int level = (type == 'p' && !board.at(aMove->getOriginal())->isMoved()) ? 0 : 1;
         if( controlArea[aMove->getsx()][aMove->getsy()] > level) {  // could be captured
             if( controlArea[aMove->getex()][aMove->getey()] <= level) { // will not be captured there
                 int currEffect = board.evaluateMove(*aMove) + PIECEWEIGHT.find(type)->second;
