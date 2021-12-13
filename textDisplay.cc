@@ -36,7 +36,7 @@ void TextDisplay::notify( std::vector<std::vector<Piece *>>& b, MoveHistory &mh 
         displayHistory.emplace_back(&(*it));
         ++it;
     }
-    system( "clear" );
+    //system( "clear" );
     std::cout << *this << std::endl;
 }   // end notify
 

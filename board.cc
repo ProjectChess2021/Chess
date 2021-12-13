@@ -285,7 +285,7 @@ int Board::evaluateMove(Move& _move) {
     } else {        // just move
         retVal = destPosWeight - initPosWeight;
     }
-    std::cerr<<"Effect of the Move from " <<init << " to " <<dest << " is " << retVal << std::endl;
+    std::cerr<<"Effect of the Move from " << *init << " to " << *dest << " is " << retVal << std::endl;
     return retVal;
 }   // end calcEffect
 

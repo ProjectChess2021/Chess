@@ -5,6 +5,7 @@
 #define __STRATEGY_H__
 
 #include <utility>
+#include "isChecked.h"
 #include "move.h"
 #include <string>
 #include <vector>
