@@ -19,9 +19,9 @@ int main() {
     bool end = false;
     std::unique_ptr<Game> g = std::make_unique<Game>();
     std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
-    // std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
+    std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
     g->attach( td.get() );
-    // g->attach( gd.get() );
+    g->attach( gd.get() );
 
     while ( !std::cin.eof() && !end ) {
         //system( "clear" );

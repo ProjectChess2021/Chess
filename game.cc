@@ -146,8 +146,7 @@ void Game::start() {
             i = 0;
         }
         for ( ; i < 2 && i >= 0; ) {
-            Player *player = nullptr;
-            player = players[i];
+            Player *player = players[i];
             if ( !player->hasAvaliableMove() && 
                 !IsChecked::isChecked( player->getId(), board ) ) {
                 cout << "Stalemate!" << endl;
