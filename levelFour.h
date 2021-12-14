@@ -9,7 +9,7 @@
 
 class LevelFour : public Strategy{
     std::string cmd;
-    int minimax(int depth, Game&, Player* currPlayer, int maximizeID);
+    int AlphaBeta(Game&, Player* currPlayer, int maxmizedID, int depth, int alpha, int beta);
     public:
     std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int) override;
 };  // end LevelThree

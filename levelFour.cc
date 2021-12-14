@@ -5,8 +5,6 @@
 #include "player.h"
 #include "game.h"
 
-const int DEPTH = 3;
-
 std::string LevelFour::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& my_am, const int id) {
     std::cerr << "LevelFour AI makes Move now, at" <<__LINE__ << " in" <<__FILE__ <<std::endl;
     Player* currPlayer = nullptr;
@@ -15,43 +13,50 @@ std::string LevelFour::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& 
             currPlayer = it;
     }
     if(!currPlayer) std::cerr << "CurrentPlayerNotFoundAt" << __LINE__ << "in" << __FILE__ << std::endl;
-    int bestMove = minimax(4, game, currPlayer, id);
-
+    int depth = 2;
+    int whatever = AlphaBeta(game, currPlayer, id, depth, -0xffffff, 0xfffffff);
+    whatever++;
     for(auto it: game.getPlayers()) {
         std::cerr << "Recover the am for player " << it->getId() << std::endl;
         it->notify(game.getBoard(), *(game.getMoveHistory()));
     }
-    std::cerr << "BestMoveValueIs" << bestMove << ". TheReturnStringIs:"<<this->cmd<<std::endl;
+
     return this->cmd;
 }   // end makeMove
 
 // Minimax returns the best moving command possible using recursive search with a specified depth
-int LevelFour::minimax(int depth, Game& game, Player* currPlayer, int maximizedId) {
+int LevelFour::AlphaBeta(Game& game, Player* currPlayer, int maxmizedID, int depth, int alpha, int beta) {
     Board& board = game.getb();
     if (depth <= 0) {
-        // DEBUG: check for four players, cause the id might not be 1 or 2
-        return board.evaluateBoard(maximizedId);
+        // Evaluate Board at White Perspective
+        return board.evaluateBoard();
     }
-    
-    int bestBoard = -9999;
-     // update this player's availableMoveList
-     std::cerr << __LINE__ << " " << __FILE__ << " : Add AM at depth = " << depth << std::endl;
-    currPlayer->notify(board.getBoard(),*(game.getMoveHistory()));  
+    currPlayer->notify(board.getBoard(),*(game.getMoveHistory()));  // update this player's am
 
     std::vector<std::unique_ptr<Move>>& am = currPlayer->getAM();
+
     for(auto it = am.begin(); it != am.end(); ++it) {
         Move* movePtr= it->get();
-        board.smart_move(*movePtr, 'q');
-        Player* next = game.nextPlayer(currPlayer->getId());
+        board.smart_move(*movePtr, 'q');    // assume to take this step    
 
-        int currBoard = minimax(depth - 1, game, next, maximizedId);
-        if(currBoard > bestBoard) {   // a better movement is found
-            this->cmd = "move " + (char)(movePtr->getsx() + 'a') + (char)(movePtr->getsy());
-            this->cmd += " " + (char)(movePtr->getex() + 'a' ) + (char)(movePtr->getey());
-            bestBoard = currBoard;
+        Player* next = game.nextPlayer(currPlayer->getId());
+        int currMoveEffect = -AlphaBeta(game, next, maxmizedID, depth -1, -beta, -alpha);
+        if(currMoveEffect >= beta){
+            board.undo(movePtr);
+            return beta;
+        }  
+        if(currMoveEffect > alpha) {   // a better movement is found
+            alpha = currMoveEffect;
+            if(currPlayer->getId() == maxmizedID) {
+                cmd = "move ";
+                cmd.push_back(movePtr->getsx() + 'a'); cmd.push_back(movePtr->getsy() + '1');
+                cmd.push_back(' ');
+                cmd.push_back(movePtr->getex() + 'a');cmd.push_back(movePtr->getey() + '1');
+
+            }
+
         }
         board.undo(movePtr);
     }
-
-    return bestBoard;
+    return alpha;
 }   // end minimax

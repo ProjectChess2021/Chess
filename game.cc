@@ -18,17 +18,16 @@ Game::Game() :  mh{ std::make_unique<MoveHistory>() },
 
 void Game::move( const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const int id ) {
+
     // std::vector<std::vector<Piece *>> board = b->getBoard();
     // Piece *pc =  board[originalX][originalY];
     // int side = board[originalX][originalY]->getSide();
     // std::string retval = "";
-
     // // The case when piece is going to kill another piece
     // if ( board[endX][endY] != nullptr ) {
     //     b->kill( originalX, originalY, endX, endY );
     //     retval = "k";
     // } 
-
     // // Checking pawn capture en passant
     // if ( pc->getType() == 'p' && mh->hasMoved() ) {
     //     Move *lastMove = mh->lastMove();
@@ -59,7 +58,6 @@ void Game::move( const int &originalX, const int &originalY,
     //         }
     //     }
     // }
-
     // // Now checking if this is a promotion
     // if ( pc->getType() == 'p' ) {
     //     if ( endY == 7 || endY == 0 ) {
@@ -86,7 +84,6 @@ void Game::move( const int &originalX, const int &originalY,
     //         }
     //     }
     // }
-
     // // Now check for castling
     // if ( pc->getType() == 'k' ) {
     //     int diffX = endX - originalX;
@@ -94,8 +91,7 @@ void Game::move( const int &originalX, const int &originalY,
     //         b->castle( originalX, originalY, endX, endY );
     //         retval = "c";
     //     }
-    // }
-    
+    // }  
     // if ( board[endX][endY] == nullptr && retval == "" ) {
     //     std::cerr << __LINE__ << std::endl;
     //     b->move( originalX, originalY, endX, endY );
@@ -112,8 +108,6 @@ void Game::move( const int &originalX, const int &originalY,
 
         promptTo = players[id]->promptTo();
     }
-    
-
     b->smart_move( *last, promptTo );
 }
 
@@ -122,9 +116,13 @@ void Game::undo() {
     b->undo( undoHist );
 }
 
-void goOn() {
+void Game::goOn() {
     std::string str = "";
-    std::cout << "Press any key to continue: ";
+    std::cout << std::endl;
+    std::cout << "Current score is:" << std::endl;
+    std::cout << "White: " << getScore( 0 ) << std::endl;
+    std::cout << "Black: " << getScore( 1 ) << std::endl;
+    std::cout << "Type in anything and then press [enter] to continue: ";
     std::cin >> str;
 }
 
@@ -137,7 +135,7 @@ void Game::start() {
     int i = 0;
     while ( !end ) {
         if ( !whiteStart ) {
-            std::cerr << __LINE__ << std::endl;
+            //std::cerr << __LINE__ << std::endl;
             diffI = -1;
             i = 1;
         } else {
@@ -183,13 +181,17 @@ void Game::start() {
                     cout << "Black is in check." << endl;
                 }
             }
-            std::cerr << __LINE__ << endl;
             std::string cmd = player->cmd( *this );
             
             if ( cmd == "undo" ) {
-                i -= diffI; 
-                undo();
-                player->usedUndo();
+                if ((mh.get())->size() < 2) {
+                    i -= diffI;
+                    cout << "There is nothing in the move histroy to undo." << endl;
+                } else {
+                    i -= diffI; 
+                    undo();
+                    player->usedUndo();
+                }
             } else if ( cmd == "resign" ) {
                 if ( i == 0 ) {
                     cout << "Black wins!" << endl;
@@ -217,8 +219,6 @@ void Game::start() {
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
                 move( iniX, iniY, endX, endY, i );
-//                std::cerr << "iniX = " << iniX << " iniY = " << iniY << std::endl;
-//                std::cerr << "endX = " << endX << " endY = " << endY << std::endl;
             }
             notifyObservers( board, *mh );
             std::cerr << __LINE__ << std::endl;
@@ -228,11 +228,11 @@ void Game::start() {
 }
 
 void errorMsg() {
-    cout << "Bad input. You can try:" << endl;
-    cout << "+ K e1" << endl;
-    cout << "- e1" << endl;
-    cout << "= white" << endl;
-    cout << "done" << endl;
+    cout << "Unrecognized setup command is detected. You can try:" << endl;
+    cout << "  \"+ K e1\"   (which puts a white King at e1)" << endl;
+    cout << "  \"- e1\"     (which removes a piece from e1 if any)" << endl;
+    cout << "  \"= white\"  (which set white takes the next move after applying setup)." << endl;
+    cout << "  \"done\"     (which detects if it's a valid setup and applies it to following games if success." << endl;
     cout << "Please enter command here: ";
 }
 
@@ -415,7 +415,6 @@ void Game::clearPlayer() {
 
 // This function returns true if the setup is valid, false ow.
 bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::string& prompt) {
-    std::cerr << "Goes here At " << __LINE__ << " at "<<__FILE__<<endl;
     bool whiteKing = false;
     bool blackKing = false;
 
@@ -428,13 +427,10 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
         else if (blackKingNum < 1)  prompt += "No black king detected.\n";
         else blackKing = true;
     
-    std::cerr << "Debug at Line " << __LINE__ << " from " << __FILE__ << ": " <<
-        whiteKingNum << " " << blackKingNum << std::endl;
-    
     bool hasInvalidPawn = false;    // check whether there is pawn on the first/last row
-    for( int i = 0; i < 7; i++) {
-        for ( int j = 0; j < 2; j++ ) {
-            if (board[i][j * 7] && board[i][j * 7]->getType() == 'p' ) {
+    for( int i = 0; i < 8; i += 7) { // only check first row and last row
+        for ( int j = 0; j < 8; j++ ) {
+            if (board[j][i] && board[j][i]->getType() == 'p' ) {
                 notifyObservers( board, *mh );
                 prompt +="Pawns cannot be placed at the first or last row of the board.\n";
                 hasInvalidPawn = true;

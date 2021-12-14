@@ -19,7 +19,6 @@ class TextDisplay : public Observer {
     virtual void notify( std::vector<std::vector<Piece *>> &b, 
         MoveHistory &mh ) override;
     friend std::ostream &operator<<( std::ostream &, TextDisplay& );
-    std::vector<Move*>* getDisplayHist();
 };
 
 #endif

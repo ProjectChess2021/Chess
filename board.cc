@@ -153,6 +153,7 @@ void Board::smart_move(Move& _move, const char promptTo) {
     if (_move.getOperation() == "k")        kill(sx, sy, ex, ey);
     else if(_move.getOperation() == "c")    castle(sx, sy, ex, ey);
     else if(_move.getOperation() == "p")    moveNProm(sx, sy, ex, ey, promptTo );
+
     else if(_move.getOperation() == "k+p")  killNProm(sx, sy, ex, ey, promptTo );
     else if(_move.getOperation() == "e")    CEP(sx, sy, ex, ey);
     else move(sx, sy, ex, ey);
@@ -162,11 +163,13 @@ void Board::smart_move(Move& _move, const char promptTo) {
 
 // This function undos a single move in convinience of bot
 void Board::undo(Move* _move) {
+    std::cerr << __LINE__ << " " << __FILE__ << " : be about to undo " << *_move <<
+    "at address " << _move << std::endl;
     std::vector<Move*> undoLst;
     undoLst.emplace_back(_move);
     undo(undoLst);
-    std::cerr << __LINE__ << " " << __FILE__ << " : undo " << *_move <<
-        " succcessfully." << std::endl;
+
+    std::cerr << __LINE__ << " " << __FILE__ << " : undo " << *_move << " succcessfully." << std::endl;
 }   // end undo
 
 void Board::undo( std::vector<Move *> &undoHist ) {
@@ -177,6 +180,7 @@ void Board::undo( std::vector<Move *> &undoHist ) {
         int endY = end->getY();
         int beginX = begin->getX();
         int beginY = begin->getY();
+
         if ( hist->getOperation() == "m" ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
@@ -217,6 +221,7 @@ void Board::undo( std::vector<Move *> &undoHist ) {
 }
 
 // This function calculates the weight of board in the perspective of given side
+// By default, evaluate at White
 int Board::evaluateBoard(int id) {
     unsigned long long retVal = 0;
     for(int i = 0; i < 8; i++)

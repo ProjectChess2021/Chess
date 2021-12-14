@@ -4,7 +4,7 @@
 #include "player.h"
 
 class Human : public Player {
-    bool valid( const int &iniX, const int &iniY, const int &endX, 
+    std::string valid( const int &iniX, const int &iniY, const int &endX, 
     const int &endY, Game &g );
     public:
     Human( const int &_id, const float score = 0 );

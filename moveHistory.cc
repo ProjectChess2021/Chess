@@ -7,16 +7,15 @@
 MoveHistory::MoveHistory() { }
 // end constructor
 
+int MoveHistory::size() {return mh.size();}   // end size
 
 void MoveHistory::add ( const int &originalX, const int &originalY, 
     const int &finalX, const int &finalY, Board &b ) {
-    std::cerr << "add a piece of move hist @ Line 12, moveHistory.cc" << std::endl;
     mh.emplace_back( 
         std::make_unique<Move>( b, originalX, originalY, finalX, finalY ) );
 }   // end add
 
 std::vector<Move *> MoveHistory::undo() {
-    std::cerr << "undo @ Line21, moveHistory.cc" << std::endl;
     std::vector<Move *> undos;
     undos.emplace_back( mh.back().release() );
     mh.pop_back();

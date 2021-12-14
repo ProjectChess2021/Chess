@@ -30,24 +30,28 @@ void TextDisplay::notify( std::vector<std::vector<Piece *>>& b, MoveHistory &mh 
     MoveHistory* MHptr = &mh;
     int displayNum = 0;               // the number of moveHistory piece to be displayed
     MoveHistory::MoveHistIter it = MHptr->begin();
-    while(displayNum < 5 && it != MHptr->end()) {       // display 5 pieces at most
+    while(displayNum < 8 && it != MHptr->end()) {       // display 5 pieces at most
         displayNum ++;
         displayHistory.emplace_back(&(*it));
         ++it;
     }
-    //system( "clear" );
     std::cout << *this << std::endl;
 }   // end notify
 
-std::vector<Move*>* TextDisplay::getDisplayHist() {
-    return &displayHistory;
-}   // end getDisplayHist()
+// This function translates the side number to a string (colour representing the player)
+std::string getSideStr(const int x){
+    if(x == 1)     return "white";
+    else if(x == 2) return "black";
+    else if(x == 3) return "azure";
+    else if(x == 4) return "green";
+    else return "";
+}   // end getSideStr
 
 // This function returns the Board as ostream
 std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
     //system("clear");          // clear what's on the screen so it looks nicer
-    auto histptr = txtOb.getDisplayHist();
-    std::vector<Move*>::iterator it = histptr->begin();
+    std::vector<Move*>& hist = txtOb.displayHistory;
+    std::vector<Move*>::iterator it = hist.begin();
 
     for(int i = 7; i >= 0; i--) {
         out << i + 1 << " ";       // Line Num
@@ -55,15 +59,16 @@ std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
                 out << txtOb.displayBoard[j][i];
         out << " ";
 
-        if(i == 7)  out << "MoveHistory (Newest at top)";
-        else if(it != histptr->end()) {
-            out << *(*it);
+        if(i == 7)  out << "Move History (Newest at top)";
+        else if(it != hist.end()) {
+            std::string sideStr = getSideStr((*it)->getSide());
+            sideStr[0] = toupper(sideStr[0]);
+            out << "        " << sideStr << ": " <<  *(*it);
             ++it;
         }
         out << std::endl;
     }   //end outer for loop
     out << std::endl << "  ";
     for(int i = 0; i < 8; i ++) out<<(char)( 'a' + i);
-    //system("pause");
     return out;
 }   // end operator<<

@@ -21,7 +21,7 @@ class MoveHistory {
     bool hasMoved();
 
     void clearHistory();
-
+    int size();
     class MoveHistIter {
         int curr;
         std::vector<std::unique_ptr<Move>> &mh;

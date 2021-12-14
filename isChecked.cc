@@ -279,7 +279,7 @@ bool IsChecked::isChecked( const int &side,
 // Noticed that board is passed by value thus can be safely modifed without affecting the true board
 bool IsChecked::isCheckMove(const int initX, const int initY, const int destX, const int destY,
     const int side, std::vector<std::vector<Piece *>>& board) {
-    //    std::cerr<<"Check for side="<<side<<std::endl;
+    // std::cerr<<"Check for side="<<side<<std::endl;
     Piece* temp = nullptr;
     std::swap(temp, board[destX][destY]);
     std::swap(board[initX][initY], board[destX][destY]); //move this piece

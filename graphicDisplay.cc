@@ -68,12 +68,6 @@ void GraphicDisplay::notify( std::vector<std::vector<Piece *>> &b,
                         35 + 50 * i, 35 + 50 * k, 50, 50, 2 );
             } else if ( b[i][7 - k] ) {
                 if ( b[i][7 - k]->getType() != d[i][k] ) {
-                    if ( ( i + k ) % 2 == 1 )
-                        display->fillRectangle( 
-                            35 + 50 * i, 35 + 50 * k, 50, 50, 3 );
-                    else
-                        display->fillRectangle( 
-                            35 + 50 * i, 35 + 50 * k, 50, 50, 2 );
                     std::string s = " ";
                     d[i][k] = b[i][7 - k]->getType();
                     if ( b[i][7 - k]->getSide() == 1 ) {

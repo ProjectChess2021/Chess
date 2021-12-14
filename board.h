@@ -42,10 +42,10 @@ class Board {
     void undo(Move*);
     
     // This function calculates the weight of board in the perspective of given side
-    int evaluateBoard(int);
-    int evaluateMove(Posn*,Posn*,int);
+    int evaluateBoard(int id = 1);
+    int evaluateMove(Posn*,Posn*,int id = 1);
     int evaluateMove(const int sx, const int sy, 
-        const int ex, const int ey, const int side); //start & end Posn not construced
+        const int ex, const int ey, const int side = 1); //start & end Posn not construced
     int evaluateMove(Move&);
     Piece* at(const int, const int);
     Piece* at(Posn&);

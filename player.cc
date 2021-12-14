@@ -49,7 +49,6 @@ std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << "
                 }   // end operation type judge
 
                 if(!IsChecked::isCheckMove(x, y, i, j, id, board)){
-//                    std::cerr << "Add a move from " << init << " to " << dest << std::endl;
                     availableMove.emplace_back(
                         std::make_unique<Move>( x, y, i, j, id, op, 
                             board[x][y]->isMoved() ) );
@@ -61,7 +60,6 @@ std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << "
 
 // This function recieves notify from the board and thus update all available movements for this player.
 void Player::notify( std::vector<std::vector<Piece *>> &board, MoveHistory &mh ) {
-    std::cerr << __LINE__ << " " << __FILE__ << " : Add am for Player" << this->getId() << std::endl; 
     availableMove.clear();  // empty the vector
     for (int i = 0; i < (int)board.size(); i++) { // search for all pieces owned by current player
         for (int j = 0; j < (int)board[i].size(); j++) {

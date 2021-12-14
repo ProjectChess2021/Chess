@@ -15,7 +15,7 @@ int main() {
     std::string input = "";
     std::string cmd = "";
     std::string player = "";
-    int numUndo;
+    int numUndo, a;
     bool end = false;
     std::unique_ptr<Game> g = std::make_unique<Game>();
     std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
@@ -23,16 +23,18 @@ int main() {
     g->attach( td.get() );
     // g->attach( gd.get() );
 
-    while ( !std::cin.eof() && !end ) {
-        //system( "clear" );
-        std::cout << "Welcome to the game of chess!" << std::endl;
-        std::cout << "Select command from below:" << std::endl << std::endl;
-        std::cout << "game white-player black-player allowUndo" << std::endl;
-        std::cout << "setup" << std::endl << std::endl;
-        std::cout << "(player can be either human or bot[1-4])" << std::endl;
-        std::cout << "If do not allow undo then put in 0." << std::endl;
-        std::cout << "Else put in the number of undos allowed." << std::endl;
-        std::cout << "Negative for unlimited undo" << std::endl;
+    try{ while ( !std::cin.eof() && !end ) {
+        a = system( "clear" );
+        std::cout << "               Welcome to the game of chess created together by Zichu Wu, Kunling Yang, Min!           " << std::endl;
+        std::cout << "---------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+        std::cout << "Available commands are all listed below:"<< std::endl;
+        std::cout << "  -  game white-player black-player allowUndo" << std::endl;
+        std::cout << "         (player can be either \"human\" or \"bot[1-4])\". If you wish to prohibit undo, type in 0 for allowUndo; if unlimited undo is" << std::endl;
+        std::cout << "         desired, type in any negative integer; otherwise, type in the number of undos allowed for each player." << std::endl;
+        std::cout << "         e.g. \"game human bot4 0\" will start a game with Level4 AI that does not allow undo.)"  << std::endl;     
+        std::cout << std::endl;
+        std::cout << "  -   setup" << std::endl;
+        std::cout << "          (This command enters the setup mode and allows client to put piece in the way you like as long as it's valid)" << std::endl;
         std::cout << std::endl;
 
         std::cout << "Please enter command here: ";
@@ -66,8 +68,7 @@ int main() {
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
                             continue;
-                        }
-                        std::cerr << "Add a bot player at level " << level << std::endl;    
+                        }  
                         temp.emplace_back(std::make_unique<Bot>(2, level, score));
                     } else continue;    // unrecognized player input
                 } else continue;        // no second player
@@ -91,8 +92,9 @@ int main() {
     }
 
     system( "clear" );
-
+    a++;
     std::cout << "Final Score:" << std::endl;
     std::cout << "White: " << g->getScore( 0 ) << std::endl;
     std::cout << "Black: " << g->getScore( 1 ) << std::endl;
+    } catch (...) { std::cout << "Unexpected Behaviour meeted Program will be terminated."  << std::endl;}
 }

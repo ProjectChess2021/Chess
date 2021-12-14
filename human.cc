@@ -9,20 +9,23 @@
 Human::Human( const int &_id, const float score ) : 
     Player{ _id, score } { }
 
-bool Human::valid( const int &iniX, const int &iniY, const int &endX, 
+std::string Human::valid( const int &iniX, const int &iniY, const int &endX, 
     const int &endY, Game &g ) {
     Posn init{ iniX, iniY };
     Posn end{ endX, endY };
-    if ( iniX < 0 || iniX >= 8 ) return false;
-    if ( iniY < 0 || iniY >= 8 ) return false;
-    if ( endX < 0 || endX >= 8 ) return false;
-    if ( endY < 0 || endY >= 8 ) return false;
-    std::vector<std::vector<Piece *>> board = g.getBoard();
-    if ( board[iniX][iniY] == nullptr ) return false;
+    if ( iniX < 0 || iniX >= 8 ||  iniY < 0 || iniY >= 8)
+        return "Provided move start is outside board boundry!";
+    if (endX < 0 || endX >= 8 || endY < 0 || endY >= 8 ) 
+        return "Provided move destination is outside board boundry!";
+
+    std::vector<std::vector<Piece *>>& board = g.getBoard();
+    if ( !board[iniX][iniY] ) return "No piece detected at the start position";
     if ( !board[iniX][iniY]->isValidMove( &init, &end, 
-            board, g.getMoveHistory() ) ) return false;
-    if ( board[iniX][iniY]->getSide() != getId() ) return false;
-    return true;
+            board, g.getMoveHistory() ) )
+            return "Provided move is illegal!";
+    if ( board[iniX][iniY]->getSide() != getId() )
+        return "Attempt to move an opponent-controlled piece";
+    return "";
 }
 
 std::string Human::cmd( Game &game ) {
@@ -34,6 +37,8 @@ std::string Human::cmd( Game &game ) {
     std::cout << "Please enter command here: ";
 
     while ( std::cin >> cmd ) {
+        Move* _move = nullptr;      // used to generate prompts
+        if(getAM().size()) _move = getAM().at(rand() % getAM().size()).get();
         if ( cmd == "move" ) {
             std::cin >> iniPosn;
             std::cin >> endPosn;
@@ -41,23 +46,19 @@ std::string Human::cmd( Game &game ) {
             int iniY = iniPosn[1] - '1';
             int endX = endPosn[0] - 'a';
             int endY = endPosn[1] - '1';
-
-            if ( !valid( iniX, iniY, endX, endY, game ) ) {
-                std::cout << "Invalid coordinates" << std::endl;
+            std::string ret = valid( iniX, iniY, endX, endY, game );
+            
+            if ( ret.length() ) {
+                std::cout << ret << std::endl;
+                std::cout << "If You do not know which piece to move, try " << *_move->getOriginal() << std::endl;
                 std::cout << "Please enter command here: ";
                 continue;
             }
 
-            std::cerr << "iniX = " << iniX << std::endl;
-            std::cerr << "iniY = " << iniY << std::endl;
-            std::cerr << "endX = " << endX << std::endl;
-            std::cerr << "endY = " << endY << std::endl;
-
             if ( IsChecked::isCheckMove( 
                 iniX, iniY, endX, endY, getId(), board ) ) {
-                std::cout << "Your king will be checked by this move" << std::endl;
-                std::cout << "Please think carefully before you make your move" << std::endl;
-                std::cout << "Please enter command here: ";
+                std::cout << "Your king will be exposed to enemy capture if taking that move" << std::endl;
+                std::cout << "Please reconsider next move and enter command here: ";
                 continue;
             } else { 
                 return cmd + " " + iniPosn + " " + endPosn;
@@ -69,20 +70,33 @@ std::string Human::cmd( Game &game ) {
             if ( getNumUndo() != 0 ) {
                 return cmd;
             } else {
-                std::cout << "You have used out your undos" << std::endl;
+                std::cout << "You have used up all of your undos. Other available commands are: " << std::endl;
+                if(!_move)  
+                    std::cout << "    \"move e1 e8\" (which moves a piece owned by you)" << std::endl;
+                else{
+                    std::cout << "    \"move " << *(_move->getOriginal()) << " "
+                    << *(_move->getEnd()) <<"\"  (which moves a piece owned by you)" << std::endl;
+                }
+                std::cout << "    \"resign\"      (which allows you to quit and add one score for the opponent)" << std::endl;
+                std::cout << "Please enter command here: ";
+                continue;
             }
-            return cmd;
+            //return cmd;
         } else {
-            std::cout << "Invalid command!" << std::endl;
+            std::cout << "Unrecognized command detected!" << std::endl;
         }
 
-        std::cout << "Command template: " << std::endl;
-        std::cout << "move e1 e8" << std::endl;
-        std::cout << "resign" << std::endl;
-        if ( getNumUndo() <= 0 ) {
-            std::cout << "undo(0)" << std::endl;
+        std::cout << "Possible command templates are listed below: " << std::endl;
+        std::cout << "    \"move " << *(_move->getOriginal()) << " "
+            << *(_move->getEnd()) <<"\"  (which moves a piece owned by you)" << std::endl;
+        std::cout << "    \"resign\"      (which allows you to quit and add one score for the opponent)"<< std::endl;
+        if ( getNumUndo() < 0 ) {
+            std::cout << "    \"undo\"        (which allows you to undo last movement of both sides)" << std::endl;
+        } else if (getNumUndo() > 0){
+            std::cout << "    \"undo\"       (which allows you to undo last movement of both sides)" << std::endl;
+            std::cout << "                   (there are still " << getNumUndo() << " times of undo availables)" << std::endl;
         } else {
-            std::cout << "undo(" << getNumUndo() << ")" << std::endl;
+            std::cout << "    \"undo\"       (There is no undo availale now)" << std::endl;
         }
         std::cout << "Please enter command here: ";
     }

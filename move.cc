@@ -70,15 +70,6 @@ int Move::getsy() {return original.get()->getY();}
 int Move::getex() {return end.get()->getX();}
 int Move::getey() {return end.get()->getY();}
 
-// This function translates the side number to a string (colour representing the player)
-std::string getSideStr(const int x){
-    if(x == 1)     return "white";
-    else if(x == 2) return "black";
-    else if(x == 3) return "azure";
-    else if(x == 4) return "green";
-    else return "";
-}   // end getSideStr
-
 // This function translates the peice type character to a string
 std::string getTypeStr(const char c) {
     std::cerr << "translate type to string @ Line34, move.cc" << std::endl;
@@ -92,10 +83,6 @@ std::string getTypeStr(const char c) {
 }   // end getTypeStr
 
 std::ostream &operator<<( std::ostream & out, const Move& _move){
-    std::string sideStr = getSideStr(_move.side);
-    sideStr[0] = toupper(sideStr[0]);
-    // out << sideStr << ":" << std::right << std::setw(6) << getTypeStr(_move.operation) << " ";
-    // out << *_move.original << " -> " << *_move.end;
-    out << sideStr << ": " << *_move.original << " -> " << *_move.end;
+    out << *_move.original << " -> " << *_move.end;
     return out;
 }   // end operator<<
