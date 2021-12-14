@@ -5,6 +5,7 @@
 using std::endl;
 using std::cout;
 
+std::string getTypeStr(const char c);
 void Game::boardInit() {
     mh->clearHistory();
     b->boardInit( isSetup );
@@ -227,13 +228,17 @@ void Game::start() {
     }
 }
 
-void errorMsg() {
+void Game::errorMsg() {
+    int a = system("clear");
+    notifyObservers(  b->getSetUpBoard(), *mh );
     cout << "Unrecognized setup command is detected. You can try:" << endl;
     cout << "  \"+ K e1\"   (which puts a white King at e1)" << endl;
     cout << "  \"- e1\"     (which removes a piece from e1 if any)" << endl;
-    cout << "  \"= white\"  (which set white takes the next move after applying setup)." << endl;
-    cout << "  \"done\"     (which detects if it's a valid setup and applies it to following games if success." << endl;
-    cout << "Please enter command here: ";
+    cout << "  \"= white\"  (which set white takes the next move after applying setup)" << endl;
+    cout << "  \"done\"     (which detects if it's a valid setup and applies it to following games if success)" << endl;
+    cout << "  \"quit\"     (which cease the setup and the board is set back to default)" << endl;
+    cout << "Please enter a setup command here: ";
+    a++;
 }
 
 void Game::setup() {
@@ -316,7 +321,8 @@ void Game::setup() {
                 }
                 pieces.pop_back();
             } else {
-                prompt += "Add piece successful.\n";
+                std::string side = !isupper(pc)? "black" : "white";
+                prompt += "Add a " + side + " piece of type " + getTypeStr(pc) + " successful.\n";
                 setUpBoard[x - 'a'][y - 1] = pieces.back().get();
             }
         } else if ( op == "-" ) {       // remove a piece
@@ -375,6 +381,7 @@ void Game::setup() {
             errorMsg();
             continue;
         }//end command selection
+        int a = system("clear");
         notifyObservers( setUpBoard, *mh );
         prompt += "Continue to enter command here: ";
         if ( op == "=" ) {
@@ -384,6 +391,7 @@ void Game::setup() {
                 std::cout << "Black will make the next move." << std::endl;
             }
         }
+        a ++;
         cout << prompt;
     }   // end while
 }   // end setup

@@ -20,6 +20,7 @@ class Game : public Subject {
     std::unique_ptr<Board> b;
     bool whiteStart, isSetup;
     void goOn();
+    void errorMsg();
     void move( const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const int id );
     void undo();

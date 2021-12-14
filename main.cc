@@ -9,7 +9,8 @@
 #include "levelThree.h"
 #include "graphicDisplay.h"
 #include "bot.h"
-
+using std::cout;
+using std::endl;
 int main() {
     std::vector<std::unique_ptr<Player>> players;
     std::string input = "";
@@ -25,19 +26,20 @@ int main() {
 
     try{ while ( !std::cin.eof() && !end ) {
         a = system( "clear" );
-        std::cout << "               Welcome to the game of chess created together by Zichu Wu, Kunling Yang, Min!           " << std::endl;
-        std::cout << "---------------------------------------------------------------------------------------------------------------------------------" << std::endl;
-        std::cout << "Available commands are all listed below:"<< std::endl;
-        std::cout << "  -  game white-player black-player allowUndo" << std::endl;
-        std::cout << "         (player can be either \"human\" or \"bot[1-4])\". If you wish to prohibit undo, type in 0 for allowUndo; if unlimited undo is" << std::endl;
-        std::cout << "         desired, type in any negative integer; otherwise, type in the number of undos allowed for each player." << std::endl;
-        std::cout << "         e.g. \"game human bot4 0\" will start a game with Level4 AI that does not allow undo.)"  << std::endl;     
-        std::cout << std::endl;
-        std::cout << "  -   setup" << std::endl;
-        std::cout << "          (This command enters the setup mode and allows client to put piece in the way you like as long as it's valid)" << std::endl;
-        std::cout << std::endl;
+        cout << "               Welcome to the game of chess created together by Zichu Wu, Kunling Yang, Min!           " << endl;
+        cout << "------------------------------------------------------------------------------------------------------------------" << endl;
+        cout << "Available commands are all listed below:"<< endl;
+        cout << "  -  game white-player black-player allowUndo" << endl;
+        cout << "         (player can be either \"human\" or \"bot[1-4])\". If you wish to prohibit undo, type in 0 for allowUndo;" << endl;
+        cout << "          if unlimited undo is desired, type in any negative integer; otherwise, type in the number of undos" << endl;
+        cout << "          allowed for each player." <<endl;
+        cout << "          e.g. \"game human bot4 0\" will start a game with Level4 AI that does not allow undo.)"  << endl;     
+        cout << endl;
+        cout << "  -  setup" << endl;
+        cout << "          (This command enters the setup mode and allows client to put pieces freely as long as it's valid)" << endl;
+        cout << endl;
 
-        std::cout << "Please enter command here: ";
+        cout << "Please enter command here: ";
         std::getline( std::cin, input );
         
         std::stringstream in{ input };
@@ -54,9 +56,9 @@ int main() {
                         catch(const std::invalid_argument& ia) {  // not valid ai level
                             continue;
                         }
-                        std::cerr << __LINE__ << std::endl;
+                        std::cerr << __LINE__ << endl;
                         temp.emplace_back(std::make_unique<Bot>(1, level, score));
-                        std::cerr << __LINE__ << std::endl;
+                        std::cerr << __LINE__ << endl;
                     } else continue;    // unrecognized player input
                 } else continue;        //no first player detected
                 if ( in >> player ) {    // input second player
@@ -86,15 +88,17 @@ int main() {
                 }
                 g->start();
             } else if ( cmd == "setup" ) {      // setup mode
+                a = system("clear");
+                cout << "Entering the setup mode" << endl;
                 g->setup();
             }
         }
     }
 
-    system( "clear" );
+    a = system( "clear" );
     a++;
-    std::cout << "Final Score:" << std::endl;
-    std::cout << "White: " << g->getScore( 0 ) << std::endl;
-    std::cout << "Black: " << g->getScore( 1 ) << std::endl;
-    } catch (...) { std::cout << "Unexpected Behaviour meeted Program will be terminated."  << std::endl;}
+    cout << "Final Score:" << endl;
+    cout << "White: " << g->getScore( 0 ) << endl;
+    cout << "Black: " << g->getScore( 1 ) << endl;
+    } catch (...) { cout << "Unexpected Behaviour meeted Program will be terminated."  << endl;}
 }
