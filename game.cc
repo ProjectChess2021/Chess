@@ -109,7 +109,6 @@ void Game::move( const int &originalX, const int &originalY,
     Move *last = mh->lastMove();
     if ( last->getOperation() == "p" || 
         last->getOperation() == "k+p" ) {
-        notifyObservers( b->getBoard(), *mh );
 
         promptTo = players[id]->promptTo();
     }
@@ -434,8 +433,8 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
     
     bool hasInvalidPawn = false;    // check whether there is pawn on the first/last row
     for( int i = 0; i < 2; i++) {
-        for ( int j = 0; j < 7; j++ ) {
-            if (board[i * 7][j] && board[i * 7][j]->getType() == 'p' ) {
+        for ( int j = 0; j < 2; j++ ) {
+            if (board[i][j * 7] && board[i][j * 7]->getType() == 'p' ) {
                 notifyObservers( board, *mh );
                 prompt +="Pawns cannot be placed at the first or last row of the board.\n";
                 hasInvalidPawn = true;
