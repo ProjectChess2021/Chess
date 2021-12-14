@@ -432,7 +432,7 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
         whiteKingNum << " " << blackKingNum << std::endl;
     
     bool hasInvalidPawn = false;    // check whether there is pawn on the first/last row
-    for( int i = 0; i < 2; i++) {
+    for( int i = 0; i < 7; i++) {
         for ( int j = 0; j < 2; j++ ) {
             if (board[i][j * 7] && board[i][j * 7]->getType() == 'p' ) {
                 notifyObservers( board, *mh );

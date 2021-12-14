@@ -1,0 +1,34 @@
+#!/bin/bash
+
+test() {
+    k=1
+    while [ ${k} -le ${1} ]; do
+        echo -n "game bot" >> ${2}
+        echo -n "$(((RANDOM % ${3}) + 1)) " >> ${2}
+        echo -n "bot" >> ${2}
+        echo -n "$(((RANDOM % ${3}) + 1))" >> ${2}
+        echo " $(((RANDOM % 1000) - 500))" >> ${2}
+        let k++
+    done
+}
+
+start() {
+    i=1
+    numTest=${1}
+    name=random
+    while [ $i -le $numTest ]; do
+        echo -n > ${name}.in
+
+        test $(((RANDOM % 10) + 1)) ${name}.in ${2}
+
+        valgrind ./chess < ${name}.in 2>/dev/null  1>/dev/null
+
+        if [ ! $? -eq 0 ]; then
+            valgrind ./chess < ${name}.in
+        fi
+
+        let i++
+    done 
+}
+
+start ${1} ${2}
