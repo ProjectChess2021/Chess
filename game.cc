@@ -146,7 +146,8 @@ void Game::start() {
             i = 0;
         }
         for ( ; i < 2 && i >= 0; ) {
-            Player *player = players[i];
+            Player *player = nullptr;
+            player = players[i];
             if ( !player->hasAvaliableMove() && 
                 !IsChecked::isChecked( player->getId(), board ) ) {
                 cout << "Stalemate!" << endl;
@@ -217,8 +218,8 @@ void Game::start() {
                 int endX = endPosn[0] - 'a';
                 int endY = endPosn[1] - '1';
                 move( iniX, iniY, endX, endY, i );
-                std::cerr << "iniX = " << iniX << " iniY = " << iniY << std::endl;
-                std::cerr << "endX = " << endX << " endY = " << endY << std::endl;
+//                std::cerr << "iniX = " << iniX << " iniY = " << iniY << std::endl;
+//                std::cerr << "endX = " << endX << " endY = " << endY << std::endl;
             }
             notifyObservers( board, *mh );
             std::cerr << __LINE__ << std::endl;

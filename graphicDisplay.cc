@@ -1,5 +1,18 @@
 #include "graphicDisplay.h"
 #include <iostream>
+const int W2 = 1;
+const int B2 = 1;
+const int E = 1;
+
+// This function draws a Pawn at the center of given side at given area
+// Try to give a even sqaure?
+void GraphicDisplay::drawPawn(const int x, const int y, const int side) {
+    if(d[x][y] == 'p' && side == 2) return;
+    if(d[x][y] == 'P' && side == 1) return;
+
+    // int edgex = 3 - 1;
+    // int edgey = 10 - 1;
+}   // end drawPawn
 
 GraphicDisplay::GraphicDisplay( const int width, const int height ) :
     width{ width }, height{ height }, 
@@ -7,7 +20,6 @@ GraphicDisplay::GraphicDisplay( const int width, const int height ) :
                                         50 * height + 70 ) } {
     d.resize( width, std::vector<char>( height, ' ' ) );
     display->fillRectangle( 25, 25, 50 * width + 20, 50 * width + 20, 4 );
-
     for ( int k = 0; k < 8; ++k ) {
         std::string s = "a";
         s[0] += k;

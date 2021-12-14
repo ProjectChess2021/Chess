@@ -13,7 +13,6 @@ TextDisplay::TextDisplay() {
 
 // update the TextObserver once get notified
 void TextDisplay::notify( std::vector<std::vector<Piece *>>& b, MoveHistory &mh ) {
-    std::cerr << "begin notify() @ Line 26, textDisplay.cc" << std::endl;
     for(int i = 0; i < 8; i++) {
         for(int j = 0; j < 8; j++) {
             if(b[i][j])        // not nullptr, there is piece on [i][j]

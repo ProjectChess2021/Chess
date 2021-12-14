@@ -13,6 +13,13 @@ class GraphicDisplay : public Observer {
     int height;
     std::unique_ptr<Xwindow> display;
     std::vector<std::vector<char>> d;
+    std::vector<std::vector<int>>prevColour;
+    void drawPawn(int, int, int);
+    void drawKnight(int, int, int);
+    void drawRook(int, int, int);
+    void drawBishop(int, int, int);
+    void drawQueen(int, int, int);
+    void drawKing(int, int, int);
     public:
     GraphicDisplay( const int width, const int height );
     ~GraphicDisplay();

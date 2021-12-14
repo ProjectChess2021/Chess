@@ -165,6 +165,8 @@ void Board::undo(Move* _move) {
     std::vector<Move*> undoLst;
     undoLst.emplace_back(_move);
     undo(undoLst);
+    std::cerr << __LINE__ << " " << __FILE__ << " : undo " << *_move <<
+        " succcessfully." << std::endl;
 }   // end undo
 
 void Board::undo( std::vector<Move *> &undoHist ) {
@@ -178,12 +180,12 @@ void Board::undo( std::vector<Move *> &undoHist ) {
         if ( hist->getOperation() == "m" ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
-        } else if ( hist->getOperation() == "c" ) {
+            board[beginX][beginY]->changeMoved( !hist->isFirstMove() );
+        } else if ( hist->getOperation() == "c" ) {     // undo castling
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
             board[beginX][beginY]->changeMoved( false );
-            if ( endX > beginX ) {
+            if ( endX > beginX ) {                      // king: e1/e8 -> h1/h8
                 board[7][endY] = board[endX - 1][endY];
                 board[7][endY]->changeMoved( false );
                 board[endX - 1][endY] = nullptr;
@@ -196,20 +198,20 @@ void Board::undo( std::vector<Move *> &undoHist ) {
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
+            board[beginX][beginY]->changeMoved( !hist->isFirstMove() );
         } else if ( hist->getOperation() == "p" ) {
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = nullptr;
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
+            board[beginX][beginY]->changeMoved( !hist->isFirstMove() );
         } else if ( hist->getOperation() == "k+p" ) {
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
             board[beginX][beginY] = board[endX][endY];
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
-            board[beginX][beginY]->changeMoved( hist->isFirstMove() );
+            board[beginX][beginY]->changeMoved( !hist->isFirstMove() );
         }
     }
 }

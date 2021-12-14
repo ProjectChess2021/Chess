@@ -8,7 +8,10 @@
 #include "piece.h"
 
 class LevelThree : public LevelTwo{
+    bool showControl;
     public:
+    LevelThree();
+    void setControlRender(bool);
     std::string makeMove(Game&, std::vector<std::unique_ptr<Move>>&, const int) override;
 };  // end LevelThree
 

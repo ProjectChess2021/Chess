@@ -33,8 +33,6 @@ std::string Human::cmd( Game &game ) {
 
     std::cout << "Please enter command here: ";
 
-    std::cerr << "I am " << getId() << std::endl;
-
     while ( std::cin >> cmd ) {
         if ( cmd == "move" ) {
             std::cin >> iniPosn;

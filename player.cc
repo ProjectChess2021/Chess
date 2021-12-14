@@ -49,7 +49,7 @@ std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << "
                 }   // end operation type judge
 
                 if(!IsChecked::isCheckMove(x, y, i, j, id, board)){
-                    std::cerr << "Add a move from " << init << " to " << dest << std::endl;
+//                    std::cerr << "Add a move from " << init << " to " << dest << std::endl;
                     availableMove.emplace_back(
                         std::make_unique<Move>( x, y, i, j, id, op, 
                             board[x][y]->isMoved() ) );

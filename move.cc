@@ -52,7 +52,7 @@ Move::Move(Board& _board, const int sx, const int sy, const int ex, const int ey
     side{ _board.at( sx, sy )->getSide() },
     firstMove{ !_board.at( sx, sy )->isMoved() },
     operation{ findOp( _board, *original, *end ) } { 
-    std::cerr << "Finished move" << std::endl; 
+   // std::cerr << "Finished move" << std::endl; 
 }   // end Constructor
 
 int Move::getSide() {return side;}
