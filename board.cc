@@ -15,6 +15,8 @@ void Board::boardInit( const bool isSetup ) {
         for ( int i = 0; i < 8; ++i ) {
             for ( int k = 0; k < 8; ++k ) {
                 board[i][k] = setUpBoard[i][k];
+                if ( board[i][k] )
+                    board[i][k]->changeMoved( false );
             }
         }
         return;
@@ -59,6 +61,13 @@ void Board::boardInit( const bool isSetup ) {
     board[6][7] = pieces.back().get();
     pieces.emplace_back( std::make_unique<Rook>( 2 ) );
     board[7][7] = pieces.back().get();
+    for ( int i = 0; i < 8; ++i ) {
+        for ( int k = 0; k < 8; ++k ) {
+            setUpBoard[i][k] = board[i][k];
+            if ( board[i][k] )
+                board[i][k]->changeMoved( false );
+        }
+    }
 }
 
 void move(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
@@ -149,6 +158,7 @@ void Board::smart_move(Move& _move, const char promptTo) {
     int sy = _move.getsy();
     int ex = _move.getex();
     int ey = _move.getey();
+    Piece *pc = board[sx][sy];
     std::string op = _move.getOperation();
     if(board[sx][sy] == nullptr)    throw "Initial Position has no piece!";
     if(board[ex][ey] == nullptr && (op == "k" || op == "k+p"))     
@@ -162,7 +172,7 @@ void Board::smart_move(Move& _move, const char promptTo) {
     else if(_move.getOperation() == "e")    CEP(pieces, board, deadPool,sx, sy, ex, ey);
     else move(pieces, board, deadPool,sx, sy, ex, ey);
 
-    board[ex][ey]->changeMoved(true);
+    pc->changeMoved(true);
 }   // end smart_move
 
 // This function undos a single move in convinience of bot
@@ -216,6 +226,14 @@ void Board::undo( std::vector<Move *> &undoHist ) {
             board[endX][endY] = deadPool.back();
             deadPool.pop_back();
             board[beginX][beginY]->changeMoved( !hist->isFirstMove() );
+        } else if ( hist->getOperation() == "e" ) {
+            if ( board[endX][endY]->getSide() == 1 ) 
+                board[endX][endY - 1] = deadPool.back();
+            else
+                board[endX][endY + 1] = deadPool.back();
+            deadPool.pop_back();
+            board[beginX][beginY] = board[endX][endY];
+            board[endX][endY] = nullptr;
         }
     }
 }

@@ -25,15 +25,16 @@ bool King::isValidMove( Posn *original, Posn *end,
         }
         return true;
     }
-    if ( diffX == 2 && diffY == 0 && ( oriY == 0 || oriY == 8 ) ) {
-        for ( int i = oriX; i < 7; ++i ) {
+    if ( diffX == 2 && diffY == 0 ) {
+        if ( board[7][oriY] == nullptr ) return false;
+        for ( int i = oriX + 1; i < 7; ++i ) {
             if ( board[i][oriY] != nullptr ) {
                 return false;
             }
         }
         char type = board[7][oriY]->getType();
         if ( !isMoved() && type == 'r' && !board[7][oriY]->isMoved() &&
-            board[0][oriY]->getSide() == getSide() ) {
+            board[7][oriY]->getSide() == getSide() ) {
             for ( int x = oriX; x <= endX; ++x ) {
                 if ( IsChecked::isChecked( x, oriY, getSide(), board ) ) 
                     return false;

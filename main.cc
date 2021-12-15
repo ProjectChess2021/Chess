@@ -94,7 +94,7 @@ int main() {
         }
     }
 
-    a = system( "clear" );
+    // a = system( "clear" );
     a++;
     cout << "Final Score:" << endl;
     cout << "White: " << g->getScore( 0 ) << endl;
