@@ -11,6 +11,13 @@
 #include "bot.h"
 using std::cout;
 using std::endl;
+
+// This function prints a lot of newline character as if SYS("clear")
+void screenClear(){
+    for(int i = 0; i < 20; i ++)    cout << endl;
+}   // end screenClear()
+
+
 int main() {
     std::vector<std::unique_ptr<Player>> players;
     std::string input = "";
@@ -84,10 +91,10 @@ int main() {
                 for ( int i = 0; i < (int)players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
-                a = system("clear");
+                screenClear();
                 g->start();
             } else if ( cmd == "setup" ) {      // setup mode
-                a = system("clear");
+                screenClear();
                 cout << "Entering the setup mode" << endl;
                 g->setup();
             }

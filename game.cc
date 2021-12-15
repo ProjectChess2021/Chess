@@ -20,6 +20,11 @@ Game::Game() :  mh{ std::make_unique<MoveHistory>() },
     boardInit();
 }
 
+// This function prints a lot of newline character as if SYS("clear")
+void screenClear(){
+    for(int i = 0; i < 20; i ++)    cout << endl;
+}   // end screenClear()
+
 void Game::move( const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const int id ) {
 
@@ -145,7 +150,7 @@ void Game::start() {
                 int endY = endPosn[1] - '1';
                 move( iniX, iniY, endX, endY, i );
             }
-            a = system("clear");
+            screenClear();
             notifyObservers( board, *mh );
             i += diffI; 
         }
@@ -154,7 +159,7 @@ void Game::start() {
 }
 
 void Game::errorMsg() {
-    int a = system("clear");
+    screenClear();
     notifyObservers(  b->getSetUpBoard(), *mh );
     cout << "Unrecognized setup command is detected. You can try:" << endl;
     cout << "  \"+ K e1\"   (which puts a white King at e1)" << endl;
@@ -163,15 +168,10 @@ void Game::errorMsg() {
     cout << "  \"done\"     (which detects if it's a valid setup and applies it to following games if success)" << endl;
     cout << "  \"quit\"     (which cease the setup and the board is set back to default)" << endl;
     cout << "Please enter a setup command here: ";
-    a++;
 }
 
 void Game::setup() {
-<<<<<<< HEAD
-    int a;
-=======
     whiteStart = true;
->>>>>>> 3aaf7e3 (Fixed the bug on undo)
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
     b->getPieces().clear();
@@ -285,7 +285,7 @@ void Game::setup() {
                 continue;
             }
         } else if ( op == "done" ) {
-            a = system("clear");
+            screenClear();
             std::string prompt = "";
             if(isValidSetup(whiteKingNum,blackKingNum,prompt)){
                 prompt += "Setup completed and will take effect in next game";
@@ -298,7 +298,7 @@ void Game::setup() {
                 continue;
             }
         } else if ( op == "quit") {
-            a = system("clear");
+           screenClear();
             char c = ' ';
             std::cout << "Are you sure to aborting all changes? Type in 'Y' and press [enter] to continue this ceasing." << std::endl;
             std::cin >> c;
@@ -306,7 +306,7 @@ void Game::setup() {
                 boardInit();
                 return;
             } else {
-                a = system("clear");
+                screenClear();
                 notifyObservers(setUpBoard, *mh);
                 std::cout << "Please enter command here: " ;
                 continue;
@@ -317,7 +317,7 @@ void Game::setup() {
             errorMsg();
             continue;
         }//end command selection
-        a = system("clear");
+        screenClear();
         notifyObservers( setUpBoard, *mh );
         prompt += "Continue to enter command here: ";
         if ( op == "=" ) {
@@ -327,7 +327,6 @@ void Game::setup() {
                 std::cout << "Black will make the next move." << std::endl;
             }
         }
-        a ++;
         cout << prompt;
     }   // end while
 }   // end setup

@@ -5,6 +5,11 @@
 #include <iostream>
 #include <iomanip>
 
+// This function prints a lot of newline character as if SYS("clear")
+void screenClear(){
+    for(int i = 0; i < 20; i ++)    std::cout << std::endl;
+}   // end screenClear()
+
 // Initialize the Board as a blank board.
 TextDisplay::TextDisplay() {
     int occupy = 8 * 8;
@@ -49,7 +54,7 @@ std::string getSideStr(const int x){
 
 // This function returns the Board as ostream
 std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
-    system("clear");          // clear what's on the screen so it looks nicer
+    screenClear();        // clear what's on the screen so it looks nicer
     std::vector<Move*>& hist = txtOb.displayHistory;
     std::vector<Move*>::iterator it = hist.begin();
 
