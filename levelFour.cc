@@ -60,3 +60,4 @@ int LevelFour::AlphaBeta(Game& game, Player* currPlayer, int maxmizedID, int dep
     }
     return alpha;
 }   // end minimax
+
