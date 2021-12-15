@@ -60,13 +60,15 @@ void Player::emplacePieceMove( const int x, const int y,
 // This function recieves notify from the board and thus update all available movements for this player.
 void Player::notify( std::vector<std::vector<Piece *>> &board, MoveHistory &mh ) {
     availableMove.clear();  // empty the vector
+    std::cerr << __LINE__ << std::endl;
     for (int i = 0; i < (int)board.size(); i++) { // search for all pieces owned by current player
         for (int j = 0; j < (int)board[i].size(); j++) {
-            if(board[i][j] && board[i][j]->getSide() == id) {
+            if(board[i][j] != nullptr && board[i][j]->getSide() == id) {
                 emplacePieceMove(i, j, board, mh);
             }   // end if
         }   // end col for loop
     }   // end row for loop
+    std::cerr << __LINE__ << std::endl;
 }   // end notify
 
 float &Player::getScore() { return score; }

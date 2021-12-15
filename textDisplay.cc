@@ -49,7 +49,7 @@ std::string getSideStr(const int x){
 
 // This function returns the Board as ostream
 std::ostream &operator<<(std::ostream & out, TextDisplay& txtOb) {
-    //system("clear");          // clear what's on the screen so it looks nicer
+    system("clear");          // clear what's on the screen so it looks nicer
     std::vector<Move*>& hist = txtOb.displayHistory;
     std::vector<Move*>::iterator it = hist.begin();
 

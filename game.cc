@@ -51,6 +51,7 @@ void Game::goOn() {
 
 void Game::start() {
     boardInit();
+    isSetup = true;
     bool end = false;
     std::vector<std::vector<Piece *>> &board = b->getBoard();
     notifyObservers( board, *mh );
@@ -104,8 +105,9 @@ void Game::start() {
                     cout << "Black is in check." << endl;
                 }
             }
+
             std::string cmd = player->cmd( *this );
-            
+
             if ( cmd == "undo" ) {
                 if ((mh.get())->size() < 2) {
                     i -= diffI;
@@ -165,7 +167,11 @@ void Game::errorMsg() {
 }
 
 void Game::setup() {
+<<<<<<< HEAD
     int a;
+=======
+    whiteStart = true;
+>>>>>>> 3aaf7e3 (Fixed the bug on undo)
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
     b->getPieces().clear();
