@@ -49,12 +49,14 @@ std::string Human::cmd( Game &game ) {
         Move* _move = nullptr;      // used to generate prompts
         if(getAM().size()) _move = getAM().at(rand() % getAM().size()).get();
         if ( cmd == "move" ) {
+            int iniX, iniY, endX, endY;
             std::cin >> iniPosn;
             std::cin >> endPosn;
-            int iniX = iniPosn[0] - 'a';
-            int iniY = iniPosn[1] - '1';
-            int endX = endPosn[0] - 'a';
-            int endY = endPosn[1] - '1';
+            iniX = iniPosn[0] - 'a';
+            iniY = iniPosn[1] - '1';
+            endX = endPosn[0] - 'a';
+            endY = endPosn[1] - '1';
+            
             std::string ret = valid( iniX, iniY, endX, endY, game );
             
             if ( ret.length() ) {

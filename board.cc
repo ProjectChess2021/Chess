@@ -266,7 +266,7 @@ int Board::evaluateMove(Move& _move) {
     Piece* destPiece = board[dest->getX()][dest->getY()];
     int initPosWeight = 0, destPosWeight = 0, retVal = 0;
     if(initPiece == nullptr) {
-        std::cerr << "Init pos does not have piece at " << __LINE__ << __FILE__<<std::endl;
+        // std::cerr << "Init pos does not have piece at " << __LINE__ << __FILE__<<std::endl;
         return 0;
     }
 
@@ -297,7 +297,7 @@ int Board::evaluateMove(Move& _move) {
         retVal = retVal + destPosWeight - initPosWeight;
     } else if (_move.getOperation() == "k") {       // capture
         if(destPiece == nullptr){
-            std::cerr << "Wrong kill generated at " << __LINE__ <<__FILE__<<std::endl;
+            // std::cerr << "Wrong kill generated at " << __LINE__ <<__FILE__<<std::endl;
         }
         int destPieceWeight = PIECEWEIGHT.find(destPiece->getType())->second;
         auto it = POSWEIGHT.find(destPiece->getType());
@@ -310,7 +310,7 @@ int Board::evaluateMove(Move& _move) {
     } else {        // just move
         retVal = destPosWeight - initPosWeight;
     }
-    std::cerr<<"Effect of the Move from " << *init << " to " << *dest << " is " << retVal << std::endl;
+    // std::cerr<<"Effect of the Move from " << *init << " to " << *dest << " is " << retVal << std::endl;
     return retVal;
 }   // end calcEffect
 
@@ -319,7 +319,7 @@ int Board::evaluateMove(Move& _move) {
 int Board::evaluateMove(Posn* init, Posn* dest, int side) {
     Piece* initPiece = board[init->getX()][init->getY()];
     if(initPiece == nullptr) {
-        std::cerr << "Init pos does not have piece at " << __LINE__ << __FILE__<<std::endl;
+        // std::cerr << "Init pos does not have piece at " << __LINE__ << __FILE__<<std::endl;
         return 0;
     }
     std::unique_ptr<Move> aMove = std::make_unique<Move>(*this, *init, *dest);

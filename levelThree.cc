@@ -13,7 +13,7 @@ void LevelThree::setControlRender(bool _var) {showControl = _var;}
 // it will try to make a capture move (Level Two)
 // if no capture is possible, a random move is selected
 std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& my_am, const int side) {
-    std::cerr << "LevelThree AI makes Move now, at" <<__LINE__ << " in" <<__FILE__ <<std::endl;
+    // std::cerr << "LevelThree AI makes Move now, at" <<__LINE__ << " in" <<__FILE__ <<std::endl;
     Board& board = game.getb();
     std::vector<std::vector<int>> controlArea; 
     // 2 if strongly controled, any Piece will be captured if move there
@@ -88,13 +88,13 @@ std::string LevelThree::makeMove(Game& game, std::vector<std::unique_ptr<Move>>&
     }   // end for
 
     if(!select)  {  // impossible to escape or have a safe move (a move cannot be captured)
-        std::cerr << __LINE__ << " " << __FILE__ <<" : Impossible to escape\n" << std::endl;
+        // std::cerr << __LINE__ << " " << __FILE__ <<" : Impossible to escape\n" << std::endl;
         return LevelTwo::makeMove(game, my_am, side);  
     }
     std::string retStr = "move ";
     retStr.push_back(select->getsx() + 'a'); retStr.push_back(select->getsy() + '1');
     retStr.push_back(' ');
     retStr.push_back(select->getex() + 'a');retStr.push_back(select->getey() + '1');
-    std::cerr << __LINE__ << " " << __FILE__ <<" : Level Three decision: " << retStr << std::endl;
+    // std::cerr << __LINE__ << " " << __FILE__ <<" : Level Three decision: " << retStr << std::endl;
     return retStr; 
 }   // end makeMove

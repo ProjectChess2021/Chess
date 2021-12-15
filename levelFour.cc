@@ -6,18 +6,18 @@
 #include "game.h"
 
 std::string LevelFour::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& my_am, const int id) {
-    std::cerr << "LevelFour AI makes Move now, at" <<__LINE__ << " in" <<__FILE__ <<std::endl;
+    // std::cerr << "LevelFour AI makes Move now, at" <<__LINE__ << " in" <<__FILE__ <<std::endl;
     Player* currPlayer = nullptr;
     for(auto it : game.getPlayers()){
         if( it->getId() == id)
             currPlayer = it;
     }
-    if(!currPlayer) std::cerr << "CurrentPlayerNotFoundAt" << __LINE__ << "in" << __FILE__ << std::endl;
+    // if(!currPlayer) std::cerr << "CurrentPlayerNotFoundAt" << __LINE__ << "in" << __FILE__ << std::endl;
     int depth = 2;
     int whatever = AlphaBeta(game, currPlayer, id, depth, -0xffffff, 0xfffffff);
     whatever++;
     for(auto it: game.getPlayers()) {
-        std::cerr << "Recover the am for player " << it->getId() << std::endl;
+        // std::cerr << "Recover the am for player " << it->getId() << std::endl;
         it->notify(game.getBoard(), *(game.getMoveHistory()));
     }
 

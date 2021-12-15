@@ -12,10 +12,10 @@
 using std::cout;
 using std::endl;
 
-// This function prints a lot of newline character as if SYS("clear")
-void screenClear(){
-    for(int i = 0; i < 20; i ++)    cout << endl;
-}   // end screenClear()
+// // This function prints a lot of newline character as if SYS("clear")
+// void screenClear() {
+//     for(int i = 0; i < 20; i ++)    cout << endl;
+// }   // end screenClear()
 
 
 int main() {
@@ -24,15 +24,15 @@ int main() {
     std::string cmd = "";
     std::string player = "";
     int numUndo, a;
-    bool end = false;
     std::unique_ptr<Game> g = std::make_unique<Game>();
     std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
     // std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
     g->attach( td.get() );
     // g->attach( gd.get() );
 
-    try{ while ( !std::cin.eof() && !end ) {
-        a = system( "clear" );
+    try{ while ( !std::cin.eof() ) {
+        // a = system( "clear" );
+        for(int i = 0; i < 20; i ++)    cout << endl;
         cout << "               Welcome to the game of chess created together by Zichu Wu, Kunling Yang, Min!           " << endl;
         cout << "------------------------------------------------------------------------------------------------------------------" << endl;
         cout << "Available commands are all listed below:"<< endl;
@@ -57,7 +57,7 @@ int main() {
                     float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 1, score ) );
-                    } else if ( player.substr(0,3) == "computer" ) {            
+                    } else if ( player.substr(0,8) == "computer" ) {            
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
@@ -70,7 +70,7 @@ int main() {
                     float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 2, score ) );
-                    } else if ( player.substr(0,3) == "computer" ) {
+                    } else if ( player.substr(0,8) == "computer" ) {
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
@@ -91,10 +91,8 @@ int main() {
                 for ( int i = 0; i < (int)players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
-                screenClear();
                 g->start();
             } else if ( cmd == "setup" ) {      // setup mode
-                screenClear();
                 cout << "Entering the setup mode" << endl;
                 g->setup();
             }

@@ -5,7 +5,7 @@
 #include "levelTwo.h"
 
 std::string LevelTwo::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& my_am, const int side) {
-    std::cerr << __LINE__ << " " << __FILE__ << " : " << "Level 2 AI decide move" << std::endl;
+    // std::cerr << __LINE__ << " " << __FILE__ << " : " << "Level 2 AI decide move" << std::endl;
     Board& board = game.getb();
     std::vector<std::unique_ptr<Move>>::iterator it;        // goes through my_available_move
     int maxCaptureWeight = -1;
@@ -35,7 +35,7 @@ std::string LevelTwo::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& m
                     select = aMove;
                 }   // end if
             } else {
-                std::cerr << __LINE__ << " " << __FILE__ << " : " << "Unkown chess type:" << destType << std::endl;
+                // std::cerr << __LINE__ << " " << __FILE__ << " : " << "Unkown chess type:" << destType << std::endl;
                 throw "Unknown Piece type detected in levelTwo";
             }   // end if
         }   else if (op == "k+p" || op == "p+k") { // a capture + kill move
@@ -47,7 +47,7 @@ std::string LevelTwo::makeMove(Game& game, std::vector<std::unique_ptr<Move>>& m
                     select = aMove;
                 }   // end if
             } else {
-                std::cerr << __LINE__ << " " << __FILE__ << " : " << "Unkown chess type:" << destType << std::endl;
+                // std::cerr << __LINE__ << " " << __FILE__ << " : " << "Unkown chess type:" << destType << std::endl;
                 throw "Unknown Piece type detected in levelTwo";
             }   // end if
         }
