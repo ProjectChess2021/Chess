@@ -75,7 +75,6 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 2)  // black pawn attack white king
                         return true;                        // from [x+1][y+1]
-                    std::cerr << __LINE__ << std::endl;
                 }
             } 
             break;
@@ -94,7 +93,6 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 1)  // white pawn attack black king
                         return true;                        // from [x+1][y-1]
-                    std::cerr << __LINE__ << std::endl;
                 }
             } 
             break;
@@ -113,7 +111,6 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 2)  // black pawn attack white king
                         return true;                        // from [x-1][y+1]
-                    std::cerr << __LINE__ << std::endl;
                 }
             } 
             break;
@@ -132,7 +129,6 @@ bool diagonalChecked( const int &x, const int &y, const int &side,
                     if(type == 'k') return true;
                     else if(type == 'p' && otherSide == 1)  // white pawn attack black king
                         return true;                        // from [x-1][y-1]
-                    std::cerr << __LINE__ << std::endl;
                 }
             } 
             break;
@@ -302,7 +298,7 @@ bool IsChecked::canCheckMove(Move& _move, std::vector<std::vector<Piece *>>& _bo
     std::swap(_board[ex][ey], temp);      // move the direct piece of this move take care of other potential below
 
     if(_move.getOperation() == "k+p" || _move.getOperation() == "p") {
-        std::cerr << __LINE__ << " " << __FILE__ << " : " << "Check if a promotion can check enemy king" << std::endl;
+        //std::cerr << __LINE__ << " " << __FILE__ << " : " << "Check if a promotion can check enemy king" << std::endl;
         Piece* temp2 = _board[ex][ey];                          // before promotion
         std::unique_ptr<Piece> tempQueen = std::make_unique<Queen>(_move.getSide());  // puppet Queen
         _board[ex][ey] = tempQueen.get();
@@ -314,7 +310,7 @@ bool IsChecked::canCheckMove(Move& _move, std::vector<std::vector<Piece *>>& _bo
         }
         _board[ex][ey] = temp2;                                 // remove the promoted piece
     } else if(_move.getOperation() == "c") {            // a castling can check other side King?
-        std::cerr << __LINE__ << " " << __FILE__ << " : " << "Check if a castling can check enemy king" << std::endl;
+        //std::cerr << __LINE__ << " " << __FILE__ << " : " << "Check if a castling can check enemy king" << std::endl;
         if(ex - _move.getsx() == 2) {                           // from e1/e8 to g1/g8
             // smart_move(_move);                               //DEBUGGING: smart_move?
             // single_undo(_move);
@@ -328,11 +324,9 @@ bool IsChecked::canCheckMove(Move& _move, std::vector<std::vector<Piece *>>& _bo
             if(isChecked(oppID, _board))    canCheck = true;
             std::swap(_board['d' - 'a'][ey],_board['a' - 'a'][ey]); // swap rook back
         } else {        // should never goes here
-            std::cerr << __LINE__ << " " << __FILE__ << " : Wrong Castling Move detected!" << std::endl; 
             throw "Wrong Castling Move detected in canCheckMove";
         } 
     } else if (_move.getOperation() == "e") {                   // can en passants check?
-        std::cerr << __LINE__ << " " << __FILE__ << " : " << "Check if a EP can check enemy king" << std::endl;
         Piece* captured = nullptr;
         std::swap(captured, _move.getSide() == 1 ? _board[ex][ey - 1] : _board[ex][ey + 1]);
         if(captured == nullptr)  throw "En Passant captures nothing in canCheckMove!";
@@ -340,7 +334,6 @@ bool IsChecked::canCheckMove(Move& _move, std::vector<std::vector<Piece *>>& _bo
     } else if (_move.getOperation() == "k" || _move.getOperation() == "m") {
         if(isChecked(oppID, _board))    canCheck =  true;
     } else {
-        std::cerr << __LINE__ << " " << __FILE__ << " : " << "Unrecognized Move Type" << std::endl;
         throw "Unrecognized Move Type in canCheckMove";
     }
     

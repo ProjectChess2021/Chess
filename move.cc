@@ -72,7 +72,6 @@ int Move::getey() {return end.get()->getY();}
 
 // This function translates the peice type character to a string
 std::string getTypeStr(const char c) {
-    std::cerr << "translate type to string @ Line34, move.cc" << std::endl;
     if(toupper(c) == 'P')    return "pawn";
     else if(toupper(c) == 'R')  return "rook";
     else if(toupper(c) == 'N')  return "knight";

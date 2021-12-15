@@ -11,6 +11,9 @@ void Game::boardInit() {
     b->boardInit( isSetup );
 }
 
+// This function translates the side number to a string (colour representing the player)
+std::string getSideStr(const int x);
+
 Game::Game() :  mh{ std::make_unique<MoveHistory>() }, 
     b{ std::make_unique<Board>() },
     whiteStart{ true }, isSetup{false} {
@@ -132,11 +135,10 @@ void Game::start() {
     bool end = false;
     std::vector<std::vector<Piece *>> &board = b->getBoard();
     notifyObservers( board, *mh );
-    int diffI = 1;
+    int diffI = 1, a = 0;
     int i = 0;
     while ( !end ) {
         if ( !whiteStart ) {
-            //std::cerr << __LINE__ << std::endl;
             diffI = -1;
             i = 1;
         } else {
@@ -146,8 +148,9 @@ void Game::start() {
         for ( ; i < 2 && i >= 0; ) {
             Player *player = nullptr;
             player = players[i];
-            if ( !player->hasAvaliableMove() && 
-                !IsChecked::isChecked( player->getId(), board ) ) {
+            if ( mh->size() > (int)players.size() * 50 ||
+                ( !player->hasAvaliableMove() && 
+                !IsChecked::isChecked( player->getId(), board ) )) {
                 cout << "Stalemate!" << endl;
                 players[0]->getScore() += 0.5;
                 players[1]->getScore() += 0.5;
@@ -221,11 +224,12 @@ void Game::start() {
                 int endY = endPosn[1] - '1';
                 move( iniX, iniY, endX, endY, i );
             }
+            a = system("clear");
             notifyObservers( board, *mh );
-            std::cerr << __LINE__ << std::endl;
             i += diffI; 
         }
     }
+    a++;
 }
 
 void Game::errorMsg() {
@@ -242,6 +246,7 @@ void Game::errorMsg() {
 }
 
 void Game::setup() {
+    int a;
     int whiteKingNum, blackKingNum;
     whiteKingNum = blackKingNum = 0;
     b->getPieces().clear();
@@ -259,7 +264,15 @@ void Game::setup() {
         cmd >> op;
         if ( op == "+" ) {
             char pc = '1';
-            cmd >> pc;
+            char x = 'a';
+            int y = 0;
+            cmd >> pc >> x >> y;
+            if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
+                notifyObservers( setUpBoard, *mh );
+                cout << "Invalid Coordinate is provided" << endl;
+                continue;
+            }   // end if
+
             if ( pc == 'r' ) {
                 pieces.emplace_back( std::make_unique<Rook>( 2 ) );
             } else if ( pc == 'R' ) {
@@ -288,32 +301,12 @@ void Game::setup() {
                 pieces.emplace_back( std::make_unique<Pawn>( 1 ) );
             } else {
                 notifyObservers( setUpBoard, *mh );
-                errorMsg();
+                cout << "Unrecognized Piece type detected" << endl;
                 continue;
             }
-
-            char x = 'a';
-            int y = 0;
-            cmd >> x;
-            cmd >> y;
-            if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {
-                if ( pieces.back()->getType() == 'k' ) {
-                    if ( pieces.back()->getSide() == 1 ) {
-                        whiteKingNum--;
-                    } else {
-                        blackKingNum--;
-                    }
-                }
-                pieces.pop_back();
-                notifyObservers( setUpBoard, *mh );
-                errorMsg();
-                continue;
-            }
-            if ( setUpBoard[x - 'a'][y - 1] != nullptr &&
-                pieces.back()->getType() == 'k' &&
-                setUpBoard[x - 'a'][y - 1]->getType() == 'k' && 
-                pieces.back()->getSide() == setUpBoard[x - 'a'][y - 1]->getSide() ) {
-                prompt += "Nothing changed \n";
+// DEBUG : immediate fixing need, unable to restore the king counter properly
+            if (setUpBoard[x - 'a'][y - 1] && setUpBoard[x - 'a'][y - 1]->getType() == 'k' && 
+                setUpBoard[x - 'a'][y - 1]->getSide() ) {
                 if ( pieces.back()->getSide() == 1 ) {
                     whiteKingNum--;
                 } else {
@@ -332,7 +325,7 @@ void Game::setup() {
             cmd >> y;
             if ( x < 'a' || x > 'h' || y < 1 || y > 8 ) {   // bad Position
                 notifyObservers( setUpBoard, *mh );
-                errorMsg();
+                cout << "Invalid Coordinate is provided" << endl;
                 continue;
             }
             //board[x - 'a'][y - 1] = pieces.back().get();
@@ -347,9 +340,11 @@ void Game::setup() {
                             if(piecePtr->getSide() == 1) whiteKingNum--;          // white king removed
                             else if(piecePtr->getSide() == 2) blackKingNum--;     // black king removed
                         }
+                        prompt += "Remove a " +  getSideStr(setUpBoard[x - 'a'][y - 1]->getSide()) + " " +
+                            getTypeStr(setUpBoard[x - 'a'][y - 1]->getType()) + " at " + x + (char)(y - 1 + '1') +
+                            " successful.\n";
                         setUpBoard[x - 'a'][y - 1] = nullptr;    // remove from board
                         pieces.erase(it);                   // remove from pieces list
-                        prompt += "Remove piece successful.\n";
                         break;
                     }
                 }   // end for loop to track piece to be removed
@@ -365,6 +360,7 @@ void Game::setup() {
                 continue;
             }
         } else if ( op == "done" ) {
+            a = system("clear");
             std::string prompt = "";
             if(isValidSetup(whiteKingNum,blackKingNum,prompt)){
                 prompt += "Setup completed and will take effect in next game";
@@ -376,12 +372,27 @@ void Game::setup() {
                 cout << prompt;
                 continue;
             }
-        }   else {  // unrecognized command
+        } else if ( op == "quit") {
+            a = system("clear");
+            char c = ' ';
+            std::cout << "Are you sure to aborting all changes? Type in 'Y' and press [enter] to continue this ceasing." << std::endl;
+            std::cin >> c;
+            if (c == 'Y') {
+                boardInit();
+                return;
+            } else {
+                a = system("clear");
+                notifyObservers(setUpBoard, *mh);
+                std::cout << "Please enter command here: " ;
+                continue;
+            }
+        }   
+        else {  // unrecognized command
             notifyObservers( setUpBoard, *mh );
             errorMsg();
             continue;
         }//end command selection
-        int a = system("clear");
+        a = system("clear");
         notifyObservers( setUpBoard, *mh );
         prompt += "Continue to enter command here: ";
         if ( op == "=" ) {
@@ -439,22 +450,25 @@ bool Game::isValidSetup(const int whiteKingNum, const int blackKingNum, std::str
     for( int i = 0; i < 8; i += 7) { // only check first row and last row
         for ( int j = 0; j < 8; j++ ) {
             if (board[j][i] && board[j][i]->getType() == 'p' ) {
-                notifyObservers( board, *mh );
-                prompt +="Pawns cannot be placed at the first or last row of the board.\n";
+                // notifyObservers( board, *mh );
+                if(!hasInvalidPawn)     prompt += "Pawn detected at";   //first detect a pawn
                 hasInvalidPawn = true;
-                break;
+                prompt.push_back(' ');
+                prompt.push_back((char) (j + 'a'));
+                prompt.push_back((char) ('1' + i));
             }
         }   // end inner for loop
     }   // end outer for loop
-
+    if(hasInvalidPawn)
+        prompt +=".\nNo pawns can be placed at the first or last row of the board.\n";
+     
     bool inCheck = false;   // check if any player is in check
-    if ( IsChecked::isChecked( 1, board ) ) {
-        notifyObservers( board, *mh );
+    if ( whiteKing && IsChecked::isChecked( 1, board ) ) {
         prompt += "White king is being checked.\n";
         inCheck = true;
-    } else if ( IsChecked::isChecked( 2, board ) ) {
-        notifyObservers( board, *mh );
-        prompt += "Black king is being checked.\n";
+    }
+    if ( blackKing && IsChecked::isChecked( 2, board ) ) {
+        prompt.append("Black king is being checked.\n");
         inCheck = true;
     }   // end if-else statement
     

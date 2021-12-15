@@ -20,11 +20,20 @@ std::string Human::valid( const int &iniX, const int &iniY, const int &endX,
 
     std::vector<std::vector<Piece *>>& board = g.getBoard();
     if ( !board[iniX][iniY] ) return "No piece detected at the start position";
+    if ( board[iniX][iniY]->getSide() != getId() )
+        return "Attempt to move an opponent-controlled piece";    
+    if ( board[iniX][iniY]->getType() == 'p' && std::abs(iniY - endY) == 2 &&
+            iniX == endX && board[iniX][iniY]->isMoved())
+        return "A pawn can only advancing two steps in its first move";
+    if( board[iniX][iniY]->getType() == 'k' && std::abs(iniX - endX) == 2 &&
+            iniY == endY && (board[iniX][iniY]->isMoved() ||
+            ((iniX - endX) == 2 && board[0][iniY]->getType() == 'r' && board[0][iniY]->isMoved())   ||  // move left and thta rook is already moved
+            ((iniX - endX) == -2 && board[7][iniY]->getType() == 'r' && board[7][iniY]->isMoved())))    // move right and that rook is already moved
+        return "Invalid Castling, both king and rook must be unmoved";
     if ( !board[iniX][iniY]->isValidMove( &init, &end, 
             board, g.getMoveHistory() ) )
             return "Provided move is illegal!";
-    if ( board[iniX][iniY]->getSide() != getId() )
-        return "Attempt to move an opponent-controlled piece";
+
     return "";
 }
 

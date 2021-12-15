@@ -30,9 +30,9 @@ int main() {
         cout << "------------------------------------------------------------------------------------------------------------------" << endl;
         cout << "Available commands are all listed below:"<< endl;
         cout << "  -  game white-player black-player allowUndo" << endl;
-        cout << "         (player can be either \"human\" or \"bot[1-4])\". If you wish to prohibit undo, type in 0 for allowUndo;" << endl;
-        cout << "          if unlimited undo is desired, type in any negative integer; otherwise, type in the number of undos" << endl;
-        cout << "          allowed for each player." <<endl;
+        cout << "         (player can be either \"human\" or \"computer[1-4])\". If you wish to prohibit undo, type in 0 for " << endl;
+        cout << "          allowUndo; if unlimited undo is desired, type in any negative integer; otherwise, type in the number of" << endl;
+        cout << "          undos allowed for each player." <<endl;
         cout << "          e.g. \"game human bot4 0\" will start a game with Level4 AI that does not allow undo.)"  << endl;     
         cout << endl;
         cout << "  -  setup" << endl;
@@ -50,22 +50,20 @@ int main() {
                     float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 1, score ) );
-                    } else if ( player.substr(0,3) == "bot" ) {            
+                    } else if ( player.substr(0,3) == "computer" ) {            
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
                             continue;
                         }
-                        std::cerr << __LINE__ << endl;
                         temp.emplace_back(std::make_unique<Bot>(1, level, score));
-                        std::cerr << __LINE__ << endl;
                     } else continue;    // unrecognized player input
                 } else continue;        //no first player detected
                 if ( in >> player ) {    // input second player
                     float score = players.size() ? players[0]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 2, score ) );
-                    } else if ( player.substr(0,3) == "bot" ) {
+                    } else if ( player.substr(0,3) == "computer" ) {
                         int level = 1;
                         try{ level = std::stoi(player.substr(3)); } 
                         catch(const std::invalid_argument& ia) {  // not valid ai level
@@ -86,6 +84,7 @@ int main() {
                 for ( int i = 0; i < (int)players.size(); ++i ) {
                     g->addPlayer( players[i].get() );
                 }
+                a = system("clear");
                 g->start();
             } else if ( cmd == "setup" ) {      // setup mode
                 a = system("clear");

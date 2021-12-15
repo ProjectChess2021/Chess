@@ -163,13 +163,9 @@ void Board::smart_move(Move& _move, const char promptTo) {
 
 // This function undos a single move in convinience of bot
 void Board::undo(Move* _move) {
-    std::cerr << __LINE__ << " " << __FILE__ << " : be about to undo " << *_move <<
-    "at address " << _move << std::endl;
     std::vector<Move*> undoLst;
     undoLst.emplace_back(_move);
     undo(undoLst);
-
-    std::cerr << __LINE__ << " " << __FILE__ << " : undo " << *_move << " succcessfully." << std::endl;
 }   // end undo
 
 void Board::undo( std::vector<Move *> &undoHist ) {

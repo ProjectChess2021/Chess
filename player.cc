@@ -26,10 +26,10 @@ void Player::emplacePieceMove( const int x, const int y,
                 // generate movement type
                 if(tolower(target->getType()) == 'p' && (j == 0 || j == 7)){
                     if(x != i){     // move to another column
-std::cerr << "add a p+k from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
+//std::cerr << "add a p+k from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
                         op = "k+p";
                     } else {     // goes to a different row, means  promotion and kill
-std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
+//std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << " of " << __FILE__ <<std::endl;
                         op = "p";  // just promotion
                     }
                 }
@@ -44,7 +44,6 @@ std::cerr << "add a p from" << init << " to " << dest << " at " << __LINE__ << "
                     std::abs(lastMove->getey() - lastMove->getsy()) == 2 && 
                     std::abs(lastMove->getex() - x) == 1 && lastMove->getey() == y &&
                     i == lastMove->getsx()) {
-                    std::cerr << __LINE__ << " " << __FILE__ << " : Add a CEP from " << init << " to " << dest << std::endl;
                     op = "e"; 
                 }   // end operation type judge
 
