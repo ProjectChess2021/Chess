@@ -70,14 +70,14 @@ void Board::boardInit( const bool isSetup ) {
     }
 }
 
-void move(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void move(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
      const int &originalX, const int &originalY, const int &endX, const int &endY ) {
     Piece *pc =  board[originalX][originalY];
     board[endX][endY] = pc;
     board[originalX][originalY] = nullptr;
 }
 
-void kill( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void kill( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
     const int &originalX, const int &originalY, const int &endX, const int &endY ) {
     Piece *pc =  board[originalX][originalY];
 
@@ -86,7 +86,7 @@ void kill( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& boar
     board[endX][endY] = pc;
 }
 
-void castle(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void castle(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
      const int &originalX, const int &originalY, 
     const int &endX, const int &endY ) {
     Piece *pc =  board[originalX][originalY];
@@ -106,7 +106,7 @@ void castle(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& boa
     }
 }
 
-void promotion( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void promotion( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
     const int &endX, const int &endY, const char promptTo ) {
     Piece *pc =  board[endX][endY];
     if ( promptTo == 'r' ) {
@@ -123,21 +123,21 @@ void promotion( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>&
     pieces.back().get()->changeMoved( true );
 }
 
-void moveNProm( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void moveNProm( vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
     const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const char promptTo ) {
     move( pieces, board, deadPool,originalX, originalY, endX, endY );
     promotion( pieces, board, deadPool,endX, endY, promptTo );
 }
 
-void killNProm(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void killNProm(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
      const int &originalX, const int &originalY, 
     const int &endX, const int &endY, const char promptTo ) {
     kill( pieces, board, deadPool,originalX, originalY, endX, endY );
     promotion( pieces, board, deadPool,endX, endY, promptTo );
 }
 
-void CEP(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> deadPool,
+void CEP(vector<std::unique_ptr<Piece>>& pieces, vector<vector<Piece *>>& board, vector<Piece *> &deadPool,
      const int &originalX, const int &originalY, 
     const int &endX, const int &endY ) {
     Piece *pc =  board[originalX][originalY];

@@ -26,9 +26,9 @@ int main() {
     int numUndo, a;
     std::unique_ptr<Game> g = std::make_unique<Game>();
     std::unique_ptr<TextDisplay> td = std::make_unique<TextDisplay>();
-    // std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
+    std::unique_ptr<GraphicDisplay> gd = std::make_unique<GraphicDisplay>( 8, 8 );
     g->attach( td.get() );
-    // g->attach( gd.get() );
+    g->attach( gd.get() );
 
     try{ while ( !std::cin.eof() ) {
         // a = system( "clear" );
@@ -67,7 +67,7 @@ int main() {
                     } else continue;    // unrecognized player input
                 } else continue;        //no first player detected
                 if ( in >> player ) {    // input second player
-                    float score = players.size() ? players[0]->getScore() : 0;
+                    float score = players.size() ? players[1]->getScore() : 0;
                     if ( player == "human" ) {
                         temp.emplace_back( std::make_unique<Human>( 2, score ) );
                     } else if ( player.substr(0,8) == "computer" ) {
