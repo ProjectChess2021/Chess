@@ -1,0 +1,8 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Wu
+    given-names: Zichu
+title: "Chess project for cs 246"
+version: 1.0.0
+date-released: 2021-12-11
